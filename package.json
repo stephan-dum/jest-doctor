@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "./packages/*",
+    "./packages/**"
+  ],
+  "scripts": {
+    "dev": "yarn workspace jest-doctor run dev",
+    "build": "yarn workspace jest-doctor run build",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "yarn workspaces foreach --all --parallel run lint",
+    "test": "yarn workspaces foreach --all --parallel --interlaced run test && yarn workspace @matrix/env run coverage"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  },
+  "packageManager": "yarn@4.9.4",
+  "resolutions": {
+    "baseline-browser-mapping": "2.9.14"
+  }
+}

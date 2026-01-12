@@ -9,7 +9,8 @@ const cleanupAfterTest = (
     if (that.shouldCleanup) {
       // to avoid warnings when useRealTimers is enabled, but there are still pending fake timers,
       // the internal object will be reset instead of calling that.fakeTimersModern.clearAllTimers
-      const fakeTimers = (that.fakeTimersModern as unknown as FakeTimers)?._clock?.timers || {};
+      const fakeTimers =
+        (that.fakeTimersModern as unknown as FakeTimers)?._clock?.timers || {};
       for (const key of Object.keys(fakeTimers)) {
         delete fakeTimers[key];
       }

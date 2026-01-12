@@ -1,7 +1,6 @@
 import type { ModernFakeTimers } from '@jest/fake-timers';
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal.cjs';
-import { AsyncHook } from 'node:async_hooks';
 
 export interface TimerRecord {
   type: 'timeout' | 'interval' | 'fakeTimeout' | 'fakeInterval';

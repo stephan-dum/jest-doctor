@@ -2,7 +2,8 @@ import type { FakeTimers, JestDoctorEnvironment } from '../types';
 import getStack from './getStack.cjs';
 
 const patchFakeTimers = (that: JestDoctorEnvironment) => {
-  const fakeTimers = (that.fakeTimersModern as unknown as FakeTimers)?._fakeTimers;
+  const fakeTimers = (that.fakeTimersModern as unknown as FakeTimers)
+    ?._fakeTimers;
   const originalFakeTimerInstall = fakeTimers?.install;
 
   if (fakeTimers && originalFakeTimerInstall) {
@@ -15,7 +16,9 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
       const originalFakeClearInterval = clock.clearInterval.bind(clock);
 
       clock.setTimeout = function (callback, delay) {
-        const fakeTimeout = that.leakRecords.get(that.currentTestName)?.fakeTimeout;
+        const fakeTimeout = that.leakRecords.get(
+          that.currentTestName,
+        )?.fakeTimeout;
 
         const timerId = originalFakeSetTimeout(() => {
           fakeTimeout?.delete(timerId);
@@ -35,12 +38,14 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
       clock.setInterval = function (callback, delay) {
         const intervalId = originalFakeSetInterval(callback, delay);
 
-        that.leakRecords.get(that.currentTestName)?.fakeInterval.set(intervalId, {
-          type: 'fakeInterval',
-          delay: delay || 0,
-          stack: getStack(that.global.setInterval),
-          testName: that.currentTestName,
-        });
+        that.leakRecords
+          .get(that.currentTestName)
+          ?.fakeInterval.set(intervalId, {
+            type: 'fakeInterval',
+            delay: delay || 0,
+            stack: getStack(that.global.setInterval),
+            testName: that.currentTestName,
+          });
 
         return intervalId;
       };
@@ -51,7 +56,9 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
       };
 
       clock.clearInterval = (intervalId) => {
-        that.leakRecords.get(that.currentTestName)?.fakeInterval.delete(intervalId);
+        that.leakRecords
+          .get(that.currentTestName)
+          ?.fakeInterval.delete(intervalId);
         originalFakeClearInterval(intervalId);
       };
 

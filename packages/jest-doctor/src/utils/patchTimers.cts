@@ -60,12 +60,16 @@ const patchTimers = (that: JestDoctorEnvironment) => {
   );
 
   env.clearTimeout = (timerId) => {
-    that.leakRecords.get(that.currentTestName)?.timeout.delete(timerId as NodeJS.Timeout);
+    that.leakRecords
+      .get(that.currentTestName)
+      ?.timeout.delete(timerId as NodeJS.Timeout);
     that.original.clearTimeout(timerId);
   };
 
   env.clearInterval = (intervalId) => {
-    that.leakRecords.get(that.currentTestName)?.interval.delete(intervalId as NodeJS.Timeout);
+    that.leakRecords
+      .get(that.currentTestName)
+      ?.interval.delete(intervalId as NodeJS.Timeout);
     that.original.clearInterval(intervalId);
   };
 };

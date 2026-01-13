@@ -3,37 +3,25 @@
 **jest-doctor** is a custom Jest environment that **detects async leaks and test isolation bugs**.
 
 It fails tests deterministically when they:
-
 - Leave unresolved Promises
 - Leak timers or intervals
 - Emit console output
 
 jest-doctor is intentionally strict. If your test leaks async work, that is a bug, even if Jest would normally ignore it.
 
-## Why jest-doctor exists
-
-Jest’s default behavior allows:
-
-- Timers to survive past test boundaries
-- Promises to resolve after test completion
-- Console output to occur outside test lifecycle
-
-These issues cause:
-
-- Flaky tests
-- Order-dependent failures
-- Memory leaks in watch mode
-- Debugging nightmares
-
 ## Installation
 
 ```bash
 npm install --save-dev jest-doctor
 ```
+or
+```bash
+yarn add -D jest-doctor
+```
 
 ## Usage
 
-Simply add one of the provided environments to your `jest.config.js`.
+Add one of the provided environments to your `jest.config.js`.
 
 ```js
 export default {
@@ -45,9 +33,9 @@ Out of the box node and jsdom are supported. If other environments are needed si
 Simply create a new file in your code base and reference it in you jest.config.js.
 
 ```js
-import createEnvMixin from 'jest-doctor/createEnvMixin';
-import NodeEnvironment from 'jest-environment-node';
-import MyEnv from 'my-env';
+const createEnvMixin = require('jest-doctor/createEnvMixin').default;
+const NodeEnvironment = require('jest-environment-node').default;
+const MyEnv = require('my-env').default;
 
 // eigther wrap the desire existing environment
 const JestDoctorMyEnv = createEnvMixin(MyEnv);
@@ -61,50 +49,70 @@ class MyClass extends NodeEnvironment {}
 const JestDoctorMyEnv = createEnvMixin(MyClass);
 
 // dont forget to export
-export default JestDoctorMyEnv;
+module.exports = JestDoctorMyEnv;
 ```
 
 ### Configuration
 
-the environment offers a small set of configuration possibilities threw jest.config.js.
-here are the defaults used:
+The environment can be configured through jest config `testEnvironmentOptions`:
+- **report**: an object defining which leaks should be tracked and reported
+  -  **console**: `boolean` or object (default `true`)
+      - **methods**: `keyof Console` (default all methods) which console methods should be tracked
+      - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded console output from tracking
+  - **timers**: `boolean` (default `true`) whether normal setTimeout and setInterval should be tracked
+  - **fakeTimers**: `boolean` (default `true`) same as timers but for fake api
+  - **promises**: `boolean` (default `true`) indicating if promises should be tracked
+- **timerIsolation**: `'afterEach' | 'immediate'` (default: `'afterEach'`)
+  - **immediate**: report and clear timers directly after each test / hook block
+  - **afterEach**: `beforeAll`, `beforeEach` and `afterAll` are immediate but `test` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks). This allows an easier clean up for example react testing framework registers an unmount function in an `afterEach` block to clean up.
+- **delayThreshold**: `number` (default: `100`) the delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is add up. If this the sum is higher then the threshold at the end when reporting an error is throw, otherwise a warning is logged.
+- **clearTimers**: `boolean` (default: `true`) whether to clear all timers base on `timerIsolation`
 
+
+here is an example how the configuration could look like:
 ```js
 export default {
   testEnvironmentOptions: {
-    // control which kind of leaks should be reported
-    mock: {
-      console: true,
-      timers: true, // setTimeout & setInterval
-      fakeTimers: true, // setTimeout & setInterval
+    report: {
+      console: {
+        methods: ["log", "warn", "error"],
+        ignore: /Third party message/,
+      },
+      timers: true,
+      fakeTimers: true,
       promises: true,
     },
-    // wheather to clean all timers after ts complites
-    clean: true,
+    delayThreshold: 0,
+    timerIsolation: 'afterEach',
+    clearTimers: true,
   },
 };
 ```
 
 ## Limitations
-
 - it.concurrent is replaced with a sync version
 - legacy fake timers are not mocked
-- it does not support done callback or generators
-- promises that resolve within the next tick can not be resolved for example:
-
+- test and hook blocks do not support done callback or generators
+- promises that resolve within the next tick can not be tracked for example:
 ```js
 Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
+- console, setTimeout / setInterval can also be imported and will not participate in leak detection is these cases, but this can also serve as exit hatch if needed
+```js
+import { setTimeout, setInterval } from 'node:timers';
+import { Console } from 'node:console';
+
+const myConsole = new Console(process.stdout, process.stderr);
+```
 
 ## Recommendations
-
 - use eslint to
   - detect floating promises
-  - disallow setTimeout in test files
+  - disallow setTimeout / setInterval in test files
+  - disallow console usage
 - enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
-
 ```js
 afterEach(async () => {
   jest.useRealTimers();
@@ -113,20 +121,18 @@ afterEach(async () => {
 });
 ```
 
-## Jest version support
-
-Tested against:
-
+## Tested against
 - Jest 28, 29, 30
 - node 22, 24
 
 # FAQ
 
-### Does this slow tests down?
+### Why is jest-doctor so strict?
+Because flaky tests cost more than broken builds.
 
-Slightly mainly because of the usage of async_hook, but overhead is intentional and bounded.
+### Does this slow tests down?
+Slightly. Overhead is intentional and bounded.
 
 ### Why does console output fail tests?
-
 It pollutes the console and is often a strong indicator that something is wrong.
 Tests should always spy on console and assert on the output.

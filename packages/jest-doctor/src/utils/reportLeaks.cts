@@ -1,51 +1,65 @@
-import { JestDoctorEnvironment } from '../types';
+import { ConsoleOptions, JestDoctorEnvironment } from '../types';
 import { LeakRecord } from '../types';
+import console from 'node:console';
 
 const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   const checkError = (
-    property:
-      | 'timeout'
-      | 'promise'
-      | 'interval'
-      | 'fakeTimeout'
-      | 'fakeInterval',
-    label: string = property,
+    property: 'promises' | 'timers' | 'fakeTimers',
+    label: string,
   ) => {
     if (leakRecord[property].size) {
-      const error = new Error();
-      error.stack = [
+      const message = [
         `${leakRecord[property].size} open ${label}(s) found!`,
         leakRecord[property].values().next().value?.stack,
       ].join('\n');
+
       leakRecord[property].clear();
-      throw error;
+
+      if (that.options.report[property] === 'throw') {
+        const error = new Error();
+        error.stack = message;
+        throw error;
+      } else {
+        console.warn(message);
+      }
     }
   };
 
   if (leakRecord.console.length) {
-    const error = new Error();
-    error.stack = [
+    const message = [
       `${leakRecord.console.length} console output found!`,
-      ...leakRecord.console[0].message,
+      leakRecord.console[0].message.slice(0, 20),
       leakRecord.console[0].stack,
     ].join('\n');
+
     leakRecord.console = [];
-    throw error;
+
+    if ((that.options.report.console as ConsoleOptions).onError === 'throw') {
+      const error = new Error();
+      error.stack = message;
+      throw error;
+    } else {
+      console.warn(message);
+    }
   }
 
-  checkError('promise');
+  checkError('promises', 'promise');
 
   if (that.currentAfterEachCount === 0) {
     if (leakRecord.totalDelay) {
-      that.original.console.warn(
-        `setTimeout / setInterval with total delay of ${leakRecord.totalDelay}ms found, use fake timers instead!`,
-      );
+      const message = `setTimeout / setInterval with total delay of ${leakRecord.totalDelay}ms found, use fake timers instead!`;
+
+      if (leakRecord.totalDelay > that.options.delayThreshold) {
+        const error = new Error();
+        error.stack = message;
+        throw error;
+      } else {
+        console.warn(message);
+      }
     }
 
-    checkError('timeout');
-    checkError('interval');
-    checkError('fakeTimeout', 'fake timeout');
-    checkError('fakeInterval', 'fake interval');
+    checkError('timers', 'timer');
+    checkError('fakeTimers', 'fake timer');
   }
 };
 

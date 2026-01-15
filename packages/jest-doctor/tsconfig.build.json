@@ -1,0 +1,17 @@
+{
+  "extends": ["@dev/tsconfig/base.json"],
+  "include": ["src/types.ts", "**/*.cts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "types": ["node", "jest"],
+    "target": "esnext",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "verbatimModuleSyntax": false,
+    "noEmit": false,
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "dist",
+    "sourceMap": true
+  }
+}

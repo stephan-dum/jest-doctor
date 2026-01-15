@@ -1,6 +1,6 @@
 import { JestDoctorEnvironment } from '../types';
 import { Circus } from '@jest/types';
-import analyzeCallback from './analyzeCallback.cjs';
+import analyzeCallback from '../utils/analyzeCallback.cjs';
 
 const patchHook = (that: JestDoctorEnvironment, hookName: string) => {
   const originalHook = that.global[hookName] as typeof beforeEach;

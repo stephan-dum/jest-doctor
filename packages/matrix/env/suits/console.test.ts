@@ -5,9 +5,19 @@ it('detects console output', async () => {
   expect(result.testResults[0].message).toContain('console output');
 });
 
-it('ignores console output if mock.console is set to false', async () => {
+it('ignores console output if report.console is set to false', async () => {
   const result = await runJest(`console.fixture.ts`, {
-    mock: { console: false },
+    report: { console: false },
+  });
+  expect(result.success).toEqual(true);
+});
+it('ignores console output if report.console.ignore is set with a string', async () => {
+  const result = await runJest(`console.fixture.ts`, {
+    report: {
+      console: {
+        ignore: 'ops',
+      },
+    },
   });
   expect(result.success).toEqual(true);
 });

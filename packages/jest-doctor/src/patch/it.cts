@@ -1,6 +1,6 @@
 import type { JestDoctorEnvironment } from '../types';
 import type { Circus } from '@jest/types';
-import analyzeCallback from './analyzeCallback.cjs';
+import analyzeCallback from '../utils/analyzeCallback.cjs';
 
 const patchIt = (that: JestDoctorEnvironment) => {
   const originalIt = that.global.it;

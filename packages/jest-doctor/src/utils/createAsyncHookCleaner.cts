@@ -7,7 +7,7 @@ const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
       const owner = that.promiseOwner.get(asyncId);
       if (!owner) return;
 
-      that.leakRecords.get(owner)?.promise.delete(asyncId);
+      that.leakRecords.get(owner)?.promises.delete(asyncId);
       that.promiseOwner.delete(asyncId);
     },
   });

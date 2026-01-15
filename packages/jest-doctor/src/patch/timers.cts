@@ -1,8 +1,8 @@
 import { JestDoctorEnvironment } from '../types';
-import getStack from './getStack.cjs';
+import getStack from '../utils/getStack.cjs';
 import { MAIN_THREAD } from '../consts.cjs';
 
-const patchTimers = (that: JestDoctorEnvironment) => {
+const timers = (that: JestDoctorEnvironment) => {
   const env = that.global;
 
   env.setTimeout = Object.assign(
@@ -16,12 +16,12 @@ const patchTimers = (that: JestDoctorEnvironment) => {
             leakRecord.totalDelay += delay;
           }
 
-          leakRecord.timeout.delete(timerId);
+          leakRecord.timers.delete(timerId);
         }
         callback();
       }, delay);
 
-      leakRecord?.timeout.set(timerId, {
+      leakRecord?.timers.set(timerId, {
         type: 'timeout',
         delay: delay || 0,
         stack: getStack(env.setTimeout),
@@ -48,7 +48,7 @@ const patchTimers = (that: JestDoctorEnvironment) => {
 
         callback();
       }, delay);
-      that.leakRecords.get(that.currentTestName)?.interval.set(intervalId, {
+      that.leakRecords.get(that.currentTestName)?.timers.set(intervalId, {
         type: 'interval',
         delay: delay || 0,
         stack: getStack(env.setInterval),
@@ -62,16 +62,16 @@ const patchTimers = (that: JestDoctorEnvironment) => {
   env.clearTimeout = (timerId) => {
     that.leakRecords
       .get(that.currentTestName)
-      ?.timeout.delete(timerId as NodeJS.Timeout);
+      ?.timers.delete(timerId as NodeJS.Timeout);
     that.original.clearTimeout(timerId);
   };
 
   env.clearInterval = (intervalId) => {
     that.leakRecords
       .get(that.currentTestName)
-      ?.interval.delete(intervalId as NodeJS.Timeout);
+      ?.timers.delete(intervalId as NodeJS.Timeout);
     that.original.clearInterval(intervalId);
   };
 };
 
-export default patchTimers;
+export default timers;

@@ -40,10 +40,6 @@ const MyEnv = require('my-env').default;
 // eigther wrap the desire existing environment
 const JestDoctorMyEnv = createEnvMixin(MyEnv);
 
-// or extend a class and add more functionallity on top
-class JestDoctorMyEnv extends createEnvMixin(MyEnv) {
-  //...
-}
 // or pass in your own class
 class MyClass extends NodeEnvironment {}
 const JestDoctorMyEnv = createEnvMixin(MyClass);
@@ -56,12 +52,13 @@ module.exports = JestDoctorMyEnv;
 
 The environment can be configured through jest config `testEnvironmentOptions`:
 - **report**: an object defining which leaks should be tracked and reported
-  -  **console**: `boolean` or object (default `true`)
+  - **timers**: `false | 'warn' | 'trow'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
+  - **fakeTimers**: `false | 'warn' | 'trow'` (default `throw`) same as timers but for fake api
+  - **promises**: `false | 'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
+  -  **console**: `false` or object (default object)
+      - **onError**: `'warn' | 'trow'` (default `throw`) how to handle reporting
       - **methods**: `keyof Console` (default all methods) which console methods should be tracked
       - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded console output from tracking
-  - **timers**: `boolean` (default `true`) whether normal setTimeout and setInterval should be tracked
-  - **fakeTimers**: `boolean` (default `true`) same as timers but for fake api
-  - **promises**: `boolean` (default `true`) indicating if promises should be tracked
 - **timerIsolation**: `'afterEach' | 'immediate'` (default: `'afterEach'`)
   - **immediate**: report and clear timers directly after each test / hook block
   - **afterEach**: `beforeAll`, `beforeEach` and `afterAll` are immediate but `test` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks). This allows an easier clean up for example react testing framework registers an unmount function in an `afterEach` block to clean up.
@@ -99,12 +96,11 @@ Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
+- injectGlobals must be used, imports from jest can not be mocked, ie import {expect, jest, test} from '@jest/globals';
 - console, setTimeout / setInterval can also be imported and will not participate in leak detection is these cases, but this can also serve as exit hatch if needed
 ```js
 import { setTimeout, setInterval } from 'node:timers';
-import { Console } from 'node:console';
-
-const myConsole = new Console(process.stdout, process.stderr);
+import console from 'node:console';
 ```
 
 ## Recommendations

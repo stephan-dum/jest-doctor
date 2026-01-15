@@ -8,7 +8,7 @@ it('detects unresolved promises', async () => {
 
 it('ignores promise leaks if mock.promise is set to false', async () => {
   const result = await runJest(`promise.fixture.ts`, {
-    mock: { promises: false },
+    report: { promises: false },
   });
   expect(result.success).toBe(true);
 });

@@ -1,15 +1,13 @@
 {
   "extends": ["@dev/tsconfig/base.json"],
-  "include": ["src"],
   "exclude": ["node_modules", "dist"],
+  "include": ["src"],
   "compilerOptions": {
     "types": ["node", "jest"],
-    "noEmit": false,
+    "noEmit": true,
     "module": "commonjs",
-    "declaration": true,
-    "outDir": "dist",
     "target": "esnext",
-    "sourceMap": true,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "moduleResolution": "node"
   }
 }

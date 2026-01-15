@@ -7,7 +7,7 @@ it('is passes', async () => {
   await resolvedPromise;
 
   const rejectedPromise = new Promise<void>((_, reject) => {
-    setTimeout(reject, 100);
+    setTimeout(reject, 10);
   });
   jest.runAllTimers();
   try {
@@ -24,7 +24,7 @@ it('is passes', async () => {
   clearTimeout(setTimeout(() => {}, 10));
 
   await new Promise<void>((resolve) => {
-    setTimeout(resolve, 100);
+    setTimeout(resolve, 10);
   });
   await new Promise<void>((_, reject) => {
     const intervalId = setInterval(() => {

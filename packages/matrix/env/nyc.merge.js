@@ -7,7 +7,7 @@ const config = {
   cwd: path.dirname(resolve('jest-doctor/package.json')),
   'temp-directory': path.join(import.meta.dirname, '.nyc_output/all'),
   'report-dir': path.join(import.meta.dirname, 'coverage'),
-  reporter: ['text', 'html'],
+  reporter: ['html', 'text'],
   clean: false,
   extension: ['.js', '.cjs', '.mjs', '.ts', '.tsx', '.jsx', '.cts'],
 };

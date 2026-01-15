@@ -8,11 +8,9 @@ const initLeakRecord = (that: JestDoctorEnvironment, testName: string) => {
   }
 
   const leakRecord = {
-    promise: new Map(),
-    interval: new Map(),
-    timeout: new Map(),
-    fakeTimeout: new Map(),
-    fakeInterval: new Map(),
+    promises: new Map(),
+    timers: new Map(),
+    fakeTimers: new Map(),
     console: [],
     totalDelay: 0,
   };

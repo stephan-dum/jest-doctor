@@ -7,22 +7,24 @@ import type { Circus } from '@jest/types';
 import type { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
 import type { ModuleMocker } from 'jest-mock';
 import type { Context } from 'node:vm';
-import type { LeakRecord } from './types';
+import { JestDoctorEnvironment, LeakRecord, NormalizedOptions } from './types';
 
-import patchConsole from './utils/patchConsole.cjs';
+import patchConsole from './patch/console.cjs';
 import initOriginal from './utils/initOriginal.cjs';
-import patchFakeTimers from './utils/patchFakeTimers.cjs';
+import patchFakeTimers from './patch/fakeTimers.cjs';
 import { MAIN_THREAD } from './consts.cjs';
-import patchTimers from './utils/patchTimers.cjs';
-import patchIt from './utils/patchIt.cjs';
+import timers from './patch/timers.cjs';
+import patchIt from './patch/it.cjs';
 import createAsyncHookDetector from './utils/createAsyncHookDetector.cjs';
 import createAsyncHookCleaner from './utils/createAsyncHookCleaner.cjs';
 import reportLeaks from './utils/reportLeaks.cjs';
 import cleanupAfterTest from './utils/cleanupAfterTest.cjs';
 import initLeakRecord from './utils/initLeakRecord.cjs';
 import { AsyncHook } from 'node:async_hooks';
-import patchHook from './utils/patchHook.cjs';
+import patchHook from './patch/hook.cjs';
 import getAllAfterEach from './utils/getAllAfterEach.cjs';
+import normalizeOptions from './utils/normalizeOptions.cjs';
+import getReporterTmpDir from './utils/getReporterTmpDir.cjs';
 
 const createEnvMixin = <
   EnvironmentConstructor extends new (
@@ -32,7 +34,7 @@ const createEnvMixin = <
 >(
   Environment: EnvironmentConstructor,
 ) => {
-  return class Base implements JestEnvironment {
+  return class Base implements JestEnvironment, JestDoctorEnvironment {
     public currentTestName: string = MAIN_THREAD;
     public leakRecords = new Map<string, LeakRecord>();
     public original = initOriginal();
@@ -47,25 +49,19 @@ const createEnvMixin = <
     public promiseOwner = new Map<number, string>();
     public asyncHookDetector?: AsyncHook;
     public asyncHookCleaner?: AsyncHook;
-    public mock: {
-      console?: boolean;
-      timers?: boolean;
-      promises?: boolean;
-      fakeTimers?: boolean;
-    };
-    public shouldCleanup: boolean;
-    public isTornDown = false;
+    public options: NormalizedOptions;
+    public seenTearDown = false;
     public currentAfterEachCount = 0;
+    public reporterTmpDir = '';
 
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
       this.env = new Environment(config, context);
 
-      const { mock = {}, cleanup = true } =
-        config.projectConfig.testEnvironmentOptions;
-      this.mock = mock as typeof this.mock;
-      this.shouldCleanup = cleanup as boolean;
+      this.reporterTmpDir = getReporterTmpDir(config.projectConfig.reporters);
+      this.options = normalizeOptions(
+        config.projectConfig.testEnvironmentOptions,
+      );
       this.global = this.env.global;
-      this.global.original = this.original;
       this.fakeTimers = this.env.fakeTimers;
       this.fakeTimersModern = this.env.fakeTimersModern;
       this.moduleMocker = this.env.moduleMocker;
@@ -74,7 +70,7 @@ const createEnvMixin = <
 
       initLeakRecord(this, MAIN_THREAD);
 
-      if (this.mock.promises ?? true) {
+      if (this.options.report.promises) {
         this.asyncHookCleaner = createAsyncHookCleaner(this);
         this.asyncHookDetector = createAsyncHookDetector(this);
       }
@@ -83,14 +79,14 @@ const createEnvMixin = <
     async setup() {
       await this.env.setup();
 
-      if (this.mock.fakeTimers ?? true) {
+      if (this.options.report.fakeTimers) {
         patchFakeTimers(this);
       }
-      if (this.mock.timers ?? true) {
-        patchTimers(this);
+      if (this.options.report.timers) {
+        timers(this);
       }
-      if (this.mock.console ?? true) {
-        patchConsole(this);
+      if (this.options.report.console) {
+        patchConsole(this, this.options.report.console);
       }
     }
 
@@ -98,14 +94,14 @@ const createEnvMixin = <
       event,
       state,
     ) => {
-      await this.env.handleTestEvent?.(event as Circus.AsyncEvent, state);
-
       if (event.name === 'test_start') {
-        this.currentAfterEachCount = getAllAfterEach(event.test.parent);
+        if (this.options.timerIsolation === 'afterEach') {
+          this.currentAfterEachCount = getAllAfterEach(event.test.parent);
+        }
       } else if (event.name === 'teardown') {
         // the detector needs to be disabled here to avoid the teardown promise polluting the report
         this.asyncHookDetector?.disable();
-        this.isTornDown = true;
+        this.seenTearDown = true;
       } else if (event.name === 'setup') {
         this.asyncHookCleaner?.enable();
         this.asyncHookDetector?.enable();
@@ -116,6 +112,8 @@ const createEnvMixin = <
         patchHook(this, 'afterEach');
         patchHook(this, 'afterAll');
       }
+
+      await this.env.handleTestEvent?.(event as Circus.AsyncEvent, state);
     };
 
     async teardown() {
@@ -125,7 +123,7 @@ const createEnvMixin = <
       try {
         // in case jest discovers an error all following events will be skipped
         // and teardown is executed immediately
-        if (this.isTornDown) {
+        if (this.seenTearDown) {
           reportLeaks(this, leakRecord);
         }
       } finally {

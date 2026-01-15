@@ -9,7 +9,7 @@ const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
     const owner = that.currentTestName;
     that.promiseOwner.set(asyncId, owner);
 
-    that.leakRecords.get(owner)?.promise.set(asyncId, {
+    that.leakRecords.get(owner)?.promises.set(asyncId, {
       stack: getStack(init as Function),
       triggerAsyncId,
       testName: owner,

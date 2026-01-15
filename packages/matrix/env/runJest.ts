@@ -2,6 +2,7 @@ import { spawn, execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 const { resolve } = createRequire(import.meta.url);
+import type { RawOptions } from 'jest-doctor';
 
 interface AssertionResults {
   status: 'failed' | 'passed';
@@ -21,16 +22,6 @@ interface JestJsonResult {
   testResults: TestResults29[];
 }
 
-interface TestEnvironmentOptions {
-  mock?: {
-    console?: boolean;
-    timers?: boolean;
-    fakeTimers?: boolean;
-    promises?: boolean;
-  };
-  clean?: boolean;
-}
-
 const getBin = (bin: string, cwd: string = process.cwd()) => {
   return execSync(`yarn bin ${bin}`, {
     encoding: 'utf8',
@@ -40,7 +31,7 @@ const getBin = (bin: string, cwd: string = process.cwd()) => {
 
 const runJest = (
   testMatch: string,
-  options: TestEnvironmentOptions = {},
+  options: RawOptions = {},
   testNamePattern: string = '.*',
   environment: string = 'jest-doctor/env/node',
 ) => {

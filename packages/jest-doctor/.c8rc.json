@@ -1,0 +1,7 @@
+{
+  "reporter": [],
+  "clean": false,
+  "o": ".nyc_output",
+  "exclude": ["e2e/**"],
+  "temp-directory": ".c8_output"
+}

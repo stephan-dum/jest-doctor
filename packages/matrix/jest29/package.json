@@ -1,12 +1,7 @@
 {
   "name": "@matrix/jest29",
   "version": "1.0.0",
-  "type": "module",
   "devDependencies": {
-    "jest": "29.7.0",
-    "shx": "^0.4.0"
-  },
-  "scripts": {
-    "test": "shx rm -Rf ../env/.nyc_output/29.7.0 && jest --config ../env/jest.config.js --runInBand"
+    "jest": "29.7.0"
   }
 }

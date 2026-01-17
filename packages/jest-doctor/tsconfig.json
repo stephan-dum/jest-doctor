@@ -1,13 +1,16 @@
 {
   "extends": ["@dev/tsconfig/base.json"],
   "exclude": ["node_modules", "dist"],
-  "include": ["src"],
+  "include": ["src", "e2e"],
   "compilerOptions": {
     "types": ["node", "jest"],
     "noEmit": true,
-    "module": "commonjs",
     "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "verbatimModuleSyntax": false,
-    "moduleResolution": "node"
+    "sourceMap": true,
+    "inlineSources": true,
+    "jsx": "react-jsx"
   }
 }

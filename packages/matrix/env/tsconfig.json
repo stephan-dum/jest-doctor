@@ -1,8 +1,0 @@
-{
-  "include": ["**/*"],
-  "extends": ["@dev/tsconfig/base.json"],
-  "compilerOptions": {
-    "types": ["node", "jest"],
-    "jsx": "react-jsx"
-  }
-}

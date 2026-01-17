@@ -7,7 +7,7 @@ It fails tests deterministically when they:
 - Leak timers or intervals
 - Emit console output
 
-jest-doctor is intentionally strict. If your test leaks async work, that is a bug, even if Jest would normally ignore it.
+Jest-doctor is intentionally strict. If your test leaks async work, that is a bug, even if Jest normally ignores it.
 
 ## Installation
 
@@ -21,31 +21,30 @@ yarn add -D jest-doctor
 
 ## Usage
 
-Add one of the provided environments to your `jest.config.js`.
+Add one of the provided environments to your `jest.config.js`, in addition, the reporter provides a list ordered by severity and a total count overview.
 
 ```js
 export default {
   testEnvironment: 'jest-doctor/env/node',
+  // optional
+  reporters: ['default', 'jest-doctor/reporter']
 };
 ```
 
-Out of the box node and jsdom are supported. If other environments are needed simple use the createEnvMixin helper.
-Simply create a new file in your code base and reference it in you jest.config.js.
+Out-of-the-box node and jsdom are supported. If other environments are needed simple use the createEnvMixin helper.
+Create a new file in your code base and reference it in you jest.config.js.
 
 ```js
-const createEnvMixin = require('jest-doctor/createEnvMixin').default;
-const NodeEnvironment = require('jest-environment-node').default;
-const MyEnv = require('my-env').default;
+import createEnvMixin from 'jest-doctor/createEnvMixin';
+import NodeEnvironment from 'jest-environment-node';
+import ThirdPartyEnv from 'thrid-party-env';
 
 // eigther wrap the desire existing environment
-const JestDoctorMyEnv = createEnvMixin(MyEnv);
+const JestDoctorThirdPartyEnv = createEnvMixin(ThirdPartyEnv);
 
 // or pass in your own class
-class MyClass extends NodeEnvironment {}
-const JestDoctorMyEnv = createEnvMixin(MyClass);
-
-// dont forget to export
-module.exports = JestDoctorMyEnv;
+class MyEnv extends NodeEnvironment {}
+const JestDoctorMyEnv = createEnvMixin(MyEnv);
 ```
 
 ### Configuration
@@ -54,7 +53,11 @@ The environment can be configured through jest config `testEnvironmentOptions`:
 - **report**: an object defining which leaks should be tracked and reported
   - **timers**: `false | 'warn' | 'trow'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
   - **fakeTimers**: `false | 'warn' | 'trow'` (default `throw`) same as timers but for fake api
-  - **promises**: `false | 'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
+  - **promises**: `false` or object
+      - **onError**: `'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
+      - **patch**: `'async_hooks' | 'promise'` (default `async_hooks`) controls how to patch promises
+          - **async_hooks**: uses node async_hook API to detect any promise generation, robust solution but with an overhead.
+          - **promise**: overwrites the global Promise object which is faster but will not detect: internal promises, async await, native API promises!
   -  **console**: `false` or object (default object)
       - **onError**: `'warn' | 'trow'` (default `throw`) how to handle reporting
       - **methods**: `keyof Console` (default all methods) which console methods should be tracked
@@ -62,9 +65,8 @@ The environment can be configured through jest config `testEnvironmentOptions`:
 - **timerIsolation**: `'afterEach' | 'immediate'` (default: `'afterEach'`)
   - **immediate**: report and clear timers directly after each test / hook block
   - **afterEach**: `beforeAll`, `beforeEach` and `afterAll` are immediate but `test` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks). This allows an easier clean up for example react testing framework registers an unmount function in an `afterEach` block to clean up.
-- **delayThreshold**: `number` (default: `100`) the delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is add up. If this the sum is higher then the threshold at the end when reporting an error is throw, otherwise a warning is logged.
+- **delayThreshold**: `number` (default: `0`) the delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is add up. If this the sum is higher then the threshold at the end when reporting an error is throw, otherwise a warning is logged.
 - **clearTimers**: `boolean` (default: `true`) whether to clear all timers base on `timerIsolation`
-
 
 here is an example how the configuration could look like:
 ```js
@@ -75,29 +77,45 @@ export default {
         methods: ["log", "warn", "error"],
         ignore: /Third party message/,
       },
-      timers: true,
-      fakeTimers: true,
-      promises: true,
+      timers: 'throw',
+      fakeTimers: 'warn',
+      promises: false,
     },
-    delayThreshold: 0,
+    delayThreshold: 100,
     timerIsolation: 'afterEach',
     clearTimers: true,
   },
 };
 ```
 
+the reporter can be configured by the standard jest reporter config syntax
+- **tmpDir**: `string` (default: `.tmp`) where to store reports from the environment to be read by the reporter
+
+```js
+export default {
+  reporters: [
+    'default',
+    ['jest-doctor/reporter', { tmpDir: 'custom-dir' }]
+  ],
+}
+```
+
 ## Limitations
 - it.concurrent is replaced with a sync version
 - legacy fake timers are not mocked
 - test and hook blocks do not support done callback or generators
-- promises that resolve within the next tick can not be tracked for example:
+- promises that resolve within the next tick cannot be tracked, for example:
 ```js
 Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
-- injectGlobals must be used, imports from jest can not be mocked, ie import {expect, jest, test} from '@jest/globals';
-- console, setTimeout / setInterval can also be imported and will not participate in leak detection is these cases, but this can also serve as exit hatch if needed
+- injectGlobals must be used for totalDelay and test attribution to work, because imports from jest can not be patched! Also this could give a wrong sense of confidence because one test could have open timers or promises that resolve while running other tests and are not present in the final report.
+```js
+import { expect, it, describe, beforeEach /*...*/ } from '@jest/globals';
+```
+
+- console, setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.
 ```js
 import { setTimeout, setInterval } from 'node:timers';
 import console from 'node:console';
@@ -118,7 +136,7 @@ afterEach(async () => {
 ```
 
 ## Tested against
-- Jest 28, 29, 30
+- Jest 27, 28, 29, 30
 - node 22, 24
 
 # FAQ

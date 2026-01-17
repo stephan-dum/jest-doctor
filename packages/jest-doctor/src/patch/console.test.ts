@@ -1,4 +1,4 @@
-import { isIgnored } from './console.cjs';
+import { isIgnored } from './console';
 
 it('returns true if ignore matches regexp', () => {
   const result = isIgnored('oops', [/ops/]);

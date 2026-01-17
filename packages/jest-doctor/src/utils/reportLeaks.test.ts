@@ -1,5 +1,5 @@
-import reportLeaks from './reportLeaks.cjs';
-import { JestDoctorEnvironment, LeakRecord } from '../types';
+import reportLeaks from './reportLeaks';
+import type { JestDoctorEnvironment, LeakRecord } from '../types';
 import console from 'node:console';
 
 jest.mock('node:console', () => ({
@@ -8,10 +8,17 @@ jest.mock('node:console', () => ({
   },
   __esModule: true,
 }));
-
+const aggregatedReport = {
+  console: 0,
+  promises: 0,
+  timers: 0,
+  fakeTimers: 0,
+  totalDelay: 0,
+};
 describe('console', () => {
   it('warns ', () => {
     const that = {
+      aggregatedReport,
       options: {
         report: {
           console: {
@@ -43,6 +50,7 @@ describe('console', () => {
 
   it('throws ', () => {
     const that = {
+      aggregatedReport,
       options: {
         report: {
           console: {
@@ -77,6 +85,7 @@ describe('console', () => {
 describe('checkError', () => {
   it('warns ', () => {
     const that = {
+      aggregatedReport,
       options: {
         report: {
           promises: 'warn',
@@ -110,6 +119,7 @@ describe('checkError', () => {
   });
   it('throws ', () => {
     const that = {
+      aggregatedReport,
       options: {
         report: {
           promises: 'throw',
@@ -147,6 +157,7 @@ describe('checkError', () => {
 describe('totalDelay', () => {
   it('warns ', () => {
     const that = {
+      aggregatedReport,
       currentAfterEachCount: 0,
       options: {
         delayThreshold: 100,
@@ -169,6 +180,7 @@ describe('totalDelay', () => {
   });
   it('throws ', () => {
     const that = {
+      aggregatedReport,
       currentAfterEachCount: 0,
       options: {
         delayThreshold: 0,

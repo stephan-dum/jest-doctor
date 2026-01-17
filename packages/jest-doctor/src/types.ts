@@ -1,6 +1,6 @@
 import type { ModernFakeTimers } from '@jest/fake-timers';
 import { JestEnvironment } from '@jest/environment';
-import initOriginal from './utils/initOriginal.cjs';
+import initOriginal from './utils/initOriginal';
 
 export interface TimerRecord {
   type: 'timeout' | 'interval' | 'fakeTimeout' | 'fakeInterval';
@@ -11,7 +11,6 @@ export interface TimerRecord {
 
 export interface PromiseRecord {
   stack: string;
-  triggerAsyncId: number;
   testName: string;
 }
 
@@ -23,7 +22,7 @@ export interface ConsoleRecord {
 }
 
 export interface LeakRecord {
-  promises: Map<number, PromiseRecord>;
+  promises: Map<number | Promise<unknown>, PromiseRecord>;
   timers: Map<NodeJS.Timeout, TimerRecord>;
   console: ConsoleRecord[];
   totalDelay: number;
@@ -46,10 +45,14 @@ export interface FakeTimers extends Omit<ModernFakeTimers, '_fakeTimers'> {
 
 export type TimerIsolation = 'afterEach' | 'immediate';
 
-export type OnError = boolean | 'throw' | 'error';
+export type OnError = boolean | 'throw' | 'warn';
+
+export type ThrowOrWarn = 'throw' | 'warn';
+
+export type Patch = 'async_hooks' | 'promise';
 
 export interface ConsoleOptions {
-  onError: OnError;
+  onError: ThrowOrWarn;
   methods: Array<keyof Console>;
   ignore: Array<string | RegExp>;
 }
@@ -61,7 +64,12 @@ export interface NormalizedOptions {
     console: NormalizedConsoleOptions;
     timers: OnError;
     fakeTimers: OnError;
-    promises: OnError;
+    promises:
+      | false
+      | {
+          onError: ThrowOrWarn;
+          patch: Patch;
+        };
   };
   delayThreshold: number;
   timerIsolation: TimerIsolation;
@@ -71,9 +79,16 @@ export interface NormalizedOptions {
 export type RawConsoleOptions =
   | boolean
   | {
-      onError?: 'throw' | 'warn';
+      onError?: ThrowOrWarn;
       methods?: Array<keyof Console>;
       ignore?: string | RegExp | Array<string | RegExp>;
+    };
+
+export type RawPromise =
+  | boolean
+  | {
+      onError?: ThrowOrWarn;
+      patch?: Patch;
     };
 
 export interface RawOptions {
@@ -81,13 +96,21 @@ export interface RawOptions {
     console?: RawConsoleOptions;
     timers?: OnError;
     fakeTimers?: OnError;
-    promises?: OnError;
+    promises?: RawPromise;
   };
   delayThreshold?: number;
   timerIsolation?: TimerIsolation;
   clearTimers?: boolean;
 }
 
+export interface AggregatedReport {
+  testPath: string;
+  promises: number;
+  timers: number;
+  fakeTimers: number;
+  console: number;
+  totalDelay: number;
+}
 export interface JestDoctorEnvironment {
   global: JestEnvironment['global'];
   fakeTimersModern: ModernFakeTimers | null;
@@ -97,4 +120,5 @@ export interface JestDoctorEnvironment {
   promiseOwner: Map<number, string>;
   currentAfterEachCount: number;
   options: NormalizedOptions;
+  aggregatedReport: AggregatedReport;
 }

@@ -1,7 +1,6 @@
-import normalizeOptions from './normalizeOptions.cjs';
-import { RawConsoleOptions } from '../types';
+import normalizeOptions from './normalizeOptions';
 
-describe('normalizeOptions', () => {
+describe('normalize console', () => {
   it('should normalize console if true', () => {
     const result = normalizeOptions({
       report: {
@@ -19,7 +18,7 @@ describe('normalizeOptions', () => {
   it('should normalize console if empty object', () => {
     const result = normalizeOptions({
       report: {
-        console: {} as RawConsoleOptions,
+        console: {},
       },
     });
 
@@ -71,15 +70,53 @@ describe('normalizeOptions', () => {
       ignore: ['test'],
     });
   });
+});
 
-  it('should normalize if report is undefined', () => {
-    const result = normalizeOptions({});
+it('should normalize if report is undefined', () => {
+  const result = normalizeOptions({});
 
-    expect(result).toMatchObject({
+  expect(result).toMatchObject({
+    report: {
+      timers: 'throw',
+    },
+    timerIsolation: 'afterEach',
+  });
+});
+
+describe('normalize promises', () => {
+  it('should normalize promises if true', () => {
+    const result = normalizeOptions({
       report: {
-        timers: 'throw',
+        promises: true,
       },
-      timerIsolation: 'afterEach',
     });
+
+    expect(result.report.promises).toEqual({
+      onError: 'throw',
+      patch: 'async_hooks',
+    });
+  });
+
+  it('should normalize promises if empty object', () => {
+    const result = normalizeOptions({
+      report: {
+        promises: {},
+      },
+    });
+
+    expect(result.report.promises).toEqual({
+      onError: 'throw',
+      patch: 'async_hooks',
+    });
+  });
+
+  it('should normalize promises is false', () => {
+    const result = normalizeOptions({
+      report: {
+        promises: false,
+      },
+    });
+
+    expect(result.report.promises).toEqual(false);
   });
 });

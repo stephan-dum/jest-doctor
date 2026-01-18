@@ -3,11 +3,19 @@ import type { FakeTimers, JestDoctorEnvironment } from '../types';
 import getStack from '../utils/getStack';
 
 const patchFakeTimers = (that: JestDoctorEnvironment) => {
-  const fakeTimers = (that.fakeTimersModern as unknown as FakeTimers)
-    ?._fakeTimers;
+  const modernFakeTimers = that.fakeTimersModern as unknown as FakeTimers;
+  const fakeTimers = modernFakeTimers?._fakeTimers;
   const originalFakeTimerInstall = fakeTimers?.install;
 
   if (fakeTimers && originalFakeTimerInstall) {
+    const originalClearAllTimers =
+      modernFakeTimers.clearAllTimers.bind(modernFakeTimers);
+
+    modernFakeTimers.clearAllTimers = () => {
+      that.leakRecords.get(that.currentTestName)?.fakeTimers.clear();
+      originalClearAllTimers();
+    };
+
     fakeTimers.install = (config) => {
       const clock = originalFakeTimerInstall(config);
 

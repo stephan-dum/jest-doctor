@@ -43,6 +43,7 @@ describe('console', () => {
     reportLeaks(that, leakReport);
 
     expect(leakReport.console.length).toEqual(0);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringContaining('console output found'),
     );
@@ -113,6 +114,7 @@ describe('checkError', () => {
     reportLeaks(that, leakReport);
 
     expect(leakReport.promises.size).toEqual(0);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringContaining('open promise(s) found'),
     );
@@ -160,6 +162,7 @@ describe('totalDelay', () => {
       aggregatedReport,
       currentAfterEachCount: 0,
       options: {
+        report: {},
         delayThreshold: 100,
       },
     } as unknown as JestDoctorEnvironment;
@@ -174,6 +177,7 @@ describe('totalDelay', () => {
 
     reportLeaks(that, leakReport);
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringContaining('with total delay of'),
     );
@@ -183,6 +187,7 @@ describe('totalDelay', () => {
       aggregatedReport,
       currentAfterEachCount: 0,
       options: {
+        report: {},
         delayThreshold: 0,
       },
     } as unknown as JestDoctorEnvironment;

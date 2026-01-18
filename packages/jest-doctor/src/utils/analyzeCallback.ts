@@ -23,7 +23,7 @@ const analyzeCallback = async (
   } finally {
     that.currentTestName = MAIN_THREAD;
 
-    // give the promise a tick time to resolve
+    // give the promise and intervals a tick time to resolve
     await Promise.resolve().then(() => {});
 
     cleanupAfterTest(that, leakRecord, testName);

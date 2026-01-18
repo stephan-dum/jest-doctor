@@ -22,6 +22,15 @@ export interface JestJsonResult {
   testResults: TestResult[];
 }
 
+const jestDoctorBase = path.dirname(
+  require.resolve('jest-doctor/package.json'),
+);
+
+const internalEnvs = {
+  node: require.resolve(path.join(jestDoctorBase, 'src/env/node.ts')),
+  jsdom: require.resolve(path.join(jestDoctorBase, 'src/env/jsdom.ts')),
+};
+
 const runJest = (
   testMatch: string,
   options: RawOptions = {},
@@ -30,14 +39,11 @@ const runJest = (
   additionalArgs: string[] = [],
 ) => {
   const root = path.dirname(__dirname);
-  //const tmpDir = path.join(root, '.c8_output');
   const jestBin = getBin('jest');
   const c8Bin = getBin('c8', root);
 
   const args: string[] = [
     c8Bin,
-    //'--temp-directory',
-    //tmpDir,
     jestBin,
     '--config',
     require.resolve('./jest.env.config.mjs'),
@@ -46,17 +52,18 @@ const runJest = (
     '--testEnvironmentOptions',
     JSON.stringify(options),
     '--testMatch',
-    path.join(__dirname, 'suits', testMatch),
+    path.join(__dirname, 'fixtures', testMatch),
     ...additionalArgs,
   ];
 
   return new Promise<string>((resolve, reject) => {
     const child = spawn(process.execPath, args, {
-      stdio: ['inherit', 'pipe', 'inherit'],
+      stdio: ['inherit', 'pipe', 'ignore'],
       cwd: path.dirname(__dirname),
       env: {
         ...process.env,
-        TEST_ENVIRONMENT: environment,
+        TEST_ENVIRONMENT:
+          internalEnvs[environment as 'node' | 'jsdom'] || environment,
       },
     });
 

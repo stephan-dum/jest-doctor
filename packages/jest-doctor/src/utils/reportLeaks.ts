@@ -35,7 +35,10 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   that.aggregatedReport.promises += leakRecord.promises.size;
 
   if (that.currentAfterEachCount === 0) {
-    that.aggregatedReport.timers += leakRecord.timers.size;
+    if (that.options.report.timers) {
+      that.aggregatedReport.timers += leakRecord.timers.size;
+    }
+
     that.aggregatedReport.fakeTimers += leakRecord.fakeTimers.size;
     that.aggregatedReport.totalDelay += leakRecord.totalDelay;
   }
@@ -73,7 +76,10 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
         }
       }
 
-      checkError('timers', 'timer');
+      if (that.options.report.timers) {
+        checkError('timers', 'timer');
+      }
+
       checkError('fakeTimers', 'fake timer');
     }
   } finally {

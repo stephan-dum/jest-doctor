@@ -1,24 +1,27 @@
-import { runTest, TestResult } from '../runJest';
+import { runTest, TestResult } from '../../runJest';
 
 const checkPromise = (testResult: TestResult) => {
-  const leaks = testResult.assertionResults[0];
-  expect(leaks.failureMessages[0]).toContain('open promise');
-
-  const resolves = testResult.assertionResults[1];
+  const resolves = testResult.assertionResults[0];
   expect(resolves.status).toEqual('passed');
 
-  const rejects = testResult.assertionResults[2];
+  const rejects = testResult.assertionResults[1];
   expect(rejects.failureMessages[0]).toContain('Promise rejected');
+
+  const leaksResolved = testResult.assertionResults[2];
+  expect(leaksResolved.failureMessages[0]).toContain('open promise');
+
+  const leaksRejected = testResult.assertionResults[3];
+  expect(leaksRejected.failureMessages[0]).toContain('open promise');
 };
 
 it('detects unresolved promises by patch async_hooks', async () => {
-  const result = await runTest(`promise.fixture.ts`);
+  const result = await runTest(`leaks/promise.fixture.ts`);
 
   checkPromise(result.testResults[0]);
 });
 
 it('detects unresolved promises by patch promise', async () => {
-  const result = await runTest(`promise.fixture.ts`, {
+  const result = await runTest(`leaks/promise.fixture.ts`, {
     report: { promises: { patch: 'promise' } },
   });
 
@@ -27,7 +30,7 @@ it('detects unresolved promises by patch promise', async () => {
 
 it('ignores promise leaks if mock.promise is set to false', async () => {
   const result = await runTest(
-    `promise.fixture.ts`,
+    `leaks/promise.fixture.ts`,
     {
       report: { promises: false },
     },

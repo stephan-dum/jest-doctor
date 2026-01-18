@@ -2,8 +2,11 @@
   "name": "jest-doctor",
   "version": "1.0.0",
   "main": "./dist/index.js",
+  "description": "jest environment for leak detection",
   "license": "MIT",
   "type": "commonjs",
+  "homepage": "https://github.com/stephan-dum/jest-doctor",
+  "repository": "https://github.com/stephan-dum/jest-doctor",
   "exports": {
     "./package.json": "./package.json",
     "./createEnvMixin": "./dist/createEnvMixin.js",
@@ -12,6 +15,10 @@
     "./env/jsdom": "./dist/env/jsdom.js",
     "./reporter": "./dist/reporter.js"
   },
+  "files": [
+    "dist",
+    "readme.md"
+  ],
   "types": "./dist/types.d.ts",
   "devDependencies": {
     "@dev/eslint": "1.0.0",

@@ -4,7 +4,8 @@
 
 It fails tests deterministically when they:
 - Leave unresolved Promises
-- Leak timers or intervals
+- leave open (fake) timers or intervals
+- Use real timers or intervals and their total delay reach a certain threshold
 - Emit console output
 
 Jest-doctor is intentionally strict. If your test leaks async work, that is a bug, even if Jest normally ignores it.
@@ -31,21 +32,7 @@ export default {
 };
 ```
 
-Out-of-the-box node and jsdom are supported. If other environments are needed simple use the createEnvMixin helper.
-Create a new file in your code base and reference it in you jest.config.js.
-
-```js
-import createEnvMixin from 'jest-doctor/createEnvMixin';
-import NodeEnvironment from 'jest-environment-node';
-import ThirdPartyEnv from 'thrid-party-env';
-
-// eigther wrap the desire existing environment
-const JestDoctorThirdPartyEnv = createEnvMixin(ThirdPartyEnv);
-
-// or pass in your own class
-class MyEnv extends NodeEnvironment {}
-const JestDoctorMyEnv = createEnvMixin(MyEnv);
-```
+Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](./docs/build_your_own_environment.md).
 
 ### Configuration
 
@@ -74,14 +61,17 @@ export default {
   testEnvironmentOptions: {
     report: {
       console: {
+        onError: 'warn',
         methods: ["log", "warn", "error"],
         ignore: /Third party message/,
       },
-      timers: 'throw',
+      timers: 'warn',
       fakeTimers: 'warn',
-      promises: false,
+      promises: {
+        onErro: 'warn',
+      },
     },
-    delayThreshold: 100,
+    delayThreshold: 1000,
     timerIsolation: 'afterEach',
     clearTimers: true,
   },

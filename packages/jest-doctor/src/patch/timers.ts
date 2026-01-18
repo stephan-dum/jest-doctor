@@ -35,9 +35,9 @@ const timers = (that: JestDoctorEnvironment) => {
 
   env.setInterval = Object.assign(
     function (callback: () => void, delay?: number) {
-      const intervalId = that.original.setInterval(() => {
-        const owner = that.currentTestName;
+      const owner = that.currentTestName;
 
+      const intervalId = that.original.setInterval(() => {
         if (owner !== MAIN_THREAD && delay) {
           const leakRecord = that.leakRecords.get(owner);
 
@@ -48,7 +48,8 @@ const timers = (that: JestDoctorEnvironment) => {
 
         callback();
       }, delay);
-      that.leakRecords.get(that.currentTestName)?.timers.set(intervalId, {
+
+      that.leakRecords.get(owner)?.timers.set(intervalId, {
         type: 'interval',
         delay: delay || 0,
         stack: getStack(env.setInterval),

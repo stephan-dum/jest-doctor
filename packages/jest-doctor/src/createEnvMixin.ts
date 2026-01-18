@@ -37,7 +37,7 @@ import type { ModuleMocker } from 'jest-mock';
 import type { Context } from 'node:vm';
 
 interface JestDoctor {
-  handleEvent(
+  handleEvent?(
     event: Circus.AsyncEvent | Circus.SyncEvent,
     state: Circus.State,
   ): Promise<void>;
@@ -119,9 +119,10 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       if (report.fakeTimers) {
         patchFakeTimers(this);
       }
-      if (report.timers) {
-        timers(this);
-      }
+
+      // always patch to be able to clean them
+      timers(this);
+
       if (report.console) {
         patchConsole(this, report.console);
       }

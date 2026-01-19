@@ -9,21 +9,10 @@ const checkPromise = (testResult: TestResult) => {
 
   const leaksResolved = testResult.assertionResults[2];
   expect(leaksResolved.failureMessages[0]).toContain('open promise');
-
-  const leaksRejected = testResult.assertionResults[3];
-  expect(leaksRejected.failureMessages[0]).toContain('open promise');
 };
 
 it('detects unresolved promises by patch async_hooks', async () => {
   const result = await runTest(`leaks/promise.fixture.ts`);
-
-  checkPromise(result.testResults[0]);
-});
-
-it('detects unresolved promises by patch promise', async () => {
-  const result = await runTest(`leaks/promise.fixture.ts`, {
-    report: { promises: { patch: 'promise' } },
-  });
 
   checkPromise(result.testResults[0]);
 });

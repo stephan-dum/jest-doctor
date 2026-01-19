@@ -18,10 +18,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       ].join('\n');
 
       const option = that.options.report[property];
-      if (
-        option === 'throw' ||
-        (typeof option === 'object' && option.onError === 'throw')
-      ) {
+      if (option === 'throw') {
         const error = new Error();
         error.stack = message;
         throw error;
@@ -41,6 +38,22 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
 
     that.aggregatedReport.fakeTimers += leakRecord.fakeTimers.size;
     that.aggregatedReport.totalDelay += leakRecord.totalDelay;
+  }
+
+  if (that.options.verbose) {
+    const messages: string[] = [];
+
+    const addLeak = (leak: { stack: string }) => {
+      messages.push(leak.stack);
+    };
+    leakRecord.promises.forEach(addLeak);
+    leakRecord.timers.forEach(addLeak);
+    leakRecord.fakeTimers.forEach(addLeak);
+    leakRecord.console.forEach(addLeak);
+
+    if (messages.length) {
+      console.log(messages.join('\n'));
+    }
   }
 
   try {

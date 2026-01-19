@@ -6,8 +6,6 @@ import {
   RawOptions,
   RawConsoleOptions,
   ThrowOrWarn,
-  RawPromise,
-  Patch,
 } from '../types';
 
 const DEFAULTS = {
@@ -21,11 +19,9 @@ const DEFAULTS = {
     },
     timers: 'throw' as OnError,
     fakeTimers: 'throw' as OnError,
-    promises: {
-      onError: 'throw' as ThrowOrWarn,
-      patch: 'async_hooks' as Patch,
-    },
+    promises: 'throw' as OnError,
   },
+  verbose: false,
   delayThreshold: 0,
   timerIsolation: 'afterEach' as TimerIsolation,
   clearTimers: true,
@@ -52,20 +48,7 @@ const normalizeConsole = (
 
   return false;
 };
-const normalizePromise = (rawPromise?: RawPromise) => {
-  if (rawPromise === undefined || rawPromise === true) {
-    return DEFAULTS.report.promises;
-  }
 
-  if (typeof rawPromise === 'object') {
-    return {
-      onError: rawPromise.onError ?? DEFAULTS.report.promises.onError,
-      patch: rawPromise.patch ?? DEFAULTS.report.promises.patch,
-    };
-  }
-
-  return false;
-};
 export function normalizeOptions(raw: RawOptions): NormalizedOptions {
   const report = raw.report ?? {};
 
@@ -74,8 +57,9 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
       console: normalizeConsole(report.console),
       timers: report.timers ?? DEFAULTS.report.timers,
       fakeTimers: report.fakeTimers ?? DEFAULTS.report.fakeTimers,
-      promises: normalizePromise(report.promises),
+      promises: report.promises ?? DEFAULTS.report.promises,
     },
+    verbose: raw.verbose ?? DEFAULTS.verbose,
     delayThreshold: raw.delayThreshold ?? DEFAULTS.delayThreshold,
     timerIsolation: raw.timerIsolation ?? DEFAULTS.timerIsolation,
     clearTimers: raw.clearTimers ?? DEFAULTS.clearTimers,

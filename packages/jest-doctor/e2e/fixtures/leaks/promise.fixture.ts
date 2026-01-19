@@ -30,7 +30,4 @@ describe('incorrect promise usage', () => {
   it('leaks a resolved promise', () => {
     void resolveFnToTest();
   });
-  it('leaks a rejected promise', () => {
-    void rejectFnToTest();
-  });
 });

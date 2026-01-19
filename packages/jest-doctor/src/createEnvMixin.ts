@@ -30,11 +30,11 @@ import patchHook from './patch/hook';
 import getAllAfterEach from './utils/getAllAfterEach';
 import normalizeOptions from './utils/normalizeOptions';
 import getReporterTmpDir from './utils/getReporterTmpDir';
-import patchPromise from './patch/promise';
 import { Circus } from '@jest/types';
 import type { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
 import type { ModuleMocker } from 'jest-mock';
 import type { Context } from 'node:vm';
+import patchPromiseConcurrency from './patch/promiseConcurrency';
 
 interface JestDoctor {
   handleEvent?(
@@ -73,7 +73,8 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public readonly reporterTmpDir: string;
     public readonly testPath: string;
     public readonly aggregatedReport;
-
+    public tearDownError?: Error;
+    public asyncIdToPromise = new Map<number, Promise<unknown>>();
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
       super(config, context);
 
@@ -103,10 +104,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
 
       initLeakRecord(this, MAIN_THREAD);
 
-      if (
-        this.options.report.promises &&
-        this.options.report.promises.patch === 'async_hooks'
-      ) {
+      if (this.options.report.promises) {
         this.asyncHookCleaner = createAsyncHookCleaner(this);
         this.asyncHookDetector = createAsyncHookDetector(this);
       }
@@ -127,8 +125,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       if (report.console) {
         patchConsole(this, report.console);
       }
-      if (report.promises && report.promises.patch === 'promise') {
-        patchPromise(this);
+
+      if (report.promises) {
+        patchPromiseConcurrency(this);
       }
     }
 
@@ -176,15 +175,24 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     };
 
     async teardown() {
+      if (this.tearDownError) {
+        // if its a retry, rethrow
+        throw this.tearDownError;
+      }
       await super.teardown();
       const leakRecord = this.leakRecords.get(MAIN_THREAD) as LeakRecord;
 
       try {
-        // in case jest discovers an error all following events will be skipped
+        // in case jest discovers an error, all following events will be skipped
         // and teardown is executed immediately
         if (this.seenTearDown) {
           reportLeaks(this, leakRecord);
         }
+      } catch (error) {
+        // it can happen that jest has a retry which leads, to even retrying teardown
+        // to preserve the state and fast-forward, the error is saved and rethrow
+        this.tearDownError = error as Error;
+        throw error;
       } finally {
         cleanupAfterTest(this, leakRecord, MAIN_THREAD);
         this.asyncHookCleaner?.disable();

@@ -4,6 +4,9 @@ import path from 'path';
 const { resolve } = createRequire(import.meta.url);
 export default {
   testEnvironment: resolve('./src/env/jsdom.ts'),
+  testEnvironmentOptions: {
+    verbose: true,
+  },
   forceCoverageMatch: ['**/src/**/*'],
   testMatch: [`${path.dirname(import.meta.dirname)}/**/*.fixture.(ts|tsx)`],
   coverageReporters: ['text', ['json', { file: './.nyc_output/unit.json' }]],

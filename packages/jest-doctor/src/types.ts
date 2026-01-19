@@ -1,6 +1,7 @@
 import type { ModernFakeTimers } from '@jest/fake-timers';
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal';
+import type { AsyncHook } from 'node:async_hooks';
 
 export interface TimerRecord {
   type: 'timeout' | 'interval' | 'fakeTimeout' | 'fakeInterval';
@@ -12,6 +13,8 @@ export interface TimerRecord {
 export interface PromiseRecord {
   stack: string;
   testName: string;
+  asyncId: number;
+  parentAsyncId: number;
 }
 
 export interface ConsoleRecord {
@@ -22,7 +25,7 @@ export interface ConsoleRecord {
 }
 
 export interface LeakRecord {
-  promises: Map<number | Promise<unknown>, PromiseRecord>;
+  promises: Map<Promise<unknown>, PromiseRecord>;
   timers: Map<NodeJS.Timeout, TimerRecord>;
   console: ConsoleRecord[];
   totalDelay: number;
@@ -49,8 +52,6 @@ export type OnError = boolean | 'throw' | 'warn';
 
 export type ThrowOrWarn = 'throw' | 'warn';
 
-export type Patch = 'async_hooks' | 'promise';
-
 export interface ConsoleOptions {
   onError: ThrowOrWarn;
   methods: Array<keyof Console>;
@@ -64,13 +65,9 @@ export interface NormalizedOptions {
     console: NormalizedConsoleOptions;
     timers: OnError;
     fakeTimers: OnError;
-    promises:
-      | false
-      | {
-          onError: ThrowOrWarn;
-          patch: Patch;
-        };
+    promises: OnError;
   };
+  verbose: boolean;
   delayThreshold: number;
   timerIsolation: TimerIsolation;
   clearTimers: boolean;
@@ -84,20 +81,14 @@ export type RawConsoleOptions =
       ignore?: string | RegExp | Array<string | RegExp>;
     };
 
-export type RawPromise =
-  | boolean
-  | {
-      onError?: ThrowOrWarn;
-      patch?: Patch;
-    };
-
 export interface RawOptions {
   report?: {
     console?: RawConsoleOptions;
     timers?: OnError;
     fakeTimers?: OnError;
-    promises?: RawPromise;
+    promises?: OnError;
   };
+  verbose?: boolean;
   delayThreshold?: number;
   timerIsolation?: TimerIsolation;
   clearTimers?: boolean;
@@ -121,4 +112,6 @@ export interface JestDoctorEnvironment {
   currentAfterEachCount: number;
   options: NormalizedOptions;
   aggregatedReport: AggregatedReport;
+  asyncIdToPromise: Map<number, Promise<unknown>>;
+  asyncHookDetector?: AsyncHook;
 }

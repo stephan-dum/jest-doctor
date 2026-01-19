@@ -97,9 +97,10 @@ describe('checkError', () => {
     const leakReport = {
       promises: new Map([
         [
-          123,
+          Promise.resolve(),
           {
-            triggerAsyncId: 0,
+            parentAsyncId: 0,
+            asyncId: 1,
             testName: 'test',
             stack: 'my stack text',
           },
@@ -132,9 +133,10 @@ describe('checkError', () => {
     const leakReport = {
       promises: new Map([
         [
-          123,
+          Promise.resolve(),
           {
-            triggerAsyncId: 0,
+            parentAsyncId: 0,
+            asyncId: 1,
             testName: 'test',
             stack: 'my stack text',
           },

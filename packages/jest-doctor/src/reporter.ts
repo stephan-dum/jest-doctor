@@ -20,7 +20,6 @@ const isAlive = (pid: number) => {
     process.kill(pid, 0);
     return true;
   } catch (error) {
-    console.log((error as NodeJS.ErrnoException).code);
     return (error as NodeJS.ErrnoException).code !== 'ESRCH';
   }
 };

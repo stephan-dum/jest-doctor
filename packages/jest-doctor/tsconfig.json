@@ -9,8 +9,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "verbatimModuleSyntax": false,
-    "sourceMap": true,
-    "inlineSources": true,
     "jsx": "react-jsx"
   }
 }

@@ -40,12 +40,8 @@ The environment can be configured through jest config `testEnvironmentOptions`:
 - **report**: an object defining which leaks should be tracked and reported
   - **timers**: `false | 'warn' | 'trow'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
   - **fakeTimers**: `false | 'warn' | 'trow'` (default `throw`) same as timers but for fake api
-  - **promises**: `false` or object
-      - **onError**: `'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
-      - **patch**: `'async_hooks' | 'promise'` (default `async_hooks`) controls how to patch promises
-          - **async_hooks**: uses node async_hook API to detect any promise generation, robust solution but with an overhead.
-          - **promise**: overwrites the global Promise object which is faster but will not detect: internal promises, async await, native API promises!
-  -  **console**: `false` or object (default object)
+  - **promises**: `false | 'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
+  - **console**: `false` or object (default object)
       - **onError**: `'warn' | 'trow'` (default `throw`) how to handle reporting
       - **methods**: `keyof Console` (default all methods) which console methods should be tracked
       - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded console output from tracking
@@ -67,9 +63,7 @@ export default {
       },
       timers: 'warn',
       fakeTimers: 'warn',
-      promises: {
-        onErro: 'warn',
-      },
+      promises:  'warn',
     },
     delayThreshold: 1000,
     timerIsolation: 'afterEach',
@@ -100,9 +94,11 @@ Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
-- injectGlobals must be used for totalDelay and test attribution to work, because imports from jest can not be patched! Also this could give a wrong sense of confidence because one test could have open timers or promises that resolve while running other tests and are not present in the final report.
+- Promise.race and Promise.any can only accept unchained promises, or they will report the chained promise as open.
 ```js
-import { expect, it, describe, beforeEach /*...*/ } from '@jest/globals';
+const p1 = Promise.resolve().then(() => { /* not allowed */});
+const p2 = Promise.resolve();
+await Promise.race([p1, p2]);
 ```
 
 - console, setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.

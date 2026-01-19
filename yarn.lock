@@ -5326,14 +5326,22 @@ __metadata:
     eslint: "npm:^9.39.2"
     istanbul-lib-report: "npm:^3.0.1"
     jest: "npm:30.2.0"
-    jest-environment-jsdom: "npm:30.2.0"
-    jest-environment-node: "npm:30.2.0"
+    jest-environment-jsdom: "npm:^30.2.0"
+    jest-environment-node: "npm:^30.2.0"
     memfs: "npm:^4.52.0"
     nyc: "npm:^17.1.0"
     react: "npm:^19.2.3"
     react-dom: "npm:^19.2.3"
     ts-jest: "npm:^29.4.6"
     typescript: "npm:5.9.2"
+  peerDependencies:
+    jest-environment-jsdom: "*"
+    jest-environment-node: "*"
+  peerDependenciesMeta:
+    jest-environment-jsdom:
+      optional: true
+    jest-environment-node:
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -5389,7 +5397,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:30.2.0":
+"jest-environment-jsdom@npm:^27.5.1":
+  version: 27.5.1
+  resolution: "jest-environment-jsdom@npm:27.5.1"
+  dependencies:
+    "@jest/environment": "npm:^27.5.1"
+    "@jest/fake-timers": "npm:^27.5.1"
+    "@jest/types": "npm:^27.5.1"
+    "@types/node": "npm:*"
+    jest-mock: "npm:^27.5.1"
+    jest-util: "npm:^27.5.1"
+    jsdom: "npm:^16.6.0"
+  checksum: 10c0/ea759ffa43e96d773983a4172c32c1a3774907723564a30a001c8a85d22d9ed82f6c45329a514152744e8916379c1c4cf9e527297ecfa1e8a4cc4888141b38fd
+  languageName: node
+  linkType: hard
+
+"jest-environment-jsdom@npm:^30.2.0":
   version: 30.2.0
   resolution: "jest-environment-jsdom@npm:30.2.0"
   dependencies:
@@ -5407,22 +5430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:^27.5.1":
-  version: 27.5.1
-  resolution: "jest-environment-jsdom@npm:27.5.1"
-  dependencies:
-    "@jest/environment": "npm:^27.5.1"
-    "@jest/fake-timers": "npm:^27.5.1"
-    "@jest/types": "npm:^27.5.1"
-    "@types/node": "npm:*"
-    jest-mock: "npm:^27.5.1"
-    jest-util: "npm:^27.5.1"
-    jsdom: "npm:^16.6.0"
-  checksum: 10c0/ea759ffa43e96d773983a4172c32c1a3774907723564a30a001c8a85d22d9ed82f6c45329a514152744e8916379c1c4cf9e527297ecfa1e8a4cc4888141b38fd
-  languageName: node
-  linkType: hard
-
-"jest-environment-node@npm:30.2.0":
+"jest-environment-node@npm:30.2.0, jest-environment-node@npm:^30.2.0":
   version: 30.2.0
   resolution: "jest-environment-node@npm:30.2.0"
   dependencies:

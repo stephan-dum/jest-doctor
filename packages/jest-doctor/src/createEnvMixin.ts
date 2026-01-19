@@ -116,6 +116,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       await super.setup();
 
       const report = this.options.report;
+
       if (report.fakeTimers) {
         patchFakeTimers(this);
       }
@@ -154,6 +155,15 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         patchHook(this, 'beforeAll');
         patchHook(this, 'afterEach');
         patchHook(this, 'afterAll');
+
+        Object.assign(circusEvent.runtimeGlobals, {
+          it: this.global.it,
+          test: this.global.test,
+          beforeEach: this.global.beforeEach,
+          beforeAll: this.global.beforeAll,
+          afterEach: this.global.afterEach,
+          afterAll: this.global.afterAll,
+        });
       }
 
       await super.handleEvent?.(circusEvent, circusState);

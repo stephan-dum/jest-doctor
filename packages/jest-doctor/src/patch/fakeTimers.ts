@@ -37,7 +37,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         fakeTimeout?.set(timerId, {
           type: 'fakeTimeout',
           delay: delay || 0,
-          stack: getStack(that.global.setTimeout),
+          stack: getStack(that.global.setTimeout, 'setTimeout'),
           testName: that.currentTestName,
         });
 
@@ -50,7 +50,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         that.leakRecords.get(that.currentTestName)?.fakeTimers.set(intervalId, {
           type: 'fakeInterval',
           delay: delay || 0,
-          stack: getStack(that.global.setInterval),
+          stack: getStack(that.global.setInterval, 'setInterval'),
           testName: that.currentTestName,
         });
 

@@ -32,7 +32,10 @@ const patchConsole = (
       if (!isIgnored(message, consoleOptions.ignore)) {
         that.leakRecords.get(that.currentTestName)?.console.push({
           method: consoleMethod,
-          stack: getStack(env.console[consoleMethod]),
+          stack: getStack(
+            env.console[consoleMethod],
+            'Console.' + consoleMethod,
+          ),
           testName: that.currentTestName,
           message,
         });

@@ -1,11 +1,11 @@
-const getStack = (stackFrom: Function) => {
+const getStack = (stackFrom: Function, prefix: string) => {
   const error = {
     stack: '',
   };
 
   Error.captureStackTrace(error, stackFrom);
 
-  return error.stack;
+  return prefix + ' ' + error.stack.replace(/\\/g, '/');
 };
 
 export default getStack;

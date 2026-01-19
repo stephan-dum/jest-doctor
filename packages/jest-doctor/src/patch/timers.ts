@@ -24,7 +24,7 @@ const timers = (that: JestDoctorEnvironment) => {
       leakRecord?.timers.set(timerId, {
         type: 'timeout',
         delay: delay || 0,
-        stack: getStack(env.setTimeout),
+        stack: getStack(env.setTimeout, 'fake setTimeout'),
         testName: owner,
       });
 
@@ -52,7 +52,7 @@ const timers = (that: JestDoctorEnvironment) => {
       that.leakRecords.get(owner)?.timers.set(intervalId, {
         type: 'interval',
         delay: delay || 0,
-        stack: getStack(env.setInterval),
+        stack: getStack(env.setInterval, 'fake setInterval'),
         testName: that.currentTestName,
       });
       return intervalId;

@@ -7,7 +7,6 @@ const patchIt = (that: JestDoctorEnvironment) => {
   const originalIt = that.global.it;
 
   if (originalIt) {
-    const test = that.global.expect as typeof expect;
     const originalOnly = that.global.it.only;
     const createItPatch =
       (originalFn: typeof originalIt | typeof originalOnly) =>
@@ -17,8 +16,7 @@ const patchIt = (that: JestDoctorEnvironment) => {
         timeout: number,
       ) => {
         const testHandler = function (this: Circus.TestContext) {
-          const testName = test.getState().currentTestName || 'unknown';
-          return analyzeCallback(that, testName, testFunction, this);
+          return analyzeCallback(that, testFunction, this);
         } as Circus.TestFn;
 
         return originalFn(testName, testHandler, timeout);

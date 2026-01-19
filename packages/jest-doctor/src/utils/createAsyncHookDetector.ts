@@ -3,15 +3,26 @@ import getStack from './getStack';
 import type { JestDoctorEnvironment } from '../types';
 
 const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
-  const init: HookCallbacks['init'] = (asyncId, type) => {
-    if (type !== 'PROMISE') return;
+  const init: HookCallbacks['init'] = (
+    asyncId,
+    type,
+    parentAsyncId,
+    resource,
+  ) => {
+    if (type !== 'PROMISE') {
+      return;
+    }
 
+    const promise = resource as Promise<unknown>;
     const owner = that.currentTestName;
     that.promiseOwner.set(asyncId, owner);
+    that.asyncIdToPromise.set(asyncId, promise);
 
-    that.leakRecords.get(owner)?.promises.set(asyncId, {
-      stack: getStack(init as Function),
+    that.leakRecords.get(owner)?.promises.set(promise, {
+      stack: getStack(init as Function, 'Promise'),
       testName: owner,
+      asyncId,
+      parentAsyncId,
     });
   };
 

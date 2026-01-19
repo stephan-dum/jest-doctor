@@ -7,13 +7,14 @@ import reportLeaks from './reportLeaks';
 
 const analyzeCallback = async (
   that: JestDoctorEnvironment,
-  testName: string,
   callback: Circus.TestFn,
   testContext: Circus.TestContext,
 ) => {
   // is used to avoid jest internal polluting test promises
   await Promise.resolve().then(() => {});
-
+  const testName =
+    (that.global.expect as typeof expect).getState().currentTestName ||
+    'unknown';
   that.currentTestName = testName;
   const leakRecord = initLeakRecord(that, that.currentTestName);
 

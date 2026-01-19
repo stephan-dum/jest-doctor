@@ -34,7 +34,7 @@ it('should', () => {
 
   const handler = () => {};
   that.global.it('test name', handler);
-  expect(analyzeCallback).toHaveBeenCalledWith(that, 'unknown', handler, {
+  expect(analyzeCallback).toHaveBeenCalledWith(that, handler, {
     testName: 'test name',
   });
   expect(itPatch).toHaveBeenCalledTimes(1);
@@ -61,6 +61,7 @@ it('should warn if global it is not defined', () => {
     global: {},
   } as JestDoctorEnvironment;
   patchIt(that);
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   expect(console.warn).toHaveBeenCalledWith(
     'injectGlobal it is set to false, this will impact on leak detection!',
   );

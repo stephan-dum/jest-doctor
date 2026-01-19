@@ -48,7 +48,7 @@ export interface FakeTimers extends Omit<ModernFakeTimers, '_fakeTimers'> {
 
 export type TimerIsolation = 'afterEach' | 'immediate';
 
-export type OnError = boolean | 'throw' | 'warn';
+export type OnError = false | 'throw' | 'warn';
 
 export type ThrowOrWarn = 'throw' | 'warn';
 

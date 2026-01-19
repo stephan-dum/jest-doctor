@@ -5,6 +5,7 @@ import console from 'node:console';
 jest.mock('node:console', () => ({
   default: {
     warn: jest.fn(),
+    log: jest.fn(),
   },
   __esModule: true,
 }));
@@ -124,6 +125,7 @@ describe('checkError', () => {
     const that = {
       aggregatedReport,
       options: {
+        verbose: true,
         report: {
           promises: 'throw',
         },
@@ -155,6 +157,8 @@ describe('checkError', () => {
     }
 
     expect(leakReport.promises.size).toEqual(0);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(console.log).toHaveBeenCalledTimes(1);
   });
 });
 

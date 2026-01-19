@@ -1,20 +1,6 @@
 import normalizeOptions from './normalizeOptions';
 
 describe('normalize console', () => {
-  it('should normalize console if true', () => {
-    const result = normalizeOptions({
-      report: {
-        console: true,
-      },
-    });
-
-    expect(result.report.console).toEqual({
-      onError: 'throw',
-      methods: ['log', 'warn', 'error', 'info', 'debug'],
-      ignore: [],
-    });
-  });
-
   it('should normalize console if empty object', () => {
     const result = normalizeOptions({
       report: {
@@ -80,43 +66,5 @@ it('should normalize if report is undefined', () => {
       timers: 'throw',
     },
     timerIsolation: 'afterEach',
-  });
-});
-
-describe('normalize promises', () => {
-  it('should normalize promises if true', () => {
-    const result = normalizeOptions({
-      report: {
-        promises: true,
-      },
-    });
-
-    expect(result.report.promises).toEqual({
-      onError: 'throw',
-      patch: 'async_hooks',
-    });
-  });
-
-  it('should normalize promises if empty object', () => {
-    const result = normalizeOptions({
-      report: {
-        promises: {},
-      },
-    });
-
-    expect(result.report.promises).toEqual({
-      onError: 'throw',
-      patch: 'async_hooks',
-    });
-  });
-
-  it('should normalize promises is false', () => {
-    const result = normalizeOptions({
-      report: {
-        promises: false,
-      },
-    });
-
-    expect(result.report.promises).toEqual(false);
   });
 });

@@ -1,21 +1,25 @@
 import {
   NormalizedOptions,
-  TimerIsolation,
-  NormalizedConsoleOptions,
   OnError,
   RawOptions,
-  RawConsoleOptions,
   ThrowOrWarn,
+  TimerIsolation,
 } from '../types';
+
+import * as zod from 'zod';
 
 const DEFAULTS = {
   report: {
     console: {
       onError: 'throw' as ThrowOrWarn,
-      methods: ['log', 'warn', 'error', 'info', 'debug'] as Array<
-        keyof Console
-      >,
-      ignore: [],
+      methods: ['log', 'warn', 'error', 'info', 'debug'] as (
+        | 'warn'
+        | 'log'
+        | 'error'
+        | 'info'
+        | 'debug'
+      )[],
+      ignore: [] as Array<string | RegExp>,
     },
     timers: 'throw' as OnError,
     fakeTimers: 'throw' as OnError,
@@ -27,43 +31,51 @@ const DEFAULTS = {
   clearTimers: true,
 };
 
-const normalizeConsole = (
-  rawConsole?: RawConsoleOptions,
-): NormalizedConsoleOptions => {
-  if (rawConsole === undefined || rawConsole === true) {
-    return DEFAULTS.report.console;
+const onError = zod
+  .union([zod.literal(false), zod.enum(['throw', 'warn'])])
+  .default('throw');
+
+const schema = zod
+  .object({
+    report: zod
+      .object({
+        console: zod
+          .union([
+            zod.literal(false),
+            zod.object({
+              onError: zod.enum(['throw', 'warn']).default('throw'),
+              methods: zod
+                .array(zod.enum(['log', 'warn', 'error', 'info', 'debug']))
+                .default(DEFAULTS.report.console.methods),
+              ignore: zod
+                .union([
+                  zod.string(),
+                  zod.instanceof(RegExp),
+                  zod.array(zod.union([zod.string(), zod.instanceof(RegExp)])),
+                ])
+                .transform((value) => (Array.isArray(value) ? value : [value]))
+                .default([]),
+            }),
+          ])
+          .default(DEFAULTS.report.console),
+        timers: onError,
+        fakeTimers: onError,
+        promises: onError,
+      })
+      .default(DEFAULTS.report),
+    verbose: zod.boolean().default(false),
+    delayThreshold: zod.int().gte(0).default(0),
+    timerIsolation: zod.enum(['afterEach', 'immediate']).default('afterEach'),
+    clearTimers: zod.boolean().default(true),
+  })
+  .default(DEFAULTS);
+
+export function normalizeOptions(raw?: RawOptions) {
+  try {
+    return schema.parse(raw || {}) as NormalizedOptions;
+  } catch (error) {
+    throw zod.prettifyError(error as zod.ZodError);
   }
-
-  if (typeof rawConsole === 'object') {
-    return {
-      onError: rawConsole.onError ?? DEFAULTS.report.console.onError,
-      methods: rawConsole.methods ?? DEFAULTS.report.console.methods,
-      ignore: Array.isArray(rawConsole.ignore)
-        ? rawConsole.ignore
-        : rawConsole.ignore === undefined
-          ? []
-          : [rawConsole.ignore],
-    };
-  }
-
-  return false;
-};
-
-export function normalizeOptions(raw: RawOptions): NormalizedOptions {
-  const report = raw.report ?? {};
-
-  return {
-    report: {
-      console: normalizeConsole(report.console),
-      timers: report.timers ?? DEFAULTS.report.timers,
-      fakeTimers: report.fakeTimers ?? DEFAULTS.report.fakeTimers,
-      promises: report.promises ?? DEFAULTS.report.promises,
-    },
-    verbose: raw.verbose ?? DEFAULTS.verbose,
-    delayThreshold: raw.delayThreshold ?? DEFAULTS.delayThreshold,
-    timerIsolation: raw.timerIsolation ?? DEFAULTS.timerIsolation,
-    clearTimers: raw.clearTimers ?? DEFAULTS.clearTimers,
-  };
 }
 
 export default normalizeOptions;

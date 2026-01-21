@@ -83,15 +83,16 @@ const patchTimers = (that: JestDoctorEnvironment) => {
     };
   };
 
-  // legacy fake timers will overwrite the existing objects and not restore them
-  const originalUseRealTimers = that.fakeTimers.useRealTimers.bind(
-    that.fakeTimers,
-  );
-  that.fakeTimers.useRealTimers = (config) => {
-    const clock = originalUseRealTimers(config);
-    patch();
-    return clock;
-  };
+  if (that.fakeTimers) {
+    // legacy fake timers will overwrite the existing objects and not restore them
+    const originalUseRealTimers = that.fakeTimers.useRealTimers.bind(
+      that.fakeTimers,
+    );
+    that.fakeTimers.useRealTimers = () => {
+      originalUseRealTimers();
+      patch();
+    };
+  }
 
   patch();
 };

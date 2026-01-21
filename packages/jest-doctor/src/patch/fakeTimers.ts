@@ -1,31 +1,23 @@
-import { FakeTimers, JestDoctorEnvironment, ReportOptions } from '../types';
+import { Clock, JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
 import chalk from 'chalk';
+import { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
 
 const patchFakeTimers = (that: JestDoctorEnvironment) => {
-  const modernFakeTimers = that.fakeTimersModern as unknown as FakeTimers;
-  const fakeTimers = modernFakeTimers?._fakeTimers;
-  const originalFakeTimerInstall = fakeTimers?.install;
+  const env = that.global as unknown as Clock;
+  const patchTimersLifeCycles = (api: ModernFakeTimers | LegacyFakeTimers) => {
+    const originalUseFakeTimers = api.useFakeTimers.bind(api);
 
-  if (fakeTimers && originalFakeTimerInstall) {
-    const originalClearAllTimers =
-      modernFakeTimers.clearAllTimers.bind(modernFakeTimers);
+    api.useFakeTimers = (config) => {
+      originalUseFakeTimers(config);
 
-    modernFakeTimers.clearAllTimers = () => {
-      that.leakRecords.get(that.currentTestName)?.fakeTimers.clear();
-      originalClearAllTimers();
-    };
+      const originalFakeSetTimeout = env.setTimeout.bind(env);
+      const originalFakeSetInterval = env.setInterval.bind(env);
+      const originalFakeClearTimeout = env.clearTimeout.bind(env);
+      const originalFakeClearInterval = env.clearInterval.bind(env);
 
-    fakeTimers.install = (config) => {
-      const clock = originalFakeTimerInstall(config);
-
-      const originalFakeSetTimeout = clock.setTimeout.bind(clock);
-      const originalFakeSetInterval = clock.setInterval.bind(clock);
-      const originalFakeClearTimeout = clock.clearTimeout.bind(clock);
-      const originalFakeClearInterval = clock.clearInterval.bind(clock);
-
-      clock.setTimeout = function (callback, delay) {
+      env.setTimeout = function (callback, delay) {
         const fakeTimeout = that.leakRecords.get(
           that.currentTestName,
         )?.fakeTimers;
@@ -53,7 +45,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         return timerId;
       };
 
-      clock.setInterval = function (callback, delay) {
+      env.setInterval = function (callback, delay) {
         const intervalId = originalFakeSetInterval(callback, delay);
         const stack = getStack(that.global.setInterval);
 
@@ -75,22 +67,41 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         return intervalId;
       };
 
-      clock.clearTimeout = (timerId) => {
+      env.clearTimeout = (timerId) => {
         that.leakRecords.get(that.currentTestName)?.fakeTimers.delete(timerId);
         originalFakeClearTimeout(timerId);
       };
 
-      clock.clearInterval = (intervalId) => {
+      env.clearInterval = (intervalId) => {
         that.leakRecords
           .get(that.currentTestName)
           ?.fakeTimers.delete(intervalId);
         originalFakeClearInterval(intervalId);
       };
-
-      return clock;
     };
+
+    const originalClearAllTimers = api.clearAllTimers.bind(api);
+
+    api.clearAllTimers = () => {
+      that.leakRecords.get(that.currentTestName)?.fakeTimers.clear();
+      originalClearAllTimers();
+    };
+  };
+
+  if (that.fakeTimersModern) {
+    patchTimersLifeCycles(that.fakeTimersModern);
   } else {
-    that.original.stderr(chalk.yellow('\nFake timers could not be mocked!'));
+    that.original.stderr(
+      chalk.yellow('\nModern fake timers could not be mocked!'),
+    );
+  }
+
+  if (that.fakeTimers) {
+    patchTimersLifeCycles(that.fakeTimers);
+  } else {
+    that.original.stderr(
+      chalk.yellow('\nLegacy fake timers could not be mocked!'),
+    );
   }
 };
 

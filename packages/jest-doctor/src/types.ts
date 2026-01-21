@@ -1,4 +1,3 @@
-import type { ModernFakeTimers } from '@jest/fake-timers';
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal';
 import type { AsyncHook } from 'node:async_hooks';
@@ -54,19 +53,11 @@ export interface LeakRecord {
   totalDelay: number;
   fakeTimers: Map<number, TimerRecord>;
 }
-interface Clock {
+export interface Clock {
   setTimeout: (callback: () => void, delay?: number) => number;
   setInterval: (callback: () => void, delay?: number) => number;
   clearTimeout: (timeoutId: number) => void;
   clearInterval: (intervalId: number) => void;
-}
-export interface FakeTimers extends Omit<ModernFakeTimers, '_fakeTimers'> {
-  _fakeTimers: {
-    install: (config: unknown) => Clock;
-  };
-  _clock: {
-    timers: Record<string, unknown>;
-  };
 }
 
 export type TimerIsolation = 'afterEach' | 'immediate';
@@ -135,9 +126,8 @@ export interface AggregatedReport {
   processOutputs: number;
   totalDelay: number;
 }
-export interface JestDoctorEnvironment {
+export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
-  fakeTimersModern: ModernFakeTimers | null;
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

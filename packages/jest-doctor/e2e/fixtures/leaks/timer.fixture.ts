@@ -5,6 +5,7 @@ const fnToTest = () => {
 
 describe('incorrect usage of timers', () => {
   it('leaks timeout', () => {
+    jest.useRealTimers();
     fnToTest();
   });
 });

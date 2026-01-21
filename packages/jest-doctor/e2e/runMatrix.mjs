@@ -3,6 +3,7 @@ import { rm } from 'node:fs/promises';
 import { execSync } from 'node:child_process';
 import spawn from 'cross-spawn';
 import getBin from './getBin.mjs';
+import { existsSync } from 'node:fs';
 
 const spawnJest = async (initCWD) => {
   const jestConfig = path.join(process.cwd(), 'jest.e2e.mjs');
@@ -56,7 +57,9 @@ const main = async () => {
 
   await startMatrixPackages();
 
-  execSync('yarn c8 report --reporter json', { stdio: 'inherit' });
+  if (existsSync(tmpDir)) {
+    execSync('yarn c8 report --reporter json', { stdio: 'inherit' });
+  }
 };
 
 await main();

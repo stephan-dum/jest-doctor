@@ -100,7 +100,6 @@ export default {
 
 ## Limitations
 - it.concurrent is replaced with a sync version
-- legacy fake timers are not mocked
 - test and hook blocks do not support done callback or generators
 - promises that resolve within the next tick cannot be tracked, for example:
 ```js
@@ -108,11 +107,24 @@ Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
-- Promise.race, Promise.any and Promise.all can only accept unchained promises, or they will report the chained promise as open.
+- Promise.race, Promise.any and Promise.all do not support nested blocks.
 ```js
-const p1 = Promise.resolve().then(() => { /* not allowed */});
-const p2 = Promise.resolve();
-await Promise.race([p1, p2]);
+const doSomething = async () => {
+  // both promises will be tracked and never released
+  await someAsyncTask();
+  return new Promise(() => { setTimeout(resolve, 10)})
+};
+
+const p1 = Promise.resolve()
+  .then(() => { /* no problem if not async */});
+
+const p2 = Promise.resolve()
+  .then(() => new Promise((resolve) => {
+    /* the promise will be also always tracked */
+    resolve();
+  }));
+
+await Promise.race([p1, p2, doSomething()]);
 ```
 
 -  setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.

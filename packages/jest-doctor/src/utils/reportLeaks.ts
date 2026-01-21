@@ -68,28 +68,36 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   }
 
   if (that.options.verbose) {
-    const logLeak = (message: string) => {
-      that.original.stderr('\n' + chalk.red(message) + '\n');
+    const logLeak = (
+      label: string,
+      message: string,
+      property: keyof typeof report,
+    ) => {
+      if (message && report[property] && report[property].onError !== 'warn') {
+        that.original.stderr(
+          '\n' + chalk.red(label) + '\n' + chalk.red(message) + '\n',
+        );
+      }
     };
 
     leakRecord.promises.forEach(({ stack }) => {
-      logLeak(`Open promise:\n` + stack);
+      logLeak(`Open promise:`, stack, 'promises');
     });
 
     if (that.currentAfterEachCount === 0) {
       accountAbleTimers.forEach(({ stack }) => {
-        logLeak(`Open timer:\n` + stack);
+        logLeak(`Open timer:`, stack, 'timers');
       });
       leakRecord.fakeTimers.forEach(({ stack }) => {
-        logLeak(`Open fake timer:\n` + stack);
+        logLeak(`Open fake timer:`, stack, 'fakeTimers');
       });
     }
 
     leakRecord.console.forEach(({ stack }) => {
-      logLeak(`Console output:\n` + stack);
+      logLeak(`Console output:`, stack, 'console');
     });
     leakRecord.processOutputs.forEach(({ stack }) => {
-      logLeak(`Process output:\n` + stack);
+      logLeak(`Process output:`, stack, 'processOutputs');
     });
   }
 

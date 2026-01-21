@@ -1,4 +1,3 @@
-const cwd = process.cwd();
 const getStack = (stackFrom: Function) => {
   const error = {
     stack: '',
@@ -12,7 +11,8 @@ const getStack = (stackFrom: Function) => {
 
   for (const line of lines) {
     if (
-      line.includes(cwd) && // this will remove all internal frames
+      /[/\\]/.test(line) && // this will remove all anonymous frames without a path
+      !line.includes('(node:internal/') &&
       !line.includes('node_modules/jest-runtime') &&
       !line.includes('node_modules/jest-circus') &&
       !line.includes('node_modules/jest-runner') &&
@@ -22,7 +22,7 @@ const getStack = (stackFrom: Function) => {
     }
   }
 
-  return '\n' + finalStack.join('\n');
+  return finalStack.join('\n');
 };
 
 export default getStack;

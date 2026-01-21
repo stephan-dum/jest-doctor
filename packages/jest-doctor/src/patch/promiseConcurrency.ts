@@ -8,7 +8,7 @@ const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
     let triggerId = executionAsyncId();
     const rootIds = [triggerId];
 
-    while (triggerId !== that.asyncRoot) {
+    while (triggerId !== that.asyncRoot && triggerId) {
       triggerId = that.asyncIdToParentId.get(triggerId) as number;
       rootIds.push(triggerId);
     }
@@ -46,7 +46,7 @@ const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
           });
 
           let promiseToDelete = concurrentPromise;
-          while (!rootIds.includes(asyncId)) {
+          while (!rootIds.includes(asyncId) && asyncId) {
             const parentId = that.asyncIdToParentId.get(asyncId);
             cleanPromise(promises, promiseToDelete, asyncId);
 

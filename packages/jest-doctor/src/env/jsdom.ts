@@ -1,3 +1,6 @@
-import requireEnvironment from '../requireEnvironment';
+import saveRequire from '../utils/saveRequire';
+import createEnvMixin from '../createEnvMixin';
 
-export default requireEnvironment('jest-environment-jsdom');
+const JSDOMEnvironment = saveRequire('jest-environment-jsdom');
+
+export default createEnvMixin(JSDOMEnvironment);

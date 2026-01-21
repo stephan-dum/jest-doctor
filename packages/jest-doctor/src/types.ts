@@ -2,17 +2,36 @@ import type { ModernFakeTimers } from '@jest/fake-timers';
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal';
 import type { AsyncHook } from 'node:async_hooks';
+import type {
+  beforeEach,
+  beforeAll,
+  it,
+  test,
+  afterEach,
+  afterAll,
+} from '@jest/globals';
+
+export interface RuntimeHooks {
+  beforeAll: typeof beforeAll;
+  beforeEach: typeof beforeEach;
+  afterEach: typeof afterEach;
+  afterAll: typeof afterAll;
+}
+
+export interface RuntimeGlobals extends RuntimeHooks {
+  it: typeof it;
+  test: typeof test;
+}
 
 export interface TimerRecord {
   type: 'timeout' | 'interval' | 'fakeTimeout' | 'fakeInterval';
   delay: number;
   stack: string;
-  testName: string;
+  isAllowed?: boolean;
 }
 
 export interface PromiseRecord {
   stack: string;
-  testName: string;
   asyncId: number;
   parentAsyncId: number;
 }
@@ -20,14 +39,18 @@ export interface PromiseRecord {
 export interface ConsoleRecord {
   method: keyof Console;
   stack: string;
-  testName: string;
-  message: string;
+}
+
+export interface OutputRecord {
+  method: 'stdout' | 'stderr';
+  stack: string;
 }
 
 export interface LeakRecord {
   promises: Map<Promise<unknown>, PromiseRecord>;
   timers: Map<NodeJS.Timeout, TimerRecord>;
   console: ConsoleRecord[];
+  processOutputs: OutputRecord[];
   totalDelay: number;
   fakeTimers: Map<number, TimerRecord>;
 }
@@ -52,20 +75,29 @@ export type OnError = false | 'throw' | 'warn';
 
 export type ThrowOrWarn = 'throw' | 'warn';
 
-export interface ConsoleOptions {
-  onError: ThrowOrWarn;
-  methods: Array<keyof Console>;
-  ignore: Array<string | RegExp>;
-}
+export type IsIgnored = Array<string | RegExp>;
 
-export type NormalizedConsoleOptions = false | ConsoleOptions;
+type ConsoleAddition = { methods: Array<keyof Console> };
+type OutputAddition = { methods: Array<'stderr' | 'stdout'> };
+
+export type ReportOptions<Type = object> = {
+  onError: ThrowOrWarn;
+  ignore: IsIgnored;
+} & Type;
+
+export type ConsoleOptions = ReportOptions<ConsoleAddition>;
+
+export type OutputOptions = ReportOptions<OutputAddition>;
+
+type NormalizedReportOptions<Type = object> = false | ReportOptions<Type>;
 
 export interface NormalizedOptions {
   report: {
-    console: NormalizedConsoleOptions;
-    timers: OnError;
-    fakeTimers: OnError;
-    promises: OnError;
+    console: NormalizedReportOptions<ConsoleAddition>;
+    processOutputs: NormalizedReportOptions<OutputAddition>;
+    timers: NormalizedReportOptions;
+    fakeTimers: NormalizedReportOptions;
+    promises: NormalizedReportOptions;
   };
   verbose: boolean;
   delayThreshold: number;
@@ -73,20 +105,20 @@ export interface NormalizedOptions {
   clearTimers: boolean;
 }
 
-export type RawConsoleOptions =
-  | boolean
-  | {
+type RawReportOptions<Type = object> =
+  | false
+  | ({
       onError?: ThrowOrWarn;
-      methods?: Array<keyof Console>;
       ignore?: string | RegExp | Array<string | RegExp>;
-    };
+    } & Type);
 
 export interface RawOptions {
   report?: {
-    console?: RawConsoleOptions;
-    timers?: OnError;
-    fakeTimers?: OnError;
-    promises?: OnError;
+    console?: RawReportOptions<Partial<ConsoleAddition>>;
+    processOutputs?: RawReportOptions<Partial<OutputAddition>>;
+    timers?: RawReportOptions;
+    fakeTimers?: RawReportOptions;
+    promises?: RawReportOptions;
   };
   verbose?: boolean;
   delayThreshold?: number;
@@ -100,6 +132,7 @@ export interface AggregatedReport {
   timers: number;
   fakeTimers: number;
   console: number;
+  processOutputs: number;
   totalDelay: number;
 }
 export interface JestDoctorEnvironment {
@@ -114,4 +147,6 @@ export interface JestDoctorEnvironment {
   aggregatedReport: AggregatedReport;
   asyncIdToPromise: Map<number, Promise<unknown>>;
   asyncHookDetector?: AsyncHook;
+  asyncRoot: number;
+  asyncIdToParentId: Map<number, number>;
 }

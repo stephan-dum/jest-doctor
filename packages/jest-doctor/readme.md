@@ -38,13 +38,23 @@ Out-of-the-box jest-doctor supports node and jsdom environments. But you can als
 
 The environment can be configured through jest config `testEnvironmentOptions`:
 - **report**: an object defining which leaks should be tracked and reported
-  - **timers**: `false | 'warn' | 'trow'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
-  - **fakeTimers**: `false | 'warn' | 'trow'` (default `throw`) same as timers but for fake api
-  - **promises**: `false | 'warn' | 'trow'` (default `throw`) indicating if promises should be reported and how
+  - **timers**: `false` or object (default: object)
+    - **onError**: `'warn' | 'throw'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
+    - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded timers from tracking if the stack trace matches
+  - **fakeTimers**: `false'` or object (default object)
+    - **onError**: `'warn' | 'throw'` (default `throw`) same as timers but for fake api
+    - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for fake api
+  - **promises**: `false'` (default object)
+    - **onError**: `'warn' | 'throw'` (default `throw`) indicating if promises should be reported and how
+    - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for promises
   - **console**: `false` or object (default object)
-      - **onError**: `'warn' | 'trow'` (default `throw`) how to handle reporting
-      - **methods**: `keyof Console` (default all methods) which console methods should be tracked
-      - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded console output from tracking
+    - **onError**: `'warn' | 'throw'` (default `throw`) how to handle reporting
+    - **methods**: `keyof Console` (default all methods) which console methods should be tracked
+    - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for console output
+  - **processOutputs**: `false` or object (default to object)
+    - **onError**: `'warn' | 'throw'` (default `throw`) how to handle reporting
+    - **methods**: `Array<stderr | stdout>` (default all methods) which process output methods should be tracked
+    - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for process output
 - **timerIsolation**: `'afterEach' | 'immediate'` (default: `'afterEach'`)
   - **immediate**: report and clear timers directly after each test / hook block
   - **afterEach**: `beforeAll`, `beforeEach` and `afterAll` are immediate but `test` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks). This allows an easier clean up for example react testing framework registers an unmount function in an `afterEach` block to clean up.
@@ -61,9 +71,13 @@ export default {
         methods: ["log", "warn", "error"],
         ignore: /Third party message/,
       },
-      timers: 'warn',
-      fakeTimers: 'warn',
-      promises:  'warn',
+      timers: {
+        onError: 'warn',
+      },
+      fakeTimers: {
+        onError: 'throw'
+      },
+      promises:  false,
     },
     delayThreshold: 1000,
     timerIsolation: 'afterEach',
@@ -94,24 +108,25 @@ Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
-- Promise.race and Promise.any can only accept unchained promises, or they will report the chained promise as open.
+- Promise.race, Promise.any and Promise.all can only accept unchained promises, or they will report the chained promise as open.
 ```js
 const p1 = Promise.resolve().then(() => { /* not allowed */});
 const p2 = Promise.resolve();
 await Promise.race([p1, p2]);
 ```
 
-- console, setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.
+-  setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.
 ```js
 import { setTimeout, setInterval } from 'node:timers';
-import console from 'node:console';
 ```
+
 
 ## Recommendations
 - use eslint to
   - detect floating promises
   - disallow setTimeout / setInterval in test files
   - disallow console usage
+- do only mock console / process output per test not globally, to avoid missing out on errors that are thrown in silence
 - enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
 ```js
 afterEach(async () => {

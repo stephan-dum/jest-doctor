@@ -1,6 +1,7 @@
-import console from 'node:console';
-import type { FakeTimers, JestDoctorEnvironment } from '../types';
+import { FakeTimers, JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
+import isIgnored from '../utils/isIgnored';
+import chalk from 'chalk';
 
 const patchFakeTimers = (that: JestDoctorEnvironment) => {
   const modernFakeTimers = that.fakeTimersModern as unknown as FakeTimers;
@@ -34,25 +35,42 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
           callback();
         }, delay);
 
-        fakeTimeout?.set(timerId, {
-          type: 'fakeTimeout',
-          delay: delay || 0,
-          stack: getStack(that.global.setTimeout, 'setTimeout'),
-          testName: that.currentTestName,
-        });
+        const stack = getStack(that.global.setTimeout);
+
+        if (
+          !isIgnored(
+            stack,
+            (that.options.report.fakeTimers as ReportOptions).ignore,
+          )
+        ) {
+          fakeTimeout?.set(timerId, {
+            type: 'fakeTimeout',
+            delay: delay || 0,
+            stack,
+          });
+        }
 
         return timerId;
       };
 
       clock.setInterval = function (callback, delay) {
         const intervalId = originalFakeSetInterval(callback, delay);
+        const stack = getStack(that.global.setInterval);
 
-        that.leakRecords.get(that.currentTestName)?.fakeTimers.set(intervalId, {
-          type: 'fakeInterval',
-          delay: delay || 0,
-          stack: getStack(that.global.setInterval, 'setInterval'),
-          testName: that.currentTestName,
-        });
+        if (
+          !isIgnored(
+            stack,
+            (that.options.report.fakeTimers as ReportOptions).ignore,
+          )
+        ) {
+          that.leakRecords
+            .get(that.currentTestName)
+            ?.fakeTimers.set(intervalId, {
+              type: 'fakeInterval',
+              delay: delay || 0,
+              stack,
+            });
+        }
 
         return intervalId;
       };
@@ -72,7 +90,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
       return clock;
     };
   } else {
-    console.warn('Fake timers could not be mocked!');
+    that.original.stderr(chalk.yellow('\nFake timers could not be mocked!'));
   }
 };
 

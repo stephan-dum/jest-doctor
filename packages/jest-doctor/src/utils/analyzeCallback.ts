@@ -1,3 +1,4 @@
+import { executionAsyncId } from 'node:async_hooks';
 import type { Circus } from '@jest/types';
 import type { JestDoctorEnvironment } from '../types';
 import initLeakRecord from './initLeakRecord';
@@ -17,13 +18,14 @@ const analyzeCallback = async (
     'unknown';
   that.currentTestName = testName;
   const leakRecord = initLeakRecord(that, that.currentTestName);
+  that.asyncRoot = executionAsyncId();
 
   let returnValue: unknown;
   try {
     returnValue = await (callback as () => Promise<unknown>).call(testContext);
   } finally {
     that.currentTestName = MAIN_THREAD;
-
+    that.asyncRoot = 0;
     // give the promise and intervals a tick time to resolve
     await Promise.resolve().then(() => {});
 

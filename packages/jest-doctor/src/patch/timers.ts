@@ -1,17 +1,23 @@
-import type { JestDoctorEnvironment } from '../types';
+import { JestDoctorEnvironment } from '../types';
 import getStack from '../utils/getStack';
 import { MAIN_THREAD } from '../consts';
+import isIgnored from '../utils/isIgnored';
 
 const timers = (that: JestDoctorEnvironment) => {
   const env = that.global;
+  const report = that.options.report;
 
   env.setTimeout = Object.assign(
     function (callback: () => void, delay?: number) {
       const owner = that.currentTestName;
       const leakRecord = that.leakRecords.get(owner);
 
+      const stack = getStack(env.setTimeout);
+      const isAllowed =
+        report.timers && !isIgnored(stack, report.timers.ignore);
+
       const timerId = that.original.setTimeout(() => {
-        if (leakRecord) {
+        if (leakRecord && isAllowed) {
           if (owner !== MAIN_THREAD && delay) {
             leakRecord.totalDelay += delay;
           }
@@ -24,8 +30,8 @@ const timers = (that: JestDoctorEnvironment) => {
       leakRecord?.timers.set(timerId, {
         type: 'timeout',
         delay: delay || 0,
-        stack: getStack(env.setTimeout, 'fake setTimeout'),
-        testName: owner,
+        stack,
+        isAllowed,
       });
 
       return timerId;
@@ -36,14 +42,14 @@ const timers = (that: JestDoctorEnvironment) => {
   env.setInterval = Object.assign(
     function (callback: () => void, delay?: number) {
       const owner = that.currentTestName;
+      const leakRecord = that.leakRecords.get(owner);
+      const stack = getStack(env.setInterval);
+      const isAllowed =
+        report.timers && !isIgnored(stack, report.timers.ignore);
 
       const intervalId = that.original.setInterval(() => {
-        if (owner !== MAIN_THREAD && delay) {
-          const leakRecord = that.leakRecords.get(owner);
-
-          if (leakRecord) {
-            leakRecord.totalDelay += delay;
-          }
+        if (isAllowed && owner !== MAIN_THREAD && delay && leakRecord) {
+          leakRecord.totalDelay += delay;
         }
 
         callback();
@@ -52,9 +58,10 @@ const timers = (that: JestDoctorEnvironment) => {
       that.leakRecords.get(owner)?.timers.set(intervalId, {
         type: 'interval',
         delay: delay || 0,
-        stack: getStack(env.setInterval, 'fake setInterval'),
-        testName: that.currentTestName,
+        isAllowed,
+        stack,
       });
+
       return intervalId;
     } as typeof env.setInterval,
     that.original.setInterval,

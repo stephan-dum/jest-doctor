@@ -15,6 +15,7 @@ const initLeakRecord = (
     timers: new Map(),
     fakeTimers: new Map(),
     console: [],
+    processOutputs: [],
     totalDelay: 0,
   };
 

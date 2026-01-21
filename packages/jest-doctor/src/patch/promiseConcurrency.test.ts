@@ -9,6 +9,7 @@ const that = {
   currentTestName: 'test',
   asyncIdToPromise: new Map(),
   promiseOwner: new Map(),
+  asyncIdToParentId: new Map(),
   leakRecords: new Map([
     [
       'test',

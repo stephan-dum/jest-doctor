@@ -1,36 +1,36 @@
 import patchIt from './it';
 import analyzeCallback from '../utils/analyzeCallback';
-import { JestDoctorEnvironment } from '../types';
+import { JestDoctorEnvironment, RuntimeGlobals } from '../types';
 import { Circus } from '@jest/types';
-import console from 'node:console';
-jest.mock('../utils/analyzeCallback', () => jest.fn());
-jest.mock('node:console', () => ({
-  default: {
-    warn: jest.fn(),
-  },
-  __esModule: true,
-}));
-it('should', () => {
-  const getStateMock = jest.fn().mockImplementation(() => '');
-  const itHandler = (testName: Circus.TestName, testHandler: Circus.TestFn) => {
-    return (testHandler as () => Promise<unknown>).call({
-      testName,
-    } as Circus.TestContext);
-  };
 
-  const itPatch = jest.fn(itHandler) as jest.Mock & { only: jest.Mock };
-  itPatch.only = jest.fn(itHandler);
+jest.mock('../utils/analyzeCallback', () => jest.fn());
+
+const itHandler = (testName: Circus.TestName, testHandler: Circus.TestFn) => {
+  return (testHandler as () => Promise<unknown>).call({
+    testName,
+  } as Circus.TestContext);
+};
+
+it('should patch on global and run', () => {
+  const getStateMock = jest.fn().mockImplementation(() => '');
 
   const that = {
     global: {
-      it: itPatch,
+      it: true,
+      test: true,
       expect: {
         getState: getStateMock,
       },
     },
   } as unknown as JestDoctorEnvironment;
 
-  patchIt(that);
+  const itPatch = jest.fn(itHandler) as jest.Mock & { only: jest.Mock };
+  itPatch.only = jest.fn(itHandler);
+  const runtimeGlobals = {
+    it: itPatch,
+  } as unknown as RuntimeGlobals;
+
+  patchIt(that, runtimeGlobals);
 
   const handler = () => {};
   that.global.it('test name', handler);
@@ -60,9 +60,14 @@ it('should warn if global it is not defined', () => {
   const that = {
     global: {},
   } as JestDoctorEnvironment;
-  patchIt(that);
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  expect(console.warn).toHaveBeenCalledWith(
-    'injectGlobal it is set to false, this will impact on leak detection!',
-  );
+
+  const itPatch = jest.fn(itHandler) as jest.Mock & { only: jest.Mock };
+  itPatch.only = jest.fn(itHandler);
+  const runtimeGlobals = {
+    it: itPatch,
+  } as unknown as RuntimeGlobals;
+
+  patchIt(that, runtimeGlobals);
+
+  expect(that.global.it).toEqual(undefined);
 });

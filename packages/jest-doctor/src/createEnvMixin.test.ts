@@ -20,10 +20,10 @@ it('tests edge cases', async () => {
   const env = new Env(
     {
       globalConfig: {
+        reporters: [],
         seed: 0,
       },
       projectConfig: {
-        reporters: [],
         testEnvironmentOptions: {},
       },
     } as unknown as JestEnvironmentConfig,

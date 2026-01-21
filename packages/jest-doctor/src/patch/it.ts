@@ -1,42 +1,37 @@
 import type { Circus } from '@jest/types';
-import type { JestDoctorEnvironment } from '../types';
+import { JestDoctorEnvironment, RuntimeGlobals } from '../types';
 import analyzeCallback from '../utils/analyzeCallback';
-import console from 'node:console';
 
-const patchIt = (that: JestDoctorEnvironment) => {
-  const originalIt = that.global.it;
+const patchIt = (
+  that: JestDoctorEnvironment,
+  runtimeGlobals: RuntimeGlobals,
+) => {
+  const originalIt = runtimeGlobals.it;
+  const originalOnly = originalIt.only;
+  const createItPatch =
+    (originalFn: typeof originalIt | typeof originalOnly) =>
+    (
+      testName: Circus.TestName,
+      testFunction: Circus.TestFn,
+      timeout: number,
+    ) => {
+      const testHandler = function (this: Circus.TestContext) {
+        return analyzeCallback(that, testFunction, this);
+      } as Circus.TestFn;
 
-  if (originalIt) {
-    const originalOnly = that.global.it.only;
-    const createItPatch =
-      (originalFn: typeof originalIt | typeof originalOnly) =>
-      (
-        testName: Circus.TestName,
-        testFunction: Circus.TestFn,
-        timeout: number,
-      ) => {
-        const testHandler = function (this: Circus.TestContext) {
-          return analyzeCallback(that, testFunction, this);
-        } as Circus.TestFn;
+      return originalFn(testName, testHandler, timeout);
+    };
 
-        return originalFn(testName, testHandler, timeout);
-      };
+  const itPatch = createItPatch(originalIt);
+  const test = Object.assign(itPatch, originalIt, {
+    concurrent: itPatch,
+    only: createItPatch(originalOnly),
+  });
 
-    const itPatch = createItPatch(originalIt);
-
-    Object.assign(itPatch, originalIt);
-
-    that.global.it = that.global.test = itPatch as unknown as typeof originalIt;
-
-    that.global.it.concurrent = that.global.it;
-    that.global.it.only = createItPatch(
-      originalOnly,
-    ) as unknown as typeof originalOnly;
-  } else {
-    console.warn(
-      'injectGlobal it is set to false, this will impact on leak detection!',
-    );
+  if (that.global.test) {
+    that.global.it = that.global.test = test;
   }
+  runtimeGlobals.it = runtimeGlobals.test = test;
 };
 
 export default patchIt;

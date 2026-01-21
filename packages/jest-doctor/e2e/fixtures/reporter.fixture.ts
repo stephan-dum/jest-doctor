@@ -10,5 +10,6 @@ it('produces errors', async () => {
     setTimeout(resolve, 100);
   });
 
+  process.stdout.write('leak');
   console.log('leak');
 });

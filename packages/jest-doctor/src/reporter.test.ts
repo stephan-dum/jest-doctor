@@ -21,6 +21,7 @@ const report = {
   fakeTimers: 0,
   console: 0,
   totalDelay: 0,
+  processOutputs: 0,
 };
 
 const seed = 123;
@@ -42,6 +43,7 @@ describe('reporter', () => {
         fakeTimers: 1,
         console: 1,
         totalDelay: 10,
+        processOutputs: 1,
       }),
     });
 

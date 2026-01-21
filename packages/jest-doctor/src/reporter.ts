@@ -29,6 +29,7 @@ const SEVERITY = {
   timers: 120,
   fakeTimers: 80,
   console: 10,
+  processOutputs: 10,
 };
 
 const getFinalReport = (report: AggregatedReport): FinalReport => {
@@ -48,9 +49,19 @@ const getFinalReport = (report: AggregatedReport): FinalReport => {
     ? (1 + Math.log2(report.console)) * SEVERITY.console
     : 0;
 
+  const processOutputs = report.processOutputs
+    ? (1 + Math.log2(report.processOutputs)) * SEVERITY.processOutputs
+    : 0;
+
   return {
     ...report,
-    score: promise + timers + fakeTimers + consoleLeaks + report.totalDelay,
+    score:
+      promise +
+      timers +
+      fakeTimers +
+      processOutputs +
+      consoleLeaks +
+      report.totalDelay,
   };
 };
 
@@ -87,6 +98,7 @@ class JestDoctorReporter implements Reporter {
       timers: 0,
       fakeTimers: 0,
       console: 0,
+      processOutputs: 0,
       totalDelay: 0,
     };
 
@@ -104,6 +116,7 @@ class JestDoctorReporter implements Reporter {
           total.timers += json.timers;
           total.fakeTimers += json.fakeTimers;
           total.console += json.console;
+          total.processOutputs += json.processOutputs;
           total.totalDelay += json.totalDelay;
 
           results.push(getFinalReport(json));
@@ -122,6 +135,8 @@ class JestDoctorReporter implements Reporter {
         report.promises && `  ${report.promises} open promise(s) found`,
         report.timers && `  ${report.timers} open timer(s) found`,
         report.fakeTimers && `  ${report.fakeTimers} open fake timer(s) found`,
+        report.processOutputs &&
+          `  ${report.processOutputs} process outputs found`,
         report.console && `  ${report.console} console outputs found`,
         report.totalDelay && `  ${report.totalDelay}ms total delay from timers`,
       ]
@@ -143,6 +158,8 @@ class JestDoctorReporter implements Reporter {
           `${chalk.bold('Total open fake timers:')} ${chalk.red(total.fakeTimers)}`,
         total.console &&
           `${chalk.bold('Total console outputs:')} ${chalk.red(total.console)}`,
+        total.processOutputs &&
+          `${chalk.bold('Total process outputs:')} ${chalk.red(total.processOutputs)}`,
         total.totalDelay &&
           `${chalk.bold('Total delay:')} ${chalk.red(total.totalDelay + 'ms')}`,
       ]

@@ -90,7 +90,7 @@ export const runReporter = (
   testEnvironment = 'node',
 ) => {
   return runJest(testMatch, options, testNamePattern, testEnvironment, [
-    '--reporters="jest-doctor/reporter"',
+    '--reporters="../dist/reporter.js"',
   ]);
 };
 

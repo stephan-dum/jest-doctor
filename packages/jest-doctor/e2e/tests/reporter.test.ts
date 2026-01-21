@@ -6,5 +6,6 @@ it('shows reporter output', async () => {
   expect(result).toContain('Total open timers: 1');
   expect(result).toContain('Total open fake timers: 1');
   expect(result).toContain('Total console outputs: 1');
+  expect(result).toContain('Total process outputs: 1');
   expect(result).toContain('Total delay: 100');
 });

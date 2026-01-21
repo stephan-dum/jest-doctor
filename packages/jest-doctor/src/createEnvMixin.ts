@@ -21,8 +21,8 @@ import patchFakeTimers from './patch/fakeTimers';
 import { MAIN_THREAD } from './consts';
 import timers from './patch/timers';
 import patchIt from './patch/it';
-import createAsyncHookDetector from './utils/createAsyncHookDetector';
-import createAsyncHookCleaner from './utils/createAsyncHookCleaner';
+import createAsyncHookDetector from './patch/createAsyncHookDetector';
+import createAsyncHookCleaner from './patch/createAsyncHookCleaner';
 import reportLeaks from './utils/reportLeaks';
 import cleanupAfterTest from './utils/cleanupAfterTest';
 import initLeakRecord from './utils/initLeakRecord';
@@ -35,6 +35,7 @@ import type { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
 import type { ModuleMocker } from 'jest-mock';
 import type { Context } from 'node:vm';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
+import patchProcessOutput from './patch/processOutput';
 
 interface JestDoctor {
   handleEvent?(
@@ -75,6 +76,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public readonly aggregatedReport;
     public tearDownError?: Error;
     public asyncIdToPromise = new Map<number, Promise<unknown>>();
+    public asyncRoot = 0;
+    public asyncIdToParentId = new Map<number, number>();
+
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
       super(config, context);
 
@@ -86,9 +90,12 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         fakeTimers: 0,
         console: 0,
         totalDelay: 0,
+        processOutputs: 0,
       };
 
-      const tmpDir = getReporterTmpDir(config.projectConfig.reporters);
+      const tmpDir = getReporterTmpDir(
+        config.projectConfig.reporters || config.globalConfig.reporters,
+      );
 
       this.reporterTmpDir = tmpDir
         ? path.join(
@@ -125,6 +132,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       if (report.console) {
         patchConsole(this, report.console);
       }
+      if (report.processOutputs) {
+        patchProcessOutput(this, report.processOutputs);
+      }
 
       if (report.promises) {
         patchPromiseConcurrency(this);
@@ -149,20 +159,11 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         this.asyncHookCleaner?.enable();
         this.asyncHookDetector?.enable();
 
-        patchIt(this);
-        patchHook(this, 'beforeEach');
-        patchHook(this, 'beforeAll');
-        patchHook(this, 'afterEach');
-        patchHook(this, 'afterAll');
-
-        Object.assign(circusEvent.runtimeGlobals, {
-          it: this.global.it,
-          test: this.global.test,
-          beforeEach: this.global.beforeEach,
-          beforeAll: this.global.beforeAll,
-          afterEach: this.global.afterEach,
-          afterAll: this.global.afterAll,
-        });
+        patchIt(this, circusEvent.runtimeGlobals);
+        patchHook(this, 'beforeEach', circusEvent.runtimeGlobals);
+        patchHook(this, 'beforeAll', circusEvent.runtimeGlobals);
+        patchHook(this, 'afterEach', circusEvent.runtimeGlobals);
+        patchHook(this, 'afterAll', circusEvent.runtimeGlobals);
       }
 
       await super.handleEvent?.(circusEvent, circusState);
@@ -195,6 +196,10 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         throw error;
       } finally {
         cleanupAfterTest(this, leakRecord, MAIN_THREAD);
+
+        process.stdout.write = this.original.stdout;
+        process.stderr.write = this.original.stderr;
+
         this.asyncHookCleaner?.disable();
         // this is added here for safety reasons,
         // because jest could abort and dont hit teardown event
@@ -205,6 +210,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
           this.aggregatedReport.timers +
           this.aggregatedReport.fakeTimers +
           this.aggregatedReport.console +
+          this.aggregatedReport.processOutputs +
           this.aggregatedReport.totalDelay;
 
         if (this.reporterTmpDir && hasLeak) {

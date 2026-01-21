@@ -1,17 +1,23 @@
+import * as zod from 'zod';
+
 import {
   NormalizedOptions,
-  OnError,
   RawOptions,
   ThrowOrWarn,
   TimerIsolation,
 } from '../types';
 
-import * as zod from 'zod';
+const ignore = [] as Array<string | RegExp>;
+const onError = 'throw' as ThrowOrWarn;
+const reportHandler = {
+  ignore,
+  onError,
+};
 
 const DEFAULTS = {
   report: {
     console: {
-      onError: 'throw' as ThrowOrWarn,
+      onError,
       methods: ['log', 'warn', 'error', 'info', 'debug'] as (
         | 'warn'
         | 'log'
@@ -19,11 +25,16 @@ const DEFAULTS = {
         | 'info'
         | 'debug'
       )[],
-      ignore: [] as Array<string | RegExp>,
+      ignore,
     },
-    timers: 'throw' as OnError,
-    fakeTimers: 'throw' as OnError,
-    promises: 'throw' as OnError,
+    processOutputs: {
+      onError,
+      ignore,
+      methods: ['stdout', 'stderr'] as Array<'stdout' | 'stderr'>,
+    },
+    timers: reportHandler,
+    fakeTimers: reportHandler,
+    promises: reportHandler,
   },
   verbose: false,
   delayThreshold: 0,
@@ -31,36 +42,39 @@ const DEFAULTS = {
   clearTimers: true,
 };
 
-const onError = zod
-  .union([zod.literal(false), zod.enum(['throw', 'warn'])])
-  .default('throw');
-
+const createReportHandler = (addition: Record<string, unknown> = {}) =>
+  zod.union([
+    zod.literal(false),
+    zod.object({
+      onError: zod.enum(['throw', 'warn']).default('throw'),
+      ignore: zod
+        .union([
+          zod.string(),
+          zod.instanceof(RegExp),
+          zod.array(zod.union([zod.string(), zod.instanceof(RegExp)])),
+        ])
+        .transform((value) => (Array.isArray(value) ? value : [value]))
+        .default([]),
+      ...addition,
+    }),
+  ]);
 const schema = zod
   .object({
     report: zod
       .object({
-        console: zod
-          .union([
-            zod.literal(false),
-            zod.object({
-              onError: zod.enum(['throw', 'warn']).default('throw'),
-              methods: zod
-                .array(zod.enum(['log', 'warn', 'error', 'info', 'debug']))
-                .default(DEFAULTS.report.console.methods),
-              ignore: zod
-                .union([
-                  zod.string(),
-                  zod.instanceof(RegExp),
-                  zod.array(zod.union([zod.string(), zod.instanceof(RegExp)])),
-                ])
-                .transform((value) => (Array.isArray(value) ? value : [value]))
-                .default([]),
-            }),
-          ])
-          .default(DEFAULTS.report.console),
-        timers: onError,
-        fakeTimers: onError,
-        promises: onError,
+        console: createReportHandler({
+          methods: zod
+            .array(zod.enum(['log', 'warn', 'error', 'info', 'debug']))
+            .default(DEFAULTS.report.console.methods),
+        }).default(DEFAULTS.report.console),
+        timers: createReportHandler().default(DEFAULTS.report.timers),
+        fakeTimers: createReportHandler().default(DEFAULTS.report.fakeTimers),
+        promises: createReportHandler().default(DEFAULTS.report.promises),
+        processOutputs: createReportHandler({
+          methods: zod
+            .array(zod.enum(['stdout', 'stderr']))
+            .default(DEFAULTS.report.processOutputs.methods),
+        }).default(DEFAULTS.report.processOutputs),
       })
       .default(DEFAULTS.report),
     verbose: zod.boolean().default(false),

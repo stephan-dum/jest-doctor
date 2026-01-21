@@ -2,12 +2,40 @@ import type {
   LeakRecord,
   ConsoleOptions,
   JestDoctorEnvironment,
+  OutputOptions,
+  ThrowOrWarn,
 } from '../types';
-import console from 'node:console';
+
 import chalk from 'chalk';
 
 const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
-  const checkError = (
+  const report = that.options.report;
+
+  const warnOrThrow = (condition: boolean, message: string) => {
+    if (condition) {
+      const error = new Error();
+      error.stack = message;
+      throw error;
+    } else {
+      that.original.stderr(`\n` + chalk.yellow(message) + '\n');
+    }
+  };
+  const checkErrorArray = (
+    result: { stack: string }[],
+    label: string,
+    onError: ThrowOrWarn,
+  ) => {
+    if (result.length) {
+      const message = [
+        chalk.red(`${result.length} ${label} found!`),
+        result[0].stack,
+      ].join('\n');
+
+      warnOrThrow(onError === 'throw', message);
+    }
+  };
+
+  const checkErrorMap = (
     property: 'promises' | 'timers' | 'fakeTimers',
     label: string,
   ) => {
@@ -17,23 +45,22 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
         leakRecord[property].values().next().value?.stack,
       ].join('\n');
 
-      const option = that.options.report[property];
-      if (option === 'throw') {
-        const error = new Error();
-        error.stack = message;
-        throw error;
-      } else {
-        console.warn(message);
-      }
+      const option = report[property];
+      warnOrThrow(option && option.onError === 'throw', message);
     }
   };
 
+  const accountAbleTimers = Array.from(
+    leakRecord.timers.values().filter((timerRecord) => timerRecord.isAllowed),
+  );
+
+  that.aggregatedReport.processOutputs += leakRecord.processOutputs.length;
   that.aggregatedReport.console += leakRecord.console.length;
   that.aggregatedReport.promises += leakRecord.promises.size;
 
   if (that.currentAfterEachCount === 0) {
     if (that.options.report.timers) {
-      that.aggregatedReport.timers += leakRecord.timers.size;
+      that.aggregatedReport.timers += accountAbleTimers.length;
     }
 
     that.aggregatedReport.fakeTimers += leakRecord.fakeTimers.size;
@@ -41,38 +68,33 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   }
 
   if (that.options.verbose) {
-    const messages: string[] = [];
-
-    const addLeak = (leak: { stack: string }) => {
-      messages.push(leak.stack);
+    const logLeak = (leak: { stack: string }) => {
+      that.original.stderr('\n' + chalk.red(leak.stack) + '\n');
     };
-    leakRecord.promises.forEach(addLeak);
-    leakRecord.timers.forEach(addLeak);
-    leakRecord.fakeTimers.forEach(addLeak);
-    leakRecord.console.forEach(addLeak);
 
-    if (messages.length) {
-      console.log(messages.join('\n'));
+    leakRecord.promises.forEach(logLeak);
+
+    if (that.currentAfterEachCount === 0) {
+      accountAbleTimers.forEach(logLeak);
+      leakRecord.fakeTimers.forEach(logLeak);
     }
+
+    leakRecord.console.forEach(logLeak);
+    leakRecord.processOutputs.forEach(logLeak);
   }
 
   try {
-    if (leakRecord.console.length) {
-      const message = [
-        chalk.red(`${leakRecord.console.length} console output found!`),
-        leakRecord.console[0].stack,
-      ].join('\n');
-
-      if ((that.options.report.console as ConsoleOptions).onError === 'throw') {
-        const error = new Error();
-        error.stack = message;
-        throw error;
-      } else {
-        console.warn(message);
-      }
-    }
-
-    checkError('promises', 'promise');
+    checkErrorArray(
+      leakRecord.console,
+      'console output(s)',
+      (report.console as ConsoleOptions).onError,
+    );
+    checkErrorArray(
+      leakRecord.processOutputs,
+      'process output(s)',
+      (report.processOutputs as OutputOptions).onError,
+    );
+    checkErrorMap('promises', 'promise');
 
     if (that.currentAfterEachCount === 0) {
       if (leakRecord.totalDelay) {
@@ -80,23 +102,25 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
           `setTimeout / setInterval with total delay of ${leakRecord.totalDelay}ms found, use fake timers instead!`,
         );
 
-        if (leakRecord.totalDelay > that.options.delayThreshold) {
-          const error = new Error();
-          error.stack = message;
-          throw error;
-        } else {
-          console.warn(message);
-        }
+        warnOrThrow(
+          leakRecord.totalDelay > that.options.delayThreshold,
+          message,
+        );
       }
 
-      if (that.options.report.timers) {
-        checkError('timers', 'timer');
+      if (report.timers) {
+        checkErrorArray(
+          accountAbleTimers,
+          'open timer(s)',
+          report.timers.onError,
+        );
       }
 
-      checkError('fakeTimers', 'fake timer');
+      checkErrorMap('fakeTimers', 'fake timer');
     }
   } finally {
     leakRecord.console = [];
+    leakRecord.processOutputs = [];
     leakRecord.promises.clear();
   }
 };

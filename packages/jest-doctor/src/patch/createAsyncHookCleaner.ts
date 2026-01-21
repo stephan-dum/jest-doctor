@@ -4,6 +4,7 @@ import { createHook } from 'node:async_hooks';
 const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
   return createHook({
     promiseResolve(asyncId: number) {
+      that.asyncIdToParentId.delete(asyncId);
       const owner = that.promiseOwner.get(asyncId);
 
       if (!owner) {

@@ -1,30 +1,32 @@
 import reportLeaks from './reportLeaks';
 import type { JestDoctorEnvironment, LeakRecord } from '../types';
-import console from 'node:console';
 
-jest.mock('node:console', () => ({
-  default: {
-    warn: jest.fn(),
-    log: jest.fn(),
-  },
-  __esModule: true,
-}));
 const aggregatedReport = {
   console: 0,
   promises: 0,
   timers: 0,
   fakeTimers: 0,
+  processOutputs: 0,
   totalDelay: 0,
 };
 describe('console', () => {
   it('warns ', () => {
+    const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
+      original: {
+        stderr: stderrWriteMock,
+      },
+      currentAfterEachCount: 0,
       options: {
         report: {
+          timers: {
+            onError: 'throw',
+          },
           console: {
             onError: 'warn',
           },
+          processOutputs: {},
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -33,9 +35,11 @@ describe('console', () => {
       promises: new Map(),
       timers: new Map(),
       fakeTimers: new Map(),
+      processOutputs: [],
+      totalDelay: 0,
       console: [
         {
-          message: 'hello text',
+          method: 'log',
           stack: 'my stack text',
         },
       ],
@@ -44,9 +48,9 @@ describe('console', () => {
     reportLeaks(that, leakReport);
 
     expect(leakReport.console.length).toEqual(0);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(console.warn).toHaveBeenCalledWith(
-      expect.stringContaining('console output found'),
+
+    expect(stderrWriteMock).toHaveBeenCalledWith(
+      expect.stringContaining('console output(s) found'),
     );
   });
 
@@ -66,9 +70,11 @@ describe('console', () => {
       promises: new Map(),
       timers: new Map(),
       fakeTimers: new Map(),
+      processOutputs: [],
+      totalDelay: 0,
       console: [
         {
-          message: 'hello text',
+          method: 'log',
           stack: 'my stack text',
         },
       ],
@@ -77,20 +83,75 @@ describe('console', () => {
     try {
       reportLeaks(that, leakReport);
     } catch (error) {
-      expect((error as Error).stack).toContain('console output found');
+      expect((error as Error).stack).toContain('console output(s) found');
     }
 
     expect(leakReport.console.length).toEqual(0);
   });
 });
 
-describe('checkError', () => {
+describe('processOutputs', () => {
   it('warns ', () => {
+    const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
+      original: {
+        stderr: stderrWriteMock,
+      },
+      currentAfterEachCount: 0,
       options: {
         report: {
-          promises: 'warn',
+          timers: {
+            onError: 'throw',
+          },
+          processOutputs: {
+            onError: 'warn',
+          },
+          console: {},
+        },
+      },
+    } as unknown as JestDoctorEnvironment;
+
+    const leakReport = {
+      promises: new Map(),
+      timers: new Map(),
+      fakeTimers: new Map(),
+      processOutputs: [
+        {
+          stack: 'my stack text',
+          method: 'stderr',
+        },
+      ],
+      totalDelay: 0,
+      console: [],
+    } as LeakRecord;
+
+    reportLeaks(that, leakReport);
+
+    expect(leakReport.processOutputs.length).toEqual(0);
+
+    expect(stderrWriteMock).toHaveBeenCalledWith(
+      expect.stringContaining('process output(s) found'),
+    );
+  });
+});
+
+describe('checkError', () => {
+  it('warns ', () => {
+    const stderrWriteMock = jest.fn();
+    const that = {
+      aggregatedReport,
+      original: {
+        stderr: stderrWriteMock,
+      },
+      options: {
+        report: {
+          promises: {
+            onError: 'warn',
+          },
+          console: {},
+          processOutputs: {},
+          timers: {},
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -110,24 +171,34 @@ describe('checkError', () => {
       timers: new Map(),
       fakeTimers: new Map(),
       console: [],
+      processOutputs: [],
       totalDelay: 0,
     } as LeakRecord;
 
     reportLeaks(that, leakReport);
 
     expect(leakReport.promises.size).toEqual(0);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(console.warn).toHaveBeenCalledWith(
+    expect(stderrWriteMock).toHaveBeenCalledWith(
       expect.stringContaining('open promise(s) found'),
     );
   });
   it('throws ', () => {
+    const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
+      original: {
+        stderr: stderrWriteMock,
+      },
+      currentAfterEachCount: 0,
       options: {
         verbose: true,
         report: {
-          promises: 'throw',
+          promises: {
+            onError: 'throw',
+          },
+          console: {},
+          processOutputs: {},
+          timers: {},
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -147,6 +218,7 @@ describe('checkError', () => {
       timers: new Map(),
       fakeTimers: new Map(),
       console: [],
+      processOutputs: [],
       totalDelay: 0,
     } as LeakRecord;
 
@@ -157,18 +229,26 @@ describe('checkError', () => {
     }
 
     expect(leakReport.promises.size).toEqual(0);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(console.log).toHaveBeenCalledTimes(1);
+
+    expect(stderrWriteMock).toHaveBeenCalledTimes(1);
   });
 });
 
 describe('totalDelay', () => {
   it('warns ', () => {
+    const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
+      original: {
+        stderr: stderrWriteMock,
+      },
       currentAfterEachCount: 0,
       options: {
-        report: {},
+        report: {
+          console: {},
+          processOutputs: {},
+          timers: {},
+        },
         delayThreshold: 100,
       },
     } as unknown as JestDoctorEnvironment;
@@ -178,13 +258,13 @@ describe('totalDelay', () => {
       timers: new Map(),
       fakeTimers: new Map(),
       console: [],
+      processOutputs: [],
       totalDelay: 10,
     } as LeakRecord;
 
     reportLeaks(that, leakReport);
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(console.warn).toHaveBeenCalledWith(
+    expect(stderrWriteMock).toHaveBeenCalledWith(
       expect.stringContaining('with total delay of'),
     );
   });
@@ -193,7 +273,11 @@ describe('totalDelay', () => {
       aggregatedReport,
       currentAfterEachCount: 0,
       options: {
-        report: {},
+        report: {
+          console: {},
+          processOutputs: {},
+          timers: {},
+        },
         delayThreshold: 0,
       },
     } as unknown as JestDoctorEnvironment;
@@ -203,6 +287,7 @@ describe('totalDelay', () => {
       timers: new Map(),
       fakeTimers: new Map(),
       console: [],
+      processOutputs: [],
       totalDelay: 10,
     } as LeakRecord;
 

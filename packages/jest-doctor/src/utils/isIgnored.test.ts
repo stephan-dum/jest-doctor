@@ -1,4 +1,4 @@
-import { isIgnored } from './console';
+import isIgnored from './isIgnored';
 
 it('returns true if ignore matches regexp', () => {
   const result = isIgnored('oops', [/ops/]);

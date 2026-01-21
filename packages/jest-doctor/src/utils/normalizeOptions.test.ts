@@ -1,4 +1,5 @@
 import normalizeOptions from './normalizeOptions';
+import { RawOptions } from '../types';
 
 describe('normalize console', () => {
   it('should normalize console if empty object', () => {
@@ -57,13 +58,42 @@ describe('normalize console', () => {
     });
   });
 });
+describe('timers', () => {
+  it('', () => {
+    const result = normalizeOptions({
+      report: {
+        timers: false,
+      },
+    });
+
+    expect(result.report.timers).toEqual(false);
+  });
+});
+
+it('should throw on invalid input', () => {
+  expect(() =>
+    normalizeOptions({
+      report: {
+        timers: true,
+        console: {
+          methods: ['wrongMethod'],
+          ignore: [123],
+        },
+        promise: 'wrong',
+      },
+    } as unknown as RawOptions),
+  ).toThrow();
+});
 
 it('should normalize if report is undefined', () => {
-  const result = normalizeOptions({});
+  const result = normalizeOptions();
 
   expect(result).toMatchObject({
     report: {
-      timers: 'throw',
+      timers: {
+        onError: 'throw',
+        ignore: [],
+      },
     },
     timerIsolation: 'afterEach',
   });

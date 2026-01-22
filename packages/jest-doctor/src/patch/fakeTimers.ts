@@ -17,7 +17,10 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
       const originalFakeClearTimeout = env.clearTimeout.bind(env);
       const originalFakeClearInterval = env.clearInterval.bind(env);
 
-      env.setTimeout = function (callback, delay) {
+      env.setTimeout = Object.assign(function (
+        callback: () => void,
+        delay: number,
+      ) {
         const fakeTimeout = that.leakRecords.get(
           that.currentTestName,
         )?.fakeTimers;
@@ -43,9 +46,12 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         }
 
         return timerId;
-      };
+      }, env.setTimeout);
 
-      env.setInterval = function (callback, delay) {
+      env.setInterval = Object.assign(function (
+        callback: () => void,
+        delay: number,
+      ) {
         const intervalId = originalFakeSetInterval(callback, delay);
         const stack = getStack(that.global.setInterval);
 
@@ -65,19 +71,19 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         }
 
         return intervalId;
-      };
+      }, env.setInterval);
 
-      env.clearTimeout = (timerId) => {
+      env.clearTimeout = Object.assign((timerId: number) => {
         that.leakRecords.get(that.currentTestName)?.fakeTimers.delete(timerId);
         originalFakeClearTimeout(timerId);
-      };
+      }, env.clearTimeout);
 
-      env.clearInterval = (intervalId) => {
+      env.clearInterval = Object.assign((intervalId: number) => {
         that.leakRecords
           .get(that.currentTestName)
           ?.fakeTimers.delete(intervalId);
         originalFakeClearInterval(intervalId);
-      };
+      }, env.clearInterval);
     };
 
     const originalClearAllTimers = api.clearAllTimers.bind(api);

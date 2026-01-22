@@ -7,12 +7,12 @@ it('should warn if environment does not support fake timers', () => {
     original: {
       stderr: stderrMock,
     },
-    fakeTimersModern: {
-      _fakeTimers: {},
-    },
   } as unknown as JestDoctorEnvironment);
 
-  expect(stderrMock).toHaveBeenCalledWith(
-    expect.stringContaining('Fake timers could not be mocked!'),
+  expect(stderrMock.mock.calls).toEqual(
+    expect.arrayContaining([
+      [expect.stringContaining('Modern fake timers could not be mocked!')],
+      [expect.stringContaining('Legacy fake timers could not be mocked!')],
+    ]),
   );
 });

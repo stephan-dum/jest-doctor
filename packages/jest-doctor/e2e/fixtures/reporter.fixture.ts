@@ -1,4 +1,5 @@
 it('produces errors', async () => {
+  jest.useRealTimers();
   await new Promise((resolve) => {
     setTimeout(resolve, 100);
   });

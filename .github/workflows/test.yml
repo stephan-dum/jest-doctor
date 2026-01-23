@@ -33,6 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
+      - run: yarn build
       - run: yarn test:matrix
       - uses: actions/upload-artifact@v6
         with:

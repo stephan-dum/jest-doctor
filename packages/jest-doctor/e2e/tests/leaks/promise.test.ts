@@ -13,7 +13,7 @@ const checkPromise = (testResult: TestResult) => {
 
 it('detects unresolved promises by patch async_hooks', async () => {
   const result = await runTest(`leaks/promise.fixture.ts`);
-  console.log(result);
+  console.log(result.testResults[0]);
   checkPromise(result.testResults[0]);
 });
 

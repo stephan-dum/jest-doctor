@@ -47,7 +47,6 @@ testEnvironment: 'jest-doctor/env/node',
 testMatch: ['**/*.doctor.test.ts'],
 };
 
-
 Gradually move or write new tests under this configuration
 
 Pros
@@ -83,7 +82,6 @@ testMatch: ['packages/new/**'],
 ],
 };
 
-
 Gradually expand coverage
 
 Pros
@@ -105,7 +103,6 @@ Update your Jest configuration:
 module.exports = {
 testEnvironment: 'jest-doctor/env/node',
 };
-
 
 Run the full test suite
 

@@ -3,6 +3,7 @@
 **jest-doctor** is a custom Jest environment that **detects async leaks and test isolation bugs**.
 
 It fails tests deterministically when they:
+
 - Leave unresolved Promises
 - leave open (fake) timers or intervals
 - Use real timers or intervals and their total delay reach a certain threshold
@@ -15,7 +16,9 @@ Jest-doctor is intentionally strict. If your test leaks async work, that is a bu
 ```bash
 npm install --save-dev jest-doctor
 ```
+
 or
+
 ```bash
 yarn add -D jest-doctor
 ```
@@ -28,7 +31,7 @@ Add one of the provided environments to your `jest.config.js`, in addition, the 
 export default {
   testEnvironment: 'jest-doctor/env/node',
   // optional
-  reporters: ['default', 'jest-doctor/reporter']
+  reporters: ['default', 'jest-doctor/reporter'],
 };
 ```
 
@@ -37,6 +40,7 @@ Out-of-the-box jest-doctor supports node and jsdom environments. But you can als
 ### Configuration
 
 The environment can be configured through jest config `testEnvironmentOptions`:
+
 - **report**: an object defining which leaks should be tracked and reported
   - **timers**: `false` or object (default: object)
     - **onError**: `'warn' | 'throw'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
@@ -62,22 +66,23 @@ The environment can be configured through jest config `testEnvironmentOptions`:
 - **clearTimers**: `boolean` (default: `true`) whether to clear all timers base on `timerIsolation`
 
 here is an example how the configuration could look like:
+
 ```js
 export default {
   testEnvironmentOptions: {
     report: {
       console: {
         onError: 'warn',
-        methods: ["log", "warn", "error"],
+        methods: ['log', 'warn', 'error'],
         ignore: /Third party message/,
       },
       timers: {
         onError: 'warn',
       },
       fakeTimers: {
-        onError: 'throw'
+        onError: 'throw',
       },
-      promises:  false,
+      promises: false,
     },
     delayThreshold: 1000,
     timerIsolation: 'afterEach',
@@ -87,59 +92,68 @@ export default {
 ```
 
 the reporter can be configured by the standard jest reporter config syntax
+
 - **tmpDir**: `string` (default: `.tmp`) where to store reports from the environment to be read by the reporter
 
 ```js
 export default {
-  reporters: [
-    'default',
-    ['jest-doctor/reporter', { tmpDir: 'custom-dir' }]
-  ],
-}
+  reporters: ['default', ['jest-doctor/reporter', { tmpDir: 'custom-dir' }]],
+};
 ```
 
 ## Limitations
+
 - it.concurrent is replaced with a sync version
 - test and hook blocks do not support done callback or generators
 - promises that resolve within the next tick cannot be tracked, for example:
+
 ```js
 Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
 });
 ```
+
 - Promise.race, Promise.any and Promise.all do not support nested blocks.
+
 ```js
 const doSomething = async () => {
   // both promises will be tracked and never released
   await someAsyncTask();
-  return new Promise(() => { setTimeout(resolve, 10)})
+  return new Promise(() => {
+    setTimeout(resolve, 10);
+  });
 };
 
-const p1 = Promise.resolve()
-  .then(() => { /* no problem if not async */});
+const p1 = Promise.resolve().then(() => {
+  /* no problem if not async */
+});
 
-const p2 = Promise.resolve()
-  .then(() => new Promise((resolve) => {
-    /* the promise will be also always tracked */
-    resolve();
-  }));
+const p2 = Promise.resolve().then(
+  () =>
+    new Promise((resolve) => {
+      /* the promise will be also always tracked */
+      resolve();
+    }),
+);
 
 await Promise.race([p1, p2, doSomething()]);
 ```
 
--  setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.
+- setTimeout / setInterval can also be imported and will not participate in leak detection in these cases, but this can also serve as exit hatch if needed.
+
 ```js
 import { setTimeout, setInterval } from 'node:timers';
 ```
 
-
 ## Recommendations
+
 - use eslint to
   - detect floating promises
   - disallow setTimeout / setInterval in test files
   - disallow console usage
 - do only mock console / process output per test not globally, to avoid missing out on errors that are thrown in silence
 - enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
+
 ```js
 afterEach(async () => {
   jest.useRealTimers();
@@ -149,17 +163,21 @@ afterEach(async () => {
 ```
 
 ## Tested against
+
 - Jest 27, 28, 29, 30
 - node 22, 24
 
 # FAQ
 
 ### Why is jest-doctor so strict?
+
 Because flaky tests cost more than broken builds.
 
 ### Does this slow tests down?
+
 Slightly. Overhead is intentional and bounded.
 
 ### Why does console output fail tests?
+
 It pollutes the console and is often a strong indicator that something is wrong.
 Tests should always spy on console and assert on the output.

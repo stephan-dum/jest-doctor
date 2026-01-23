@@ -49,7 +49,6 @@ const runJest = (
     require.resolve('./jest.env.config.mjs'),
     '--testNamePattern',
     testNamePattern,
-    `--testEnvironmentOptions=${JSON.stringify(options)}`,
     '--testMatch',
     path.join(__dirname, 'fixtures', testMatch),
     ...additionalArgs,
@@ -63,6 +62,7 @@ const runJest = (
         ...process.env,
         TEST_ENVIRONMENT:
           internalEnvs[environment as 'node' | 'jsdom'] || environment,
+        TEST_ENVIRONMENT_OPTIONS: JSON.stringify(options),
       },
     });
 

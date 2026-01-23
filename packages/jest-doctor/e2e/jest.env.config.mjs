@@ -1,5 +1,6 @@
 export default {
   testEnvironment: process.env['TEST_ENVIRONMENT'],
+  testEnvironmentOptions: JSON.parse(process.env['TEST_ENVIRONMENT_OPTIONS']),
   transform: {
     '^.+\\.(tsx?|m?js)$': 'ts-jest',
   },

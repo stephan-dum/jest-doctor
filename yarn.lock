@@ -1721,17 +1721,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@matrix/jest27@workspace:packages/matrix/jest27":
-  version: 0.0.0-use.local
-  resolution: "@matrix/jest27@workspace:packages/matrix/jest27"
-  dependencies:
-    jest: "npm:27.5.1"
-    jest-doctor: "npm:^0.1.1"
-    jest-environment-jsdom: "npm:27.5.1"
-    jest-environment-node: "npm:27.5.1"
-  languageName: unknown
-  linkType: soft
-
 "@matrix/jest28@workspace:packages/matrix/jest28":
   version: 0.0.0-use.local
   resolution: "@matrix/jest28@workspace:packages/matrix/jest28"
@@ -1759,6 +1748,17 @@ __metadata:
   resolution: "@matrix/jest30@workspace:packages/matrix/jest30"
   dependencies:
     jest: "npm:30.2.0"
+  languageName: unknown
+  linkType: soft
+
+"@matrix/jestx27@workspace:packages/matrix/jest27":
+  version: 0.0.0-use.local
+  resolution: "@matrix/jestx27@workspace:packages/matrix/jest27"
+  dependencies:
+    jest: "npm:27.5.1"
+    jest-doctor: "npm:^0.1.1"
+    jest-environment-jsdom: "npm:27.5.1"
+    jest-environment-node: "npm:27.5.1"
   languageName: unknown
   linkType: soft
 

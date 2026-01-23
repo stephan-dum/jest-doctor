@@ -15,7 +15,7 @@
     "test": "yarn workspaces foreach --all --parallel --interlaced run test && yarn workspace @matrix/env run coverage"
   },
   "devDependencies": {
-    "prettier": "3.6.2"
+    "prettier": "3.8.1"
   },
   "packageManager": "yarn@4.9.4",
   "resolutions": {

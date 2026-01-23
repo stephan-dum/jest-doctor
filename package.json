@@ -12,10 +12,13 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "yarn workspaces foreach --all --parallel run lint",
-    "test": "yarn workspaces foreach --all --parallel --interlaced run test && yarn workspace @matrix/env run coverage"
+    "test:unit": "yarn workspace jest-doctor run test:unit",
+    "test:matrix": "yarn workspace jest-doctor run test:matrix",
+    "test": "yarn workspace jest-doctor run test",
+    "coverage:merge": "yarn workspace jest-doctor run coverage:merge"
   },
   "devDependencies": {
-    "prettier": "3.6.2"
+    "prettier": "^3.8.1"
   },
   "packageManager": "yarn@4.9.4",
   "resolutions": {

@@ -1751,17 +1751,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@matrix/jestx27@workspace:packages/matrix/jest27":
-  version: 0.0.0-use.local
-  resolution: "@matrix/jestx27@workspace:packages/matrix/jest27"
-  dependencies:
-    jest: "npm:27.5.1"
-    jest-doctor: "npm:^0.1.1"
-    jest-environment-jsdom: "npm:27.5.1"
-    jest-environment-node: "npm:27.5.1"
-  languageName: unknown
-  linkType: soft
-
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -2741,6 +2730,17 @@ __metadata:
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
+
+"@xxmatrix/jest27@workspace:packages/matrix/jest27":
+  version: 0.0.0-use.local
+  resolution: "@xxmatrix/jest27@workspace:packages/matrix/jest27"
+  dependencies:
+    jest: "npm:27.5.1"
+    jest-doctor: "npm:^0.1.1"
+    jest-environment-jsdom: "npm:27.5.1"
+    jest-environment-node: "npm:27.5.1"
+  languageName: unknown
+  linkType: soft
 
 "abab@npm:^2.0.3, abab@npm:^2.0.5, abab@npm:^2.0.6":
   version: 2.0.6

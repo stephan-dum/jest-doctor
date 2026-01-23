@@ -24,6 +24,6 @@ it('ignores promise leaks if mock.promise is set to false', async () => {
     },
     'leaks',
   );
-  console.log(result);
+
   expect(result.success).toBe(true);
 });

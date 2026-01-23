@@ -80,7 +80,6 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public asyncIdToParentId = new Map<number, number>();
 
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
-      process.stderr.write(JSON.stringify(config, null, 2));
       super(config, context);
 
       this.testPath = context.testPath.replace(/\W/g, '_');

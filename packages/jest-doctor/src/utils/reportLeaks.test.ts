@@ -19,6 +19,7 @@ describe('console', () => {
       },
       currentAfterEachCount: 0,
       options: {
+        verbose: true,
         report: {
           timers: {
             onError: 'throw',
@@ -100,6 +101,7 @@ describe('processOutputs', () => {
       },
       currentAfterEachCount: 0,
       options: {
+        verbose: true,
         report: {
           timers: {
             onError: 'throw',
@@ -296,5 +298,64 @@ describe('totalDelay', () => {
     } catch (error) {
       expect((error as Error).stack).toContain('with total delay of');
     }
+  });
+});
+
+describe('timers', () => {
+  it('warns ', () => {
+    const stderrWriteMock = jest.fn();
+    const that = {
+      aggregatedReport,
+      currentAfterEachCount: 0,
+      original: {
+        stderr: stderrWriteMock,
+      },
+      options: {
+        verbose: true,
+        report: {
+          promises: {
+            onError: 'warn',
+          },
+          console: {},
+          processOutputs: {},
+          timers: {},
+        },
+      },
+    } as unknown as JestDoctorEnvironment;
+
+    const leakReport = {
+      promises: new Map(),
+      timers: new Map([
+        [
+          1 as unknown as NodeJS.Timeout,
+          {
+            type: 'timeout',
+            delay: 0,
+            stack: 'my stack text',
+            isAllowed: true,
+          },
+        ],
+      ]),
+      fakeTimers: new Map([
+        [
+          2,
+          {
+            type: 'timeout',
+            delay: 0,
+            stack: 'my stack text',
+          },
+        ],
+      ]),
+      console: [],
+      processOutputs: [],
+      totalDelay: 0,
+    } as LeakRecord;
+
+    reportLeaks(that, leakReport);
+
+    expect(leakReport.promises.size).toEqual(0);
+    expect(stderrWriteMock).toHaveBeenCalledWith(
+      expect.stringContaining('open timer(s) found'),
+    );
   });
 });

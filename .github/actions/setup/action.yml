@@ -1,0 +1,13 @@
+name: setup
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@4
+      with:
+        node-version: 24
+        cache: yarn
+    - run: corepack enable
+      shell: bash
+    - run: yarn --immutable
+      shell: bash

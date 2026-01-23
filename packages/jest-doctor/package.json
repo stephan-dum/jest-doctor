@@ -83,6 +83,6 @@
     "test:unit": "jest --coverage",
     "test:matrix": "node ./e2e/runMatrix.mjs",
     "test": "yarn matrix && yarn test:unit && yarn coverage:merge",
-    "coverage:merge": "nyc report --reporter lcov --reporter text"
+    "coverage:merge": "nyc report"
   }
 }

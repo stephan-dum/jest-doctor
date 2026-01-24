@@ -1,4 +1,4 @@
-# jest-doctor
+# jest-doctor [![test](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor)
 
 **jest-doctor** is a custom Jest environment that **detects async leaks and test isolation bugs**.
 
@@ -164,8 +164,8 @@ afterEach(async () => {
 
 ## Tested against
 
-- Jest 28, 29, 30
-- node 22, 24
+- **Jest**: 28, 29, 30
+- **Node**: 20, 22, 24
 
 # FAQ
 

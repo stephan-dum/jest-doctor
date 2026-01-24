@@ -1540,7 +1540,7 @@ __metadata:
     jest: "npm:28.1.3"
     jest-doctor: "npm:^0.1.1"
     jest-environment-jsdom: "npm:29.7.0"
-    jest-environment-node: "npm:29.7.0"
+    jest-environment-node: "npm:30.2.0"
   languageName: unknown
   linkType: soft
 
@@ -1551,7 +1551,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-doctor: "npm:^0.1.1"
     jest-environment-jsdom: "npm:29.7.0"
-    jest-environment-node: "npm:29.7.0"
+    jest-environment-node: "npm:30.2.0"
   languageName: unknown
   linkType: soft
 
@@ -5127,20 +5127,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:29.7.0, jest-environment-node@npm:^29.7.0":
-  version: 29.7.0
-  resolution: "jest-environment-node@npm:29.7.0"
-  dependencies:
-    "@jest/environment": "npm:^29.7.0"
-    "@jest/fake-timers": "npm:^29.7.0"
-    "@jest/types": "npm:^29.6.3"
-    "@types/node": "npm:*"
-    jest-mock: "npm:^29.7.0"
-    jest-util: "npm:^29.7.0"
-  checksum: 10c0/61f04fec077f8b1b5c1a633e3612fc0c9aa79a0ab7b05600683428f1e01a4d35346c474bde6f439f9fcc1a4aa9a2861ff852d079a43ab64b02105d1004b2592b
-  languageName: node
-  linkType: hard
-
 "jest-environment-node@npm:30.2.0, jest-environment-node@npm:^30.2.0":
   version: 30.2.0
   resolution: "jest-environment-node@npm:30.2.0"
@@ -5167,6 +5153,20 @@ __metadata:
     jest-mock: "npm:^28.1.3"
     jest-util: "npm:^28.1.3"
   checksum: 10c0/d7d313ee28d6063f0740cf5dd94f3ae206f0897ac8e562e52159ec1b26c24233c75893b3cbf1b885dcc8abb50e82a20d07f77c28917be8fd20156dd15602892f
+  languageName: node
+  linkType: hard
+
+"jest-environment-node@npm:^29.7.0":
+  version: 29.7.0
+  resolution: "jest-environment-node@npm:29.7.0"
+  dependencies:
+    "@jest/environment": "npm:^29.7.0"
+    "@jest/fake-timers": "npm:^29.7.0"
+    "@jest/types": "npm:^29.6.3"
+    "@types/node": "npm:*"
+    jest-mock: "npm:^29.7.0"
+    jest-util: "npm:^29.7.0"
+  checksum: 10c0/61f04fec077f8b1b5c1a633e3612fc0c9aa79a0ab7b05600683428f1e01a4d35346c474bde6f439f9fcc1a4aa9a2861ff852d079a43ab64b02105d1004b2592b
   languageName: node
   linkType: hard
 

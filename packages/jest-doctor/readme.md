@@ -1,4 +1,4 @@
-# jest-doctor [![test](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor)[![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor)
+# jest-doctor [![test](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor)
 
 **jest-doctor** is a custom Jest environment that **detects async leaks and test isolation bugs**.
 
@@ -7,7 +7,7 @@ It fails tests deterministically when they:
 - Leave unresolved Promises
 - leave open (fake) timers or intervals
 - Use real timers or intervals and their total delay reach a certain threshold
-- Emit console output
+- Emit process / console output
 
 Jest-doctor is intentionally strict. If your test leaks async work, that is a bug, even if Jest normally ignores it.
 
@@ -45,10 +45,10 @@ The environment can be configured through jest config `testEnvironmentOptions`:
   - **timers**: `false` or object (default: object)
     - **onError**: `'warn' | 'throw'` (default `throw`) whether normal setTimeout and setInterval should be reported and how
     - **ignore**: `string | regexp | Array<string | regexp>` (default: []) allows to excluded timers from tracking if the stack trace matches
-  - **fakeTimers**: `false'` or object (default object)
+  - **fakeTimers**: `false` or object (default object)
     - **onError**: `'warn' | 'throw'` (default `throw`) same as timers but for fake api
     - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for fake api
-  - **promises**: `false'` (default object)
+  - **promises**: `false` (default object)
     - **onError**: `'warn' | 'throw'` (default `throw`) indicating if promises should be reported and how
     - **ignore**: `string | regexp | Array<string | regexp>` (default: []) same as timers but for promises
   - **console**: `false` or object (default object)
@@ -83,6 +83,10 @@ export default {
         onError: 'throw',
       },
       promises: false,
+      processOutput: {
+        onError: 'warn',
+        methods: ['stderr'],
+      },
     },
     delayThreshold: 1000,
     timerIsolation: 'afterEach',

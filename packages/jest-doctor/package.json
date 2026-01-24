@@ -8,7 +8,8 @@
   "homepage": "https://github.com/stephan-dum/jest-doctor",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stephan-dum/jest-doctor.git"
+    "url": "git+https://github.com/stephan-dum/jest-doctor.git",
+    "directory": "packages/jest-doctor"
   },
   "exports": {
     "./package.json": "./package.json",

@@ -1,7 +1,7 @@
 import { Readable } from 'stream';
 import { finished } from 'stream/promises';
 
-it('leaks process output by write', async () => {
+it('leaks process output by write', () => {
   process.stdout.write('leaking output');
 });
 it('leaks process output by pipe', async () => {

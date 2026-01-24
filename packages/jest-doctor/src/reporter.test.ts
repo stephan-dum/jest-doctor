@@ -24,7 +24,7 @@ const report = {
   processOutputs: 0,
 };
 
-const seed = 123;
+const seed = process.pid.toString();
 const pidFile = path.join(REPORTER_TMP_DIR, 'pid', process.pid.toString());
 const tmpDir = path.join(REPORTER_TMP_DIR, seed.toString());
 
@@ -55,7 +55,6 @@ describe('reporter', () => {
   });
 
   it('doesnt create pid and doesnt delete folder if keep is set to true', async () => {
-    const seed = 123;
     const reporter = new JestDoctorReporter({ seed }, { keep: true });
 
     expect(existsSync(pidFile)).toEqual(false);

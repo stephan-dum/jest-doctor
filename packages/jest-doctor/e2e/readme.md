@@ -4,6 +4,7 @@ this package contains all e2e tests for jest-doctor package.
 Instead of unit testing it makes more sense to see how the environment interacts and if certain aspects are meet that could not be tested with unit tests.
 
 ## How it works
+
 It launches a jest subprocess inside jest with [runJest](../../matrix/env/runJest.ts) and uses nyc to instrument it.
 This approach allows to get coverage for jest internals like jest-doctor environments.
 
@@ -13,5 +14,3 @@ Each for those packages has just one script to launch the tests. The coverage is
 After all tests are run an aggregated coverage report can be created with nyc (package.json script coverage).
 
 as there are many different packages involved the global package.json hosts the test script to make it easier to use.
-
-

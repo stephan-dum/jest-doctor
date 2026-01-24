@@ -72,6 +72,7 @@ class JestDoctorReporter implements Reporter {
   private readonly keep: boolean;
 
   constructor(globalConfig: { seed: number }, options: ReporterOptions) {
+    console.log(globalConfig);
     const seed = globalConfig.seed.toString();
 
     this.tmpDir = options.tmpDir || REPORTER_TMP_DIR;

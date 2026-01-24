@@ -1,6 +1,6 @@
 import type { Reporter } from '@jest/reporters';
 import path from 'node:path';
-import { mkdirSync, writeFileSync, rmdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { rm, readdir, readFile } from 'node:fs/promises';
 import chalk from 'chalk';
 import { REPORTER_TMP_DIR } from './consts';
@@ -79,7 +79,7 @@ class JestDoctorReporter implements Reporter {
     this.reportDir = path.join(this.tmpDir, seed);
     this.pidDir = path.join(this.tmpDir, 'pid');
 
-    rmdirSync(this.reportDir);
+    rmSync(this.reportDir, { recursive: true, force: true });
     mkdirSync(this.pidDir, { recursive: true });
     mkdirSync(this.reportDir, { recursive: true });
 

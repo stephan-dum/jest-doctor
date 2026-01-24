@@ -55,7 +55,6 @@ describe('reporter', () => {
   });
 
   it('doesnt create pid and doesnt delete folder if keep is set to true', async () => {
-    const seed = 123;
     const reporter = new JestDoctorReporter({ seed }, { keep: true });
 
     expect(existsSync(pidFile)).toEqual(false);

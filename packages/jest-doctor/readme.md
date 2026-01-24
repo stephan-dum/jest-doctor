@@ -164,7 +164,7 @@ afterEach(async () => {
 
 ## Tested against
 
-- Jest 27, 28, 29, 30
+- Jest 29, 30
 - node 22, 24
 
 # FAQ

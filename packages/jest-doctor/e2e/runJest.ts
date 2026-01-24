@@ -22,17 +22,13 @@ export interface JestJsonResult {
   testResults: TestResult[];
 }
 
-/*const jestDoctorBase = path.dirname(
-  require.resolve('jest-doctor/package.json'),
-);*/
+const jestDoctorBase = path.dirname(
+  require.resolve('jest-doctor/package.json', { paths: [process.cwd()] }),
+);
 
-/*const internalEnvs = {
+const internalEnvs = {
   node: require.resolve(path.join(jestDoctorBase, 'src/env/node.ts')),
   jsdom: require.resolve(path.join(jestDoctorBase, 'src/env/jsdom.ts')),
-};*/
-const internalEnvs = {
-  node: 'jest-doctor/env/node',
-  jsdom: 'jest-doctor/env/jsdom',
 };
 
 const runJest = (
@@ -53,6 +49,8 @@ const runJest = (
     require.resolve('./jest.env.config.mjs'),
     '--testNamePattern',
     testNamePattern,
+    '--testEnvironmentOptions',
+    JSON.stringify(options),
     '--testMatch',
     path.join(__dirname, 'fixtures', testMatch),
     ...additionalArgs,
@@ -66,7 +64,6 @@ const runJest = (
         ...process.env,
         TEST_ENVIRONMENT:
           internalEnvs[environment as 'node' | 'jsdom'] || environment,
-        TEST_ENVIRONMENT_OPTIONS: JSON.stringify(options),
       },
     });
 

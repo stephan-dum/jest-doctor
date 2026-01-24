@@ -5,13 +5,13 @@ const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
   const env = that.global;
 
   const getRootIds = () => {
-    let triggerId = executionAsyncId();
-    const rootIds = [triggerId];
+    let triggerId: number | undefined = executionAsyncId();
+    const rootIds = [];
 
-    while (triggerId !== that.asyncRoot && triggerId) {
-      triggerId = that.asyncIdToParentId.get(triggerId) as number;
+    do {
       rootIds.push(triggerId);
-    }
+      triggerId = that.asyncIdToParentId.get(triggerId);
+    } while (triggerId && triggerId !== that.asyncRoot);
 
     return rootIds;
   };

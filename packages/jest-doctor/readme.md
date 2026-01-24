@@ -1,4 +1,4 @@
-# jest-doctor [![test](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor)
+# jest-doctor [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor)
 
 **jest-doctor** is a custom Jest environment that **detects async leaks and test isolation bugs**.
 

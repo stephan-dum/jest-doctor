@@ -1,0 +1,23 @@
+name: matrix
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        required: true
+      jest-version:
+        type: string
+        default: ''
+jobs:
+  test-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup
+      - run: yarn build
+      - run: yarn test:matrix ${{ inputs.jest-version }}
+      - uses: actions/upload-artifact@v6
+        with:
+          name: coverage-e2e-${{ matrix.node-version }}
+          path: packages/jest-doctor/.nyc_output/coverage-final.json
+          if-no-files-found: warn

@@ -1,119 +1,92 @@
-Migration Guide: Adopting jest-doctor in Existing Jest Suites
+# Migration Guide
 
 This guide explains how to introduce jest-doctor into an existing Jest test suite with minimal disruption, predictable outcomes, and clear rollback options.
+Adopting jest-doctor in large or legacy codebases should be done incrementally to avoid blocking development while steadily improving test reliability
 
-jest-doctor enforces async correctness and test isolation. As a result, existing test suites may surface failures that were previously hidden.
+The goal is:
 
-This is expected.
+> Prevent new async leaks while gradually fixing existing ones.
 
-1. Migration goals
+Before introducing jest-doctor:
+- check if your [environment is supported](../readme.md#-tested-against)
+- check the [when not to use jest-doctor](../readme.md#-when-not-to-use-jest-doctor) section
+- be aware of the [limitations](../readme.md#limitations)
+- Make sure to onboard all developers and they agree to that stricter enforcement
+- decide on the code hygiene level to apply.
 
-A successful migration should:
+## Phase 1 — Observe (Warnings Only)
 
-Surface existing async isolation issues
+Enable jest-doctor but configure all leak types as warnings.
+This will help to find existing issues while avoiding CI failures.
 
-Avoid destabilizing CI pipelines unexpectedly
-
-Allow teams to fix issues incrementally
-
-Preserve confidence in test results
-
-2. Before you begin
-   Recommended prerequisites
-
-Before adopting jest-doctor, ensure that:
-
-Your Jest suite is already passing consistently
-
-Flakiness is a known or suspected issue
-
-The team agrees that stricter enforcement is acceptable
-
-jest-doctor is most effective when introduced deliberately, not opportunistically.
-
-3. Migration strategies
-
-There are three recommended adoption strategies, depending on your tolerance for disruption.
-
-Strategy A: New tests only (lowest risk)
-
-Recommended for large or legacy codebases
-
-Create a new Jest project or config:
-
-// jest.doctor.config.js
-module.exports = {
-testEnvironment: 'jest-doctor/env/node',
-testMatch: ['**/*.doctor.test.ts'],
+```js
+const options = {
+  report: {
+    timers: {
+      onError: 'warn'
+    },
+    fakeTimers: {
+      onError: 'warn'
+    },
+    promises: {
+      onError: 'warn'
+    },
+    console: {
+      onError: 'warn'
+    },
+    processOutputs: {
+      onError: 'warn'
+    },
+  },
+  delayThreshold: Infinity
 };
+```
 
-Gradually move or write new tests under this configuration
+## Phase 2 — Analyze & Fix High-Impact Leaks
 
-Pros
+Enable the reporter and do a first run to get a baseline.
+Repeat this to track progress and gain metrics over time.
 
-Zero disruption to existing tests
+The reporter sorts the leaks by severity so you can quickly tell which test needs most attention.
+Analyze the report and create tasks for repetitive leaks and low hanging fruits.
 
-Clear signal for new code quality
+Prioritize fixing:
+- Floating promises
+- Open timers
+- Fake timers not cleared
 
-Cons
+This usually removes most flakiness quickly.
 
-Existing leaks remain unfixed
+## Phase 3 continuously improve tests
 
-Two environments to maintain
+Chose one of the following plans depending on your needs.
 
-Strategy B: Per-package or per-folder rollout (balanced)
+### ✅ Use --changedSince
 
-Recommended for monorepos or modular codebases
+If jest internal `--changedSince` flag is already used it makes transition straight forward.
+By creating a separate config for jest-doctor all tests can be still executed without disruption.
+```bash
+jest --config jest.doctor.config.js --changedSince=origin/main
+```
 
-Enable jest-doctor for a subset of tests:
+### ✅ Use Separate Jest Config with Patterns
 
-module.exports = {
-projects: [
-{
-displayName: 'legacy',
-testEnvironment: 'node',
-testMatch: ['packages/legacy/**'],
-},
-{
-displayName: 'strict',
-testEnvironment: 'jest-doctor/env/node',
-testMatch: ['packages/new/**'],
-},
-],
+Opt-in strict testing via file naming or folders:
+
+```js
+const config = {
+  testMatch: ['**/*.test.fixed.ts'],
+  // ...
 };
+```
 
-Gradually expand coverage
+Over time, expand coverage until full suite uses jest-doctor.
 
-Pros
+## ⚠️ About “Fail CI Only on New Leaks”
 
-Incremental enforcement
+Raw leak counts — especially promise leaks — may vary by:
+- Node version
+- OS / architecture
+- event loop scheduling differences
 
-Issues isolated to specific areas
-
-Cons
-
-Slightly more configuration complexity
-
-Strategy C: Full suite adoption (highest confidence, highest effort)
-
-Recommended for infrastructure teams or CI-first organizations
-
-Update your Jest configuration:
-
-module.exports = {
-testEnvironment: 'jest-doctor/env/node',
-};
-
-Run the full test suite
-
-Address reported isolation violations
-
-Pros
-
-Immediate correctness guarantees
-
-Eliminates hidden flakiness quickly
-
-Cons
-
-Initial failure volume may be high
+So do not rely on comparing total counts!

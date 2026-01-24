@@ -11,7 +11,6 @@ const getStack = (stackFrom: Function) => {
 
   for (const line of lines) {
     if (
-      /[/\\]/.test(line) && // this will remove all anonymous frames without a path
       !line.includes('(node:internal/') &&
       !line.includes('node_modules/jest-runtime') &&
       !line.includes('node_modules/jest-circus') &&

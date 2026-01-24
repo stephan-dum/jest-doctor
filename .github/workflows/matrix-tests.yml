@@ -9,7 +9,7 @@ on:
         type: string
         default: ''
 jobs:
-  test-matrix:
+  matrix-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -18,6 +18,6 @@ jobs:
       - run: yarn test:matrix ${{ inputs.jest-version }}
       - uses: actions/upload-artifact@v6
         with:
-          name: coverage-e2e-${{ matrix.node-version }}
+          name: coverage-e2e-${{ inputs.node-version }}
           path: packages/jest-doctor/.nyc_output/coverage-final.json
           if-no-files-found: warn

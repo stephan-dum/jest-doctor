@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20, 22, 24]
-    uses: ./.github/workflows/matrix.yml
+    uses: ./.github/workflows/matrix-tests.yml
     with:
       node-version: ${{ matrix.node-version }}
 

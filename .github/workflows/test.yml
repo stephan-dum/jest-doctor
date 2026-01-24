@@ -57,3 +57,8 @@ jobs:
           name: coverage-e2e-24
           path: packages/jest-doctor/.nyc_output
       - run: yarn coverage:merge
+
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./packages/jest-doctor/coverage/lcov.info

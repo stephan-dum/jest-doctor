@@ -16,6 +16,8 @@ class FakeEnvironment extends NodeEnvironment {
 
 const Env = createEnvMixin(FakeEnvironment);
 
+delete process.send;
+
 it('tests edge cases', async () => {
   const env = new Env(
     {

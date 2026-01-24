@@ -57,9 +57,6 @@ export interface JestDoctorConstructor {
   new (config: JestEnvironmentConfig, context: EnvironmentContext): JestDoctor;
 }
 
-const isWorker = typeof process.send === 'function';
-const seed = (isWorker ? process.ppid : process.pid).toString();
-
 const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
   Environment: EnvironmentConstructor,
 ) => {
@@ -99,6 +96,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       const tmpDir = getReporterTmpDir(
         config.projectConfig.reporters || config.globalConfig.reporters,
       );
+
+      const isWorker = typeof process.send === 'function';
+      const seed = (isWorker ? process.ppid : process.pid).toString();
 
       this.reporterTmpDir = tmpDir
         ? path.join(tmpDir, seed, this.testPath + '.json')

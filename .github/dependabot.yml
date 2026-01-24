@@ -4,6 +4,8 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    ignore:
+      - dependency-name: 'chalk'
   - package-ecosystem: 'npm'
     directory: '/packages/matrix'
     schedule:

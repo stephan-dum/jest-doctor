@@ -16,6 +16,9 @@ class FakeEnvironment extends NodeEnvironment {
 
 const Env = createEnvMixin(FakeEnvironment);
 
+// simulate a worker thread
+process.send = jest.fn();
+
 it('tests edge cases', async () => {
   const env = new Env(
     {

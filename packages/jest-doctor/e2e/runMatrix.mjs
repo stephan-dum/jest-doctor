@@ -5,11 +5,11 @@ import spawn from 'cross-spawn';
 import getBin from './getBin.mjs';
 import { existsSync } from 'node:fs';
 
-const spawnJest = async (initCWD) => {
+const spawnJest = (initCWD) => {
   const jestConfig = path.join(process.cwd(), 'jest.e2e.mjs');
   const jestBin = getBin('jest', initCWD);
 
-  await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const child = spawn(
       'node',
       [jestBin, '--config', jestConfig, '--runInBand', process.argv[3]].filter(
@@ -55,7 +55,13 @@ const main = async () => {
   const tmpDir = path.join(process.cwd(), '.c8_output');
   await rm(tmpDir, { recursive: true, force: true });
 
-  await startMatrixPackages();
+  await startMatrixPackages().then((exitCodes) => {
+    for (const code of exitCodes) {
+      if (code) {
+        process.exit(code);
+      }
+    }
+  });
 
   if (existsSync(tmpDir)) {
     execSync('yarn c8 report --reporter json', { stdio: 'inherit' });

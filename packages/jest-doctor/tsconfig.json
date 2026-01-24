@@ -1,7 +1,7 @@
 {
   "extends": ["@dev/tsconfig/base.json"],
   "exclude": ["node_modules", "dist"],
-  "include": ["src", "e2e"],
+  "include": ["src", "e2e", "playground"],
   "compilerOptions": {
     "types": ["node", "jest"],
     "noEmit": true,

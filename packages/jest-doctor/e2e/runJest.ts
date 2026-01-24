@@ -23,7 +23,7 @@ export interface JestJsonResult {
 }
 
 const jestDoctorBase = path.dirname(
-  require.resolve('jest-doctor/package.json'),
+  require.resolve('jest-doctor/package.json', { paths: [process.cwd()] }),
 );
 
 const internalEnvs = {
@@ -58,7 +58,7 @@ const runJest = (
 
   return new Promise<string>((resolve, reject) => {
     const child = spawn(process.execPath, args, {
-      stdio: ['inherit', 'pipe', 'ignore'],
+      stdio: ['inherit', 'pipe', 'inherit'],
       cwd: path.dirname(__dirname),
       env: {
         ...process.env,

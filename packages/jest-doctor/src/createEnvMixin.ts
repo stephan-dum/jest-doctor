@@ -97,12 +97,11 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         config.projectConfig.reporters || config.globalConfig.reporters,
       );
 
+      const isWorker = typeof process.send === 'function';
+      const seed = (isWorker ? process.ppid : process.pid).toString();
+
       this.reporterTmpDir = tmpDir
-        ? path.join(
-            tmpDir,
-            config.globalConfig.seed.toString(),
-            this.testPath + 'json',
-          )
+        ? path.join(tmpDir, seed, this.testPath + '.json')
         : '';
 
       this.options = normalizeOptions(

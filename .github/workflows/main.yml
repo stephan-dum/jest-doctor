@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/unit-tests.yml
 
   matrix-tests:
-    uses: ./.github/workflows/matrix.yml
+    uses: matrix-tests.yml
     with:
       node-version: 24
       jest-version: 30

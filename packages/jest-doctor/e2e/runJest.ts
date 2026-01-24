@@ -22,6 +22,7 @@ export interface JestJsonResult {
   testResults: TestResult[];
 }
 
+/*
 const jestDoctorBase = path.dirname(
   require.resolve('jest-doctor/package.json', { paths: [process.cwd()] }),
 );
@@ -29,6 +30,12 @@ const jestDoctorBase = path.dirname(
 const internalEnvs = {
   node: require.resolve(path.join(jestDoctorBase, 'src/env/node.ts')),
   jsdom: require.resolve(path.join(jestDoctorBase, 'src/env/jsdom.ts')),
+};
+*/
+
+const internalEnvs = {
+  node: 'jest-doctor/env/node',
+  jsdom: 'jest-doctor/env/jsdom',
 };
 
 const runJest = (

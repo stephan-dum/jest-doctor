@@ -1,19 +1,92 @@
 import type { Reporter } from '@jest/reporters';
 import path from 'node:path';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { rm, readdir, readFile } from 'node:fs/promises';
+import { rm, readdir, readFile, writeFile } from 'node:fs/promises';
 import chalk from 'chalk';
 import { REPORTER_TMP_DIR } from './consts';
 import type { AggregatedReport } from './types.js';
 interface ReporterOptions {
   tmpDir?: string;
   keep?: boolean;
+  jsonFile?: string;
 }
 
 interface FinalReport extends AggregatedReport {
   score: number;
 }
+interface TotalReport {
+  promises: number;
+  timers: number;
+  fakeTimers: number;
+  console: number;
+  processOutputs: number;
+  domListeners: number;
+  totalDelay: number;
+}
+const writeTextReport = (results: FinalReport[], total: TotalReport) => {
+  for (const report of results) {
+    const message = [
+      report.promises && `  ${report.promises} open promise(s) found`,
+      report.timers && `  ${report.timers} open timer(s) found`,
+      report.fakeTimers && `  ${report.fakeTimers} open fake timer(s) found`,
+      report.processOutputs &&
+        `  ${report.processOutputs} process outputs found`,
+      report.console && `  ${report.console} console outputs found`,
+      report.domListeners && `  ${report.domListeners} DOM listeners found`,
+      report.totalDelay && `  ${report.totalDelay}ms total delay from timers`,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
+    if (message) {
+      console.log(['', chalk.red.bold(report.testPath), message].join('\n'));
+    }
+  }
+
+  if (results.length) {
+    const message = [
+      total.promises &&
+        `${chalk.bold('Total open promises:')} ${chalk.red(total.promises)}`,
+      total.timers &&
+        `${chalk.bold('Total open timers:')} ${chalk.red(total.timers)}`,
+      total.fakeTimers &&
+        `${chalk.bold('Total open fake timers:')} ${chalk.red(total.fakeTimers)}`,
+      total.console &&
+        `${chalk.bold('Total console outputs:')} ${chalk.red(total.console)}`,
+      total.processOutputs &&
+        `${chalk.bold('Total process outputs:')} ${chalk.red(total.processOutputs)}`,
+      total.domListeners &&
+        `${chalk.bold('Total DOM listeners:')} ${chalk.red(total.domListeners)}`,
+      total.totalDelay &&
+        `${chalk.bold('Total delay:')} ${chalk.red(total.totalDelay + 'ms')}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    if (message) {
+      console.log('\n' + message + '\n');
+    }
+  }
+};
+
+const writeJsonReport = (
+  results: FinalReport[],
+  total: TotalReport,
+  filePath: string,
+) => {
+  return writeFile(
+    filePath,
+    JSON.stringify(
+      {
+        files: results,
+        total,
+      },
+      null,
+      2,
+    ),
+    'utf8',
+  );
+};
 const isAlive = (pid: number) => {
   try {
     // nodes strange way to check if a process is still running
@@ -30,19 +103,20 @@ const SEVERITY = {
   fakeTimers: 80,
   console: 10,
   processOutputs: 10,
+  domListeners: 30,
 };
 
 const getFinalReport = (report: AggregatedReport): FinalReport => {
   const promise = report.promises
-    ? (1 + Math.log2(report.promises)) * SEVERITY.promises * 2
+    ? (1 + Math.log2(report.promises)) * SEVERITY.promises * 1.5
     : 0;
 
   const timers = report.timers
-    ? (1 + Math.log2(report.timers)) * SEVERITY.timers * 1.5
+    ? (1 + Math.log2(report.timers)) * SEVERITY.timers
     : 0;
 
   const fakeTimers = report.fakeTimers
-    ? (1 + Math.log2(report.fakeTimers)) * SEVERITY.fakeTimers * 1.5
+    ? (1 + Math.log2(report.fakeTimers)) * SEVERITY.fakeTimers
     : 0;
 
   const consoleLeaks = report.console
@@ -53,6 +127,10 @@ const getFinalReport = (report: AggregatedReport): FinalReport => {
     ? (1 + Math.log2(report.processOutputs)) * SEVERITY.processOutputs
     : 0;
 
+  const domListeners = report.domListeners
+    ? (1 + Math.log2(report.domListeners)) * SEVERITY.domListeners
+    : 0;
+
   return {
     ...report,
     score:
@@ -61,6 +139,7 @@ const getFinalReport = (report: AggregatedReport): FinalReport => {
       fakeTimers +
       processOutputs +
       consoleLeaks +
+      domListeners +
       report.totalDelay,
   };
 };
@@ -70,10 +149,12 @@ class JestDoctorReporter implements Reporter {
   private readonly reportDir: string;
   private readonly pidDir: string;
   private readonly keep: boolean;
+  private readonly jsonFile: string;
 
   constructor(_: object, options: ReporterOptions) {
     const seed = process.pid.toString();
 
+    this.jsonFile = options.jsonFile || '';
     this.tmpDir = options.tmpDir || REPORTER_TMP_DIR;
     this.keep = options.keep || false;
     this.reportDir = path.join(this.tmpDir, seed);
@@ -101,6 +182,7 @@ class JestDoctorReporter implements Reporter {
       console: 0,
       processOutputs: 0,
       totalDelay: 0,
+      domListeners: 0,
     };
 
     const dir = await readdir(this.reportDir);
@@ -118,6 +200,7 @@ class JestDoctorReporter implements Reporter {
           total.fakeTimers += json.fakeTimers;
           total.console += json.console;
           total.processOutputs += json.processOutputs;
+          total.domListeners += json.domListeners;
           total.totalDelay += json.totalDelay;
 
           results.push(getFinalReport(json));
@@ -131,45 +214,10 @@ class JestDoctorReporter implements Reporter {
 
     results.sort((a, b) => a.score - b.score);
 
-    for (const report of results) {
-      const message = [
-        report.promises && `  ${report.promises} open promise(s) found`,
-        report.timers && `  ${report.timers} open timer(s) found`,
-        report.fakeTimers && `  ${report.fakeTimers} open fake timer(s) found`,
-        report.processOutputs &&
-          `  ${report.processOutputs} process outputs found`,
-        report.console && `  ${report.console} console outputs found`,
-        report.totalDelay && `  ${report.totalDelay}ms total delay from timers`,
-      ]
-        .filter(Boolean)
-        .join('\n');
+    writeTextReport(results, total);
 
-      if (message) {
-        console.log(['', chalk.red.bold(report.testPath), message].join('\n'));
-      }
-    }
-
-    if (results.length) {
-      const message = [
-        total.promises &&
-          `${chalk.bold('Total open promises:')} ${chalk.red(total.promises)}`,
-        total.timers &&
-          `${chalk.bold('Total open timers:')} ${chalk.red(total.timers)}`,
-        total.fakeTimers &&
-          `${chalk.bold('Total open fake timers:')} ${chalk.red(total.fakeTimers)}`,
-        total.console &&
-          `${chalk.bold('Total console outputs:')} ${chalk.red(total.console)}`,
-        total.processOutputs &&
-          `${chalk.bold('Total process outputs:')} ${chalk.red(total.processOutputs)}`,
-        total.totalDelay &&
-          `${chalk.bold('Total delay:')} ${chalk.red(total.totalDelay + 'ms')}`,
-      ]
-        .filter(Boolean)
-        .join('\n');
-
-      if (message) {
-        console.log('\n' + message + '\n');
-      }
+    if (this.jsonFile) {
+      await writeJsonReport(results, total, this.jsonFile);
     }
 
     if (!this.keep) {

@@ -97,7 +97,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
   if (that.fakeTimersModern) {
     patchTimersLifeCycles(that.fakeTimersModern);
   } else {
-    that.original.stderr(
+    that.original.process.stderr(
       chalk.yellow('\nModern fake timers could not be mocked!'),
     );
   }
@@ -105,7 +105,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
   if (that.fakeTimers) {
     patchTimersLifeCycles(that.fakeTimers);
   } else {
-    that.original.stderr(
+    that.original.process.stderr(
       chalk.yellow('\nLegacy fake timers could not be mocked!'),
     );
   }

@@ -167,12 +167,21 @@ The reporter can be configured by the standard jest reporter config syntax
 
 Options:
 
-
+- **jsonFile**: `string`: (default: null) file path where a json version of the report should be saved to.
 - **tmpDir**: `string` (default: `.tmp`) Directory used to exchange data between environment and reporter.
 
 ```js
 export default {
-  reporters: ['default', ['jest-doctor/reporter', { tmpDir: 'custom-dir' }]],
+  reporters: [
+    'default',
+    [
+      'jest-doctor/reporter',
+      {
+        tmpDir: 'custom-dir',
+        jsonFile: 'report.json',
+      }
+    ]
+  ],
 };
 ```
 
@@ -186,7 +195,7 @@ a synchronous version to guarantee deterministic cleanup.
 ### No done callbacks or generators
 Since this is also a legacy pattern, it is not supported to avoid unnecessary complexity.
 
-## Results are inconsistent
+### Results are inconsistent
 Promises are handled differently depending on the OS and node version.
 This means the report will always look a bit different depending on the environment.
 
@@ -247,6 +256,7 @@ In such cases, consider selectively disabling checks or using ignore rules.
   - disallow setTimeout / setInterval in tests
   - disallow console usage
 - Only mock console / process output *per test* not globally, to avoid missing out on errors that are thrown in silence
+- Avoid listening for process.on event like unhandledRejection because jest already does this for you and it can lead to memory leaks if not unregistered properly.
 - Enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
 
 ```js
@@ -294,7 +304,7 @@ properly wait for or clean it up. This can:
 In the best case it just pollutes the console.
 In the worst case a real bug is logged but ignored.
 Thats why tests should always spy on console and assert on the output.
-The [react example](./e2e/fixtures/react.fixture.tsx#L20-L25) shows a common problem that can be caught by tests that mock console correctly.
+The [react example](./e2e/fixtures/react.fixture.tsx#L32-L37) shows a common problem that can be caught by tests that mock console correctly.
 
 ---
 

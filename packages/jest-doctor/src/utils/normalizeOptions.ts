@@ -35,6 +35,7 @@ const DEFAULTS = {
     timers: reportHandler,
     fakeTimers: reportHandler,
     promises: reportHandler,
+    domListeners: reportHandler,
   },
   verbose: false,
   delayThreshold: 0,
@@ -70,6 +71,9 @@ const schema = zod
         timers: createReportHandler().default(DEFAULTS.report.timers),
         fakeTimers: createReportHandler().default(DEFAULTS.report.fakeTimers),
         promises: createReportHandler().default(DEFAULTS.report.promises),
+        domListeners: createReportHandler().default(
+          DEFAULTS.report.domListeners,
+        ),
         processOutputs: createReportHandler({
           methods: zod
             .array(zod.enum(['stdout', 'stderr']))

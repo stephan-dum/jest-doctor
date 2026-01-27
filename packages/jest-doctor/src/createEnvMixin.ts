@@ -37,13 +37,13 @@ import type { Context } from 'node:vm';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
 import patchProcessOutput from './patch/processOutput';
 
-interface JestDoctor {
+interface JestDoctor extends JestDoctorEnvironment {
   handleEvent?(
     event: Circus.AsyncEvent | Circus.SyncEvent,
     state: Circus.State,
   ): Promise<void>;
   global: JestEnvironment['global'];
-  fakeTimers: LegacyFakeTimers<unknown> | null;
+  fakeTimers: LegacyFakeTimers | null;
   fakeTimersModern: ModernFakeTimers | null;
   moduleMocker: ModuleMocker | null;
   getVmContext: () => Context | null;
@@ -53,13 +53,13 @@ interface JestDoctor {
   handleTestEvent?: Circus.EventHandler;
 }
 
-export interface JestDoctorConstructor {
+export interface JestDoctorConstructor extends JestDoctor {
   new (config: JestEnvironmentConfig, context: EnvironmentContext): JestDoctor;
 }
 
 const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
   Environment: EnvironmentConstructor,
-) => {
+): EnvironmentConstructor => {
   // @ts-expect-error strange ts rule where constructor arguments should be any[] where again TypeScript complains
   return class Base extends Environment implements JestDoctorEnvironment {
     public currentTestName: string = MAIN_THREAD;
@@ -91,6 +91,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         console: 0,
         totalDelay: 0,
         processOutputs: 0,
+        domListeners: 0,
       };
 
       const tmpDir = getReporterTmpDir(
@@ -176,7 +177,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
 
     async teardown() {
       if (this.tearDownError) {
-        // if its a retry, rethrow
+        // if it's a retry, rethrow
         throw this.tearDownError;
       }
       await super.teardown();
@@ -196,12 +197,12 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       } finally {
         cleanupAfterTest(this, leakRecord, MAIN_THREAD);
 
-        process.stdout.write = this.original.stdout;
-        process.stderr.write = this.original.stderr;
+        process.stdout.write = this.original.process.stdout;
+        process.stderr.write = this.original.process.stderr;
 
         this.asyncHookCleaner?.disable();
         // this is added here for safety reasons,
-        // because jest could abort and dont hit teardown event
+        // because jest could abort and don't hit teardown event
         this.asyncHookDetector?.disable();
 
         const hasLeak =
@@ -210,6 +211,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
           this.aggregatedReport.fakeTimers +
           this.aggregatedReport.console +
           this.aggregatedReport.processOutputs +
+          this.aggregatedReport.domListeners +
           this.aggregatedReport.totalDelay;
 
         if (this.reporterTmpDir && hasLeak) {

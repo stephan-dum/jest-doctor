@@ -4,6 +4,7 @@ import type {
   JestDoctorEnvironment,
   OutputOptions,
   ThrowOrWarn,
+  ReportOptions,
 } from '../types';
 
 import chalk from 'chalk';
@@ -17,7 +18,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       error.stack = message;
       throw error;
     } else {
-      that.original.stderr(`\n` + chalk.yellow(message) + '\n');
+      that.original.process.stderr(`\n` + chalk.yellow(message) + '\n');
     }
   };
   const checkErrorArray = (
@@ -63,6 +64,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       that.aggregatedReport.timers += accountAbleTimers.length;
     }
 
+    that.aggregatedReport.domListeners += leakRecord.domListeners.length;
     that.aggregatedReport.fakeTimers += leakRecord.fakeTimers.size;
     that.aggregatedReport.totalDelay += leakRecord.totalDelay;
   }
@@ -74,7 +76,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       property: keyof typeof report,
     ) => {
       if (message && report[property] && report[property].onError !== 'warn') {
-        that.original.stderr(
+        that.original.process.stderr(
           '\n' + chalk.red(label) + '\n' + chalk.red(message) + '\n',
         );
       }
@@ -90,6 +92,9 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       });
       leakRecord.fakeTimers.forEach(({ stack }) => {
         logLeak(`Open fake timer:`, stack, 'fakeTimers');
+      });
+      leakRecord.domListeners.forEach(({ stack }) => {
+        logLeak(`Attached DOM listeners:`, stack, 'domListeners');
       });
     }
 
@@ -107,11 +112,13 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       'console output(s)',
       (report.console as ConsoleOptions).onError,
     );
+
     checkErrorArray(
       leakRecord.processOutputs,
       'process output(s)',
       (report.processOutputs as OutputOptions).onError,
     );
+
     checkErrorMap('promises', 'promise');
 
     if (that.currentAfterEachCount === 0) {
@@ -133,6 +140,12 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
           report.timers.onError,
         );
       }
+
+      checkErrorArray(
+        leakRecord.domListeners,
+        'DOM listener(s)',
+        (report.domListeners as ReportOptions).onError,
+      );
 
       checkErrorMap('fakeTimers', 'fake timer');
     }

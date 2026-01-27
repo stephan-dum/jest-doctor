@@ -21,6 +21,7 @@ const report = {
   fakeTimers: 0,
   console: 0,
   totalDelay: 0,
+  domListeners: 0,
   processOutputs: 0,
 };
 
@@ -30,7 +31,8 @@ const tmpDir = path.join(REPORTER_TMP_DIR, seed.toString());
 
 describe('reporter', () => {
   it('creates tmp folder and removes it', async () => {
-    const reporter = new JestDoctorReporter({ seed }, {});
+    const jsonFile = './result.json';
+    const reporter = new JestDoctorReporter({ seed }, { jsonFile });
 
     expect(await readFile(pidFile, 'utf8')).toEqual(seed.toString());
     expect(existsSync(tmpDir)).toEqual(true);
@@ -43,6 +45,7 @@ describe('reporter', () => {
         fakeTimers: 1,
         console: 1,
         totalDelay: 10,
+        domListeners: 1,
         processOutputs: 1,
       }),
     });
@@ -52,6 +55,7 @@ describe('reporter', () => {
     expect(consoleSpy).toHaveBeenCalledTimes(2);
     expect(existsSync(pidFile)).toEqual(false);
     expect(existsSync(tmpDir)).toEqual(false);
+    expect(existsSync(jsonFile)).toEqual(true);
   });
 
   it('doesnt create pid and doesnt delete folder if keep is set to true', async () => {
@@ -96,8 +100,6 @@ describe('reporter', () => {
 
       const reporter = new JestDoctorReporter({ seed }, {});
       await reporter.onRunComplete();
-
-      console.log(vol.toJSON());
 
       expect(existsSync(othersPidFile)).toEqual(expected);
       expect(existsSync(othersTmpFile)).toEqual(expected);

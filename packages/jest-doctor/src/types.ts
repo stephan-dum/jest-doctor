@@ -9,6 +9,7 @@ import type {
   afterEach,
   afterAll,
 } from '@jest/globals';
+import jsdom from 'jsdom';
 
 export interface RuntimeHooks {
   beforeAll: typeof beforeAll;
@@ -44,6 +45,12 @@ export interface OutputRecord {
   method: 'stdout' | 'stderr';
   stack: string;
 }
+interface DOMListenerRecord {
+  event: string;
+  listener: (...args: unknown[]) => void;
+  options: { capture?: boolean } | false | undefined;
+  stack: string;
+}
 
 export interface LeakRecord {
   promises: Map<Promise<unknown>, PromiseRecord>;
@@ -52,6 +59,7 @@ export interface LeakRecord {
   processOutputs: OutputRecord[];
   totalDelay: number;
   fakeTimers: Map<number, TimerRecord>;
+  domListeners: DOMListenerRecord[];
 }
 export interface Clock {
   setTimeout: (callback: () => void, delay?: number) => number;
@@ -89,6 +97,7 @@ export interface NormalizedOptions {
     timers: NormalizedReportOptions;
     fakeTimers: NormalizedReportOptions;
     promises: NormalizedReportOptions;
+    domListeners: NormalizedReportOptions;
   };
   verbose: boolean;
   delayThreshold: number;
@@ -110,6 +119,7 @@ export interface RawOptions {
     timers?: RawReportOptions;
     fakeTimers?: RawReportOptions;
     promises?: RawReportOptions;
+    domListeners?: RawReportOptions;
   };
   verbose?: boolean;
   delayThreshold?: number;
@@ -124,10 +134,12 @@ export interface AggregatedReport {
   fakeTimers: number;
   console: number;
   processOutputs: number;
+  domListeners: number;
   totalDelay: number;
 }
 export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
+  dom: jsdom.JSDOM;
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

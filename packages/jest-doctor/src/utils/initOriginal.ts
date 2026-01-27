@@ -3,8 +3,10 @@ const initOriginal = () => ({
   clearTimeout,
   setInterval,
   clearInterval,
-  stdout: process.stdout.write.bind(process.stdout),
-  stderr: process.stderr.write.bind(process.stderr),
+  process: {
+    stdout: process.stdout.write.bind(process.stdout),
+    stderr: process.stderr.write.bind(process.stderr),
+  },
   console: {
     log: console.log.bind(console),
     info: console.info.bind(console),

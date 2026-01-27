@@ -20,7 +20,7 @@ const patchProcessOutput = (
         }
       }
 
-      return that.original[method](
+      return that.original.process[method](
         ...(args as Parameters<NodeJS.WritableStream['write']>),
       );
     };

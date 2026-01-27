@@ -7,12 +7,14 @@ It prevents flaky tests and enforces strong test hygiene.
 ## ✨ What problems does it catch?
 
 It detects and reports when tests:
+
 - Leave unresolved Promises
 - Leave open real or fake timers
 - Rely on excessive real-time delays
 - Emit process / console outputs
 
 ---
+
 **Docs**
 
 - [Quick Start](#quick-start)
@@ -24,6 +26,7 @@ It detects and reports when tests:
 - [Migration](./docs/migration.md)
 
 ---
+
 ## 🚀 Quick Start
 
 ```bash
@@ -49,10 +52,10 @@ export default {
 Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](./docs/build_your_own_environment.md).
 
 ---
+
 ## ⚙️ Configuration
 
 The environment can be configured through the Jest config `testEnvironmentOptions`:
-
 
 ```js
 export default {
@@ -83,13 +86,16 @@ export default {
 ```
 
 ### report
+
 Controls which leak types are detected and how they are reported.
 
 Each option can be:
+
 - false → disabled
 - object → enabled with configuration
 
 Common options:
+
 - **onError**: `'warn' | 'throw'` (default: `'throw'`)
 - ignore: `string | RegExp | Array<string | RegExp>` (default: `[]`)
   If the stack trace or emitted message matches, the leak is ignored.
@@ -99,12 +105,14 @@ Common options:
 - **timers:** track real timers
 - **fakeTimers:** track fake timers
 - **promises:** track not awaited promises
+- **domListeners:** track not removed DOM listeners
 - **console:** track console output
   - **methods:** `Array<keyof Console>` (default: all) which console methods should be tracked
 - **processOutputs:** track process output
   - **methods:** `Array<'stderr' | 'stdout'>` (default: both) which process output methods should be tracked
 
-###  timerIsolation
+### timerIsolation
+
 Controls when timers are validated and cleared.
 
 **afterEach** (default)
@@ -124,6 +132,7 @@ The disadvantage of this method is that it can happen that in an afterEach block
 
 **immediate**
 timers are checked **after** each test / hook block
+
 ```
 beforeAll  → check
 beforeEach → check
@@ -131,9 +140,11 @@ test       → check
 afterEach  → check
 afterAll   → check
 ```
+
 Use when tests should clean up immediately.
 
 ### delayThreshold
+
 `number` (default: `0`)
 
 The delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is added up.
@@ -141,11 +152,13 @@ If the sum is higher than the threshold, an error is thrown; otherwise a warning
 This feature should helps to detect tests that accidentally rely on real time.
 
 ### clearTimers
+
 `boolean` (default: `true`)
 
 Whether timers should be cleared automatically based on `timerIsolation`.
 
 ### verbose
+
 `boolean` (default: `false`)
 
 Jest often hides stack traces and files are not clickable.
@@ -153,6 +166,7 @@ Also it is only possible to report one error type at a time.
 This option will print all errors with the related stack traces.
 
 ---
+
 ## 📊 Reporter
 
 The reporter aggregates leaks across all test environments and prints:
@@ -179,28 +193,34 @@ export default {
       {
         tmpDir: 'custom-dir',
         jsonFile: 'report.json',
-      }
-    ]
+      },
+    ],
   ],
 };
 ```
 
 ---
+
 ## ⚠️ Limitations
 
 ### No it.concurrent
+
 Concurrent tests cannot be isolated reliably. jest-doctor replaces them with
 a synchronous version to guarantee deterministic cleanup.
 
 ### No done callbacks or generators
+
 Since this is also a legacy pattern, it is not supported to avoid unnecessary complexity.
 
 ### Results are inconsistent
+
 Promises are handled differently depending on the OS and node version.
 This means the report will always look a bit different depending on the environment.
 
 ### Microtasks resolving in same tick are not tracked
+
 This is a JavaScript limitation, not specific to jest-doctor.
+
 ```js
 Promise.resolve().then(() => {
   /* i am not tracked as unresolved */
@@ -208,6 +228,7 @@ Promise.resolve().then(() => {
 ```
 
 ### Concurrent promise combinators with nested async are problematic
+
 `Promise.race`, `Promise.any`, `Promise.all` cannot safely untrack nested async:
 
 ```js
@@ -235,13 +256,17 @@ await Promise.race([p1, p2, doSomething()]);
 ```
 
 ### Imported timers bypass tracking
+
 These timers are not intercepted. This can also be used as an escape hatch.
+
 ```js
 import { setTimeout, setInterval } from 'node:timers';
 ```
 
 ---
+
 ## 🚫 When not to use jest-doctor
+
 - Heavy integration tests with background workers
 - Tests relying on long-running real timers
 - Legacy test suites using callback-based async
@@ -249,13 +274,14 @@ import { setTimeout, setInterval } from 'node:timers';
 In such cases, consider selectively disabling checks or using ignore rules.
 
 ---
+
 ## 💡 Recommendations
 
 - Use ESLint to
   - detect floating promises
   - disallow setTimeout / setInterval in tests
   - disallow console usage
-- Only mock console / process output *per test* not globally, to avoid missing out on errors that are thrown in silence
+- Only mock console / process output _per test_ not globally, to avoid missing out on errors that are thrown in silence
 - Avoid listening for process.on event like unhandledRejection because jest already does this for you and it can lead to memory leaks if not unregistered properly.
 - Enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
 
@@ -268,13 +294,16 @@ afterEach(async () => {
 ```
 
 ---
+
 ## 🧪 Tested Against
 
 This project is tested against the following combinations:
+
 - **jest**: 28, 29, 30
 - **node**: 20, 22, 24
 
 ---
+
 # ❓ FAQ
 
 ### How to migrate an existing project?
@@ -297,7 +326,6 @@ properly wait for or clean it up. This can:
 - Interfere with later tests
 - Cause flaky failures
 - Hide real bugs
-
 
 ### Why does console output fail tests?
 

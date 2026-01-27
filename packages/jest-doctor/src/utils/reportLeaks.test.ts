@@ -15,7 +15,9 @@ describe('console', () => {
     const that = {
       aggregatedReport,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       currentAfterEachCount: 0,
       options: {
@@ -28,6 +30,9 @@ describe('console', () => {
             onError: 'warn',
           },
           processOutputs: {},
+          domListeners: {
+            onError: 'error',
+          },
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -38,6 +43,14 @@ describe('console', () => {
       fakeTimers: new Map(),
       processOutputs: [],
       totalDelay: 0,
+      domListeners: [
+        {
+          event: 'resize',
+          options: false,
+          listener: () => {},
+          stack: 'my stack',
+        },
+      ],
       console: [
         {
           method: 'log',
@@ -73,6 +86,7 @@ describe('console', () => {
       fakeTimers: new Map(),
       processOutputs: [],
       totalDelay: 0,
+      domListeners: [],
       console: [
         {
           method: 'log',
@@ -97,7 +111,9 @@ describe('processOutputs', () => {
     const that = {
       aggregatedReport,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       currentAfterEachCount: 0,
       options: {
@@ -110,6 +126,7 @@ describe('processOutputs', () => {
             onError: 'warn',
           },
           console: {},
+          domListeners: false,
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -118,6 +135,7 @@ describe('processOutputs', () => {
       promises: new Map(),
       timers: new Map(),
       fakeTimers: new Map(),
+      domListeners: [],
       processOutputs: [
         {
           stack: 'my stack text',
@@ -144,7 +162,9 @@ describe('checkError', () => {
     const that = {
       aggregatedReport,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       options: {
         report: {
@@ -154,6 +174,7 @@ describe('checkError', () => {
           console: {},
           processOutputs: {},
           timers: {},
+          domListeners: {},
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -172,6 +193,7 @@ describe('checkError', () => {
       ]),
       timers: new Map(),
       fakeTimers: new Map(),
+      domListeners: [],
       console: [],
       processOutputs: [],
       totalDelay: 0,
@@ -189,7 +211,9 @@ describe('checkError', () => {
     const that = {
       aggregatedReport,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       currentAfterEachCount: 0,
       options: {
@@ -201,6 +225,7 @@ describe('checkError', () => {
           console: {},
           processOutputs: {},
           timers: {},
+          domListeners: false,
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -218,6 +243,7 @@ describe('checkError', () => {
         ],
       ]),
       timers: new Map(),
+      domListeners: [],
       fakeTimers: new Map(),
       console: [],
       processOutputs: [],
@@ -242,7 +268,9 @@ describe('totalDelay', () => {
     const that = {
       aggregatedReport,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       currentAfterEachCount: 0,
       options: {
@@ -250,6 +278,7 @@ describe('totalDelay', () => {
           console: {},
           processOutputs: {},
           timers: {},
+          domListeners: {},
         },
         delayThreshold: 100,
       },
@@ -259,6 +288,7 @@ describe('totalDelay', () => {
       promises: new Map(),
       timers: new Map(),
       fakeTimers: new Map(),
+      domListeners: [],
       console: [],
       processOutputs: [],
       totalDelay: 10,
@@ -279,6 +309,7 @@ describe('totalDelay', () => {
           console: {},
           processOutputs: {},
           timers: {},
+          domListeners: {},
         },
         delayThreshold: 0,
       },
@@ -290,6 +321,7 @@ describe('totalDelay', () => {
       fakeTimers: new Map(),
       console: [],
       processOutputs: [],
+      domListeners: [],
       totalDelay: 10,
     } as LeakRecord;
 
@@ -308,7 +340,9 @@ describe('timers', () => {
       aggregatedReport,
       currentAfterEachCount: 0,
       original: {
-        stderr: stderrWriteMock,
+        process: {
+          stderr: stderrWriteMock,
+        },
       },
       options: {
         verbose: true,
@@ -319,6 +353,7 @@ describe('timers', () => {
           console: {},
           processOutputs: {},
           timers: {},
+          domListeners: {},
         },
       },
     } as unknown as JestDoctorEnvironment;
@@ -348,6 +383,7 @@ describe('timers', () => {
       ]),
       console: [],
       processOutputs: [],
+      domListeners: [],
       totalDelay: 0,
     } as LeakRecord;
 

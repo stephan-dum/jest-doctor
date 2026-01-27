@@ -5,7 +5,9 @@ it('should warn if environment does not support fake timers', () => {
   const stderrMock = jest.fn();
   fakeTimers({
     original: {
-      stderr: stderrMock,
+      process: {
+        stderr: stderrMock,
+      },
     },
   } as unknown as JestDoctorEnvironment);
 

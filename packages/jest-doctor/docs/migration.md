@@ -8,6 +8,7 @@ The goal is:
 > Prevent new async leaks while gradually fixing existing ones.
 
 Before introducing jest-doctor:
+
 - check if your [environment is supported](../readme.md#-tested-against)
 - check the [when not to use jest-doctor](../readme.md#-when-not-to-use-jest-doctor) section
 - be aware of the [limitations](../readme.md#limitations)
@@ -23,22 +24,22 @@ This will help to find existing issues while avoiding CI failures.
 const options = {
   report: {
     timers: {
-      onError: 'warn'
+      onError: 'warn',
     },
     fakeTimers: {
-      onError: 'warn'
+      onError: 'warn',
     },
     promises: {
-      onError: 'warn'
+      onError: 'warn',
     },
     console: {
-      onError: 'warn'
+      onError: 'warn',
     },
     processOutputs: {
-      onError: 'warn'
+      onError: 'warn',
     },
   },
-  delayThreshold: Infinity
+  delayThreshold: Infinity,
 };
 ```
 
@@ -51,6 +52,7 @@ The reporter sorts the leaks by severity so you can quickly tell which test need
 Analyze the report and create tasks for repetitive leaks and low hanging fruits.
 
 Prioritize fixing:
+
 - Floating promises
 - Open timers
 - Fake timers not cleared
@@ -65,6 +67,7 @@ Chose one of the following plans depending on your needs.
 
 If jest internal `--changedSince` flag is already used it makes transition straight forward.
 By creating a separate config for jest-doctor all tests can be still executed without disruption.
+
 ```bash
 jest --config jest.doctor.config.js --changedSince=origin/main
 ```
@@ -85,6 +88,7 @@ Over time, expand coverage until full suite uses jest-doctor.
 ## ⚠️ About “Fail CI Only on New Leaks”
 
 Raw leak counts — especially promise leaks — may vary by:
+
 - Node version
 - OS / architecture
 - event loop scheduling differences

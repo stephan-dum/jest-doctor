@@ -21,6 +21,7 @@ This document explains how jest-doctor integrates with Jest and enforces test is
 ---
 
 ## Non-goals
+
 - Not a performance profiler
 - Not a linter
 - Not a replacement for Jest's `--detectOpenHandles`
@@ -89,14 +90,14 @@ This section describes how jest-doctor detects leaks.
 
 jest-doctor currently detects:
 
-| Category        | Detection mechanism                           |
-|-----------------|-----------------------------------------------|
-| Promises        | `async_hooks`                                 |
-| Timers          | Global API patching                           |
-| Fake timers     | Jest fake timer patching                      |
-| Console output  | Console method patching                       |
-| Process output  | process method patching                       |
-| DOM listeners   | (add/remove)-EventListener patching           |
+| Category       | Detection mechanism                 |
+| -------------- | ----------------------------------- |
+| Promises       | `async_hooks`                       |
+| Timers         | Global API patching                 |
+| Fake timers    | Jest fake timer patching            |
+| Console output | Console method patching             |
+| Process output | process method patching             |
+| DOM listeners  | (add/remove)-EventListener patching |
 
 ---
 
@@ -129,6 +130,7 @@ Global functions are patched [../src/patch/timers.ts](../src/patch/timers.ts):
 - `clearImmediate`
 
 Records:
+
 - stack trace
 - type: which of the patched method created the leak
 - isAllowed: if the leak should be reported. It is still necessary to track all timers if the option `clearTimers` is `true` but `report.timers` is `false`, to be able to clear them.
@@ -152,8 +154,9 @@ Console methods are patched [../src/patch/console.ts](../src/patch/console.ts)
 Console output is treated as a leak.
 
 Records:
-  - stack trace
-  - method
+
+- stack trace
+- method
 
 **Rationale:**
 
@@ -178,10 +181,11 @@ window.(add/remove)EventListener are patched [../src/patch/domListeners.ts](../s
 Attached DOM listeners after a test are treated as a leak.
 
 Records:
-  - stack trace
-  - event
-  - handler
-  - options
+
+- stack trace
+- event
+- handler
+- options
 
 ### Ownership attribution
 
@@ -198,6 +202,7 @@ This ensures:
 - Accurate error reporting
 - all leaks attributed with `main-thread` will be reported at the end of the test suite
   - usually this is a sign that the `beforeAll`, `afterAll` or other global code has leaks.
+
 ---
 
 ## Cleanup
@@ -222,4 +227,3 @@ Leaks are reported with:
 A single error is thrown per test for clarity.
 
 All reports are summed up and sent to the reporter at the end of each test file.
-

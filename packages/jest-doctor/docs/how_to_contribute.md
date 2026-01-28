@@ -76,6 +76,7 @@ yarn install
 ```bash
 yarn test:matrix
 ```
+
 The command also supports two optional parameters the major jest version to test and a test file matcher pattern.
 For example to test jest 30 only fake-timer test:
 
@@ -100,6 +101,7 @@ Those unit tests should compliment the E2E tests and can be used to extend cover
 ```bash
 yarn coverage:merge
 ```
+
 This will merge both unit and E2E coverage into a single report which is stored inside coverage directory.
 
 ---

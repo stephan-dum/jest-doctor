@@ -1,15 +1,14 @@
 {
   "extends": ["@dev/tsconfig/base.json"],
-  "include": ["src"],
   "exclude": ["node_modules", "dist"],
+  "include": ["src", "e2e", "playground"],
   "compilerOptions": {
     "types": ["node", "jest"],
-    "noEmit": false,
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "dist",
+    "noEmit": true,
     "target": "esnext",
-    "sourceMap": true,
-    "verbatimModuleSyntax": false
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "verbatimModuleSyntax": false,
+    "jsx": "react-jsx"
   }
 }

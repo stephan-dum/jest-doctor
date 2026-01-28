@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    ignore:
+      - dependency-name: 'chalk'
+
+  - package-ecosystem: 'npm'
+    directory: '/packages/matrix/yest29'
+    schedule:
+      interval: 'yearly'
+    ignore:
+      - dependency-name: 'jest'
+      - dependency-name: 'jest-*'
+  - package-ecosystem: 'npm'
+    directory: '/packages/matrix/yest28'
+    schedule:
+      interval: 'yearly'
+    ignore:
+      - dependency-name: 'jest'
+      - dependency-name: 'jest-*'

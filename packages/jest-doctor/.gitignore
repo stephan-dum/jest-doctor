@@ -1,2 +1,9 @@
 dist
 node_modules
+coverage
+.nyc_output
+.tmp
+.c8_output
+jest.playground.mjs
+playground
+ideas.md

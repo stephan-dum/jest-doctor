@@ -1,0 +1,17 @@
+name: setup
+inputs:
+  node-version:
+    description: 'node version to use'
+    required: false
+    default: '24'
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: yarn
+    - run: corepack enable
+      shell: bash
+    - run: yarn --immutable
+      shell: bash

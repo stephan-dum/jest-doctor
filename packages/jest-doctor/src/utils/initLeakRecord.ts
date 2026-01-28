@@ -1,0 +1,28 @@
+import type { JestDoctorEnvironment, LeakRecord } from '../types';
+
+const initLeakRecord = (
+  that: JestDoctorEnvironment,
+  testName: string,
+): LeakRecord => {
+  const previousLeakRecord = that.leakRecords.get(testName);
+
+  if (previousLeakRecord) {
+    return previousLeakRecord;
+  }
+
+  const leakRecord = {
+    promises: new Map(),
+    timers: new Map(),
+    fakeTimers: new Map(),
+    console: [],
+    processOutputs: [],
+    domListeners: [],
+    totalDelay: 0,
+  };
+
+  that.leakRecords.set(testName, leakRecord);
+
+  return leakRecord;
+};
+
+export default initLeakRecord;

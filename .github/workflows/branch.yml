@@ -1,0 +1,33 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: branch-test
+on:
+  pull_request:
+    branches: ['main']
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup
+      - run: yarn lint
+      - run: yarn format
+      - run: yarn build
+
+  unit-tests:
+    uses: ./.github/workflows/unit-tests.yml
+
+  matrix-tests:
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+    uses: ./.github/workflows/matrix-tests.yml
+    with:
+      node-version: ${{ matrix.node-version }}
+
+  merge-coverage:
+    needs:
+      - matrix-tests
+      - unit-tests
+    uses: ./.github/workflows/coverage.yml

@@ -1,0 +1,22 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: tests
+on:
+  push:
+    branches: [main]
+jobs:
+  unit-tests:
+    uses: ./.github/workflows/unit-tests.yml
+
+  matrix-tests:
+    uses: ./.github/workflows/matrix-tests.yml
+    with:
+      node-version: 24
+      jest-version: 30
+
+  merge-coverage:
+    needs:
+      - matrix-tests
+      - unit-tests
+    uses: ./.github/workflows/coverage.yml

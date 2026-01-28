@@ -1,0 +1,22 @@
+name: coverage
+on:
+  workflow_call:
+jobs:
+  merge-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v7
+        with:
+          name: coverage-unit
+          path: packages/jest-doctor/.nyc_output
+      - uses: actions/download-artifact@v7
+        with:
+          name: coverage-e2e-24
+          path: packages/jest-doctor/.nyc_output
+      - run: yarn coverage:merge
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./packages/jest-doctor/coverage/lcov.info

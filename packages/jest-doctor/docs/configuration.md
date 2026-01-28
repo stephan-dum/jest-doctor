@@ -74,6 +74,7 @@ Controls when timers are validated and cleared.
 `afterEach` (default)
 `beforeAll`, `beforeEach` and `afterAll` are still immediate but `test` / `it` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
 
+```
 Hook       → Check?
 --------------------
 beforeAll  → ✅
@@ -82,7 +83,7 @@ test       → ⏳
 afterEach  → ⏳
 afterEach  → ✅
 afterAll   → ✅
-
+```
 - ✅ = timer and async leaks are checked immediately
 - ⏳ = timer leaks are deferred until the final afterEach
 
@@ -94,6 +95,7 @@ Use `afterEach` if your tests clean up resources in hooks (e.g., React Testing L
 `immediate`
 Timers are checked **after** each test or hook block.
 
+```
 Hook       → Check?
 --------------------
 beforeAll  → ✅
@@ -101,7 +103,7 @@ beforeEach → ✅
 test       → ✅
 afterEach  → ✅
 afterAll   → ✅
-
+```
 
 Use `immediate` if you need stricter timing checks.
 

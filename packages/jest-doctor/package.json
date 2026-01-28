@@ -1,6 +1,6 @@
 {
   "name": "jest-doctor",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "jest environment for leak and issue detection",
   "license": "MIT",
   "author": "Stephan Dum",

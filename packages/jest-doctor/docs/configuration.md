@@ -71,7 +71,7 @@ These options are common to all `report` subtypes.
 
 Controls when timers are validated and cleared.
 
-`afterEach` (default)
+### `afterEach` (default)
 `beforeAll`, `beforeEach` and `afterAll` are still immediate but `test` / `it` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
 
 ```
@@ -92,7 +92,7 @@ The disadvantage is that if a long-running task executes in an `afterEach` block
 
 Use `afterEach` if your tests clean up resources in hooks (e.g., React Testing Library).
 
-`immediate`
+### `immediate`
 Timers are checked **after** each test or hook block.
 
 ```

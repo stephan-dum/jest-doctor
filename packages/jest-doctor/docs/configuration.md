@@ -20,7 +20,7 @@ export default {
       promises: false,
       domListeners: {
         onError: 'warn',
-        ignoreStack: 'node_modules/history'
+        ignoreStack: 'node_modules/history',
       },
       processOutputs: {
         onError: 'warn',
@@ -34,7 +34,6 @@ export default {
   },
 };
 ```
-
 
 ## `report`
 
@@ -72,6 +71,7 @@ These options are common to all `report` subtypes.
 Controls when timers are validated and cleared.
 
 ### `afterEach` (default)
+
 `beforeAll`, `beforeEach` and `afterAll` are still immediate but `test` / `it` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
 
 ```
@@ -84,6 +84,7 @@ afterEach  → ⏳
 afterEach  → ✅
 afterAll   → ✅
 ```
+
 - ✅ = timer and async leaks are checked immediately
 - ⏳ = timer leaks are deferred until the final afterEach
 
@@ -93,6 +94,7 @@ The disadvantage is that if a long-running task executes in an `afterEach` block
 Use `afterEach` if your tests clean up resources in hooks (e.g., React Testing Library).
 
 ### `immediate`
+
 Timers are checked **after** each test or hook block.
 
 ```

@@ -1,4 +1,5 @@
 # jest-doctor
+
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](./LICENSE)
 
 jest-doctor is a custom Jest environment that fails tests deterministically
@@ -47,6 +48,7 @@ After running tests, a report like this is shown for each detected leak:
 ---
 
 **Other Docs**
+
 - [Configuration](./docs/configuration.md)
 - [Motivation](./docs/motivation.md)
 - [Migration](./docs/migration.md)
@@ -63,11 +65,13 @@ But it often does not report any issues and will not provide actionable advice.
 The [motivation page](./docs/motivation.md) goes into more detail.
 
 ---
+
 ## ⚙️ Configuration
 
 The environment can be configured through the Jest config `testEnvironmentOptions`.
 
 List of all available options:
+
 - report
   - console
   - processOutputs
@@ -214,7 +218,6 @@ In such cases, consider selectively disabling checks or using ignore rules.
 - Avoid listening to process.on events like unhandledRejection, because Jest already handles these and failing to unregister handlers can cause memory leaks.
 - Enable fake timers globally in config.
 
-
 ---
 
 ## 🧪 Tested Against
@@ -250,6 +253,7 @@ properly wait for or clean it up. This can:
 - Hide real bugs
 
 ### Why does console output fail tests?
+
 Treating console output as a leak is a deliberate strictness choice.
 This enforces explicit assertions and prevents silent failures in CI.
 

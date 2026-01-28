@@ -1,9 +1,9 @@
 # jest-doctor
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](./LICENSE)
 
-Jest-doctor is a custom Jest environment that fails tests deterministically
+jest-doctor is a custom Jest environment that fails tests deterministically
 when [async work leaks](#what-is-an-async-leak) across test boundaries.
-It prevents flaky tests and enforces strong test hygiene.
+The goal is to prevent flaky tests and enforce strong test hygiene.
 
 ## ✨ What problems does it catch?
 
@@ -13,10 +13,9 @@ It detects and reports when tests:
 - Leave open real or fake timers
 - Leave DOM listeners attached
 - Rely on excessive real-time delays
-- Emit process / console outputs
+- Produce unexpected console or process output
 
 ---
-
 
 ## 🚀 Quick Start
 
@@ -31,6 +30,7 @@ yarn add -D jest-doctor
 ```
 
 Add one of the provided environments to your `jest.config.js`.
+Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](./docs/build_your_own_environment.md).
 
 ```js
 export default {
@@ -40,139 +40,47 @@ export default {
 };
 ```
 
-Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](./docs/build_your_own_environment.md).
+After running tests, a report like this is shown for each detected leak:
+
+![report promise leak](./docs/leaks-promise.jpg)
 
 ---
 
-**Docs**
-
-- [Configuration](#configuration)
-- [Reporter](#reporter)
-- [Limitations](#limitations)
-- [When not to use jest-doctor](#when-not-to-use-jest-doctor)
-- [Recommendations](#recommendations)
-- [Tested against](#tested-against)
-- [FAQ](#faq)
+**Other Docs**
+- [Configuration](./docs/configuration.md)
+- [Motivation](./docs/motivation.md)
 - [Migration](./docs/migration.md)
+- [Build your own environment](./docs/build_your_own_environment.md)
+- [Architecture](./docs/architecture.md)
+- [How to Contribute](./docs/how_to_contribute.md)
+
+---
+
+## Why Jest's `--detectOpenHandles` is not enough
+
+Jest already offers a built-in solution to detect open handles.
+But it often does not report any issues and will not provide actionable advice.
+The [motivation page](./docs/motivation.md) goes into more detail.
 
 ---
 ## ⚙️ Configuration
 
-The environment can be configured through the Jest config `testEnvironmentOptions`:
+The environment can be configured through the Jest config `testEnvironmentOptions`.
 
-```js
-export default {
-  testEnvironmentOptions: {
-    report: {
-      console: {
-        onError: 'warn',
-        methods: ['log', 'warn', 'error'],
-        ignoreMessage: /Third party message/,
-      },
-      timers: {
-        onError: 'warn',
-      },
-      fakeTimers: {
-        onError: 'throw',
-      },
-      promises: false,
-      domListeners: {
-        onError: 'warn',
-        ignoreStack: 'node_modules/history'
-      },
-      processOutputs: {
-        onError: 'warn',
-        methods: ['stderr'],
-      },
-    },
-    delayThreshold: 1000,
-    timerIsolation: 'afterEach',
-    clearTimers: true,
-  },
-};
-```
+List of all available options:
+- report
+  - console
+  - processOutputs
+  - fakeTimers
+  - timers
+  - promises
+  - domListeners
+- delayThreshold
+- timerIsolation
+- clearTimers
+- verbose
 
-### report
-
-Controls which leak types are detected and how they are reported.
-
-Each option can be:
-
-- false → disabled
-- object → enabled with configuration
-
-Common options:
-
-- **onError**: `'warn' | 'throw'` (default: `'throw'`)
-- ignoreStack: `string | RegExp | Array<string | RegExp>` (default: `[]`)
-  If the stack trace matches, the leak is ignored.
-
-#### possible report options
-
-- **timers:** track real timers
-- **fakeTimers:** track fake timers
-- **promises:** track not awaited promises
-- **domListeners:** track not removed DOM listeners
-- **console:** track console output
-  - **methods:** `Array<keyof Console>` (default: all) which console methods should be tracked
-  - **ignoreMessage** same as ignoreStack but for the message
-- **processOutputs:** track process output
-  - **methods:** `Array<'stderr' | 'stdout'>` (default: both) which process output methods should be tracked
-  - **ignoreMessage** same as ignoreStack but for the message
-
-### timerIsolation
-
-Controls when timers are validated and cleared.
-
-**afterEach** (default)
-`beforeAll`, `beforeEach` and `afterAll` are still immediate but `test` / `it` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
-
-```
-beforeAll  → check
-beforeEach → check
-test       → defer
-afterEach  → defer
-afterEach  → final check
-afterAll   → check
-```
-
-This allows easier cleanup., for example react testing framework registers an unmount function in an `afterEach` block to clean up.
-The disadvantage of this method is that it can happen that in an afterEach block a long-running task is executed and while running it timers resolve unnoticed.
-
-**immediate**
-timers are checked **after** each test / hook block
-
-```
-beforeAll  → check
-beforeEach → check
-test       → check
-afterEach  → check
-afterAll   → check
-```
-
-Use when tests should clean up immediately.
-
-### delayThreshold
-
-`number` (default: `0`)
-
-The delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is added up.
-If the sum is higher than the threshold, an error is thrown; otherwise a warning is logged.
-This feature should helps to detect tests that accidentally rely on real time.
-
-### clearTimers
-
-`boolean` (default: `true`)
-
-Whether timers should be cleared automatically based on `timerIsolation`.
-
-### verbose
-
-`boolean` (default: `false`)
-
-Jest often hides stack traces and files are not clickable.
-Also it is only possible to report one error type at a time.
-This option will print all errors with the related stack traces.
+A detailed description of the configuration options can be found at [./docs/configuration.md](./docs/configuration.md).
 
 ---
 
@@ -186,12 +94,12 @@ The reporter aggregates leaks across all test environments and prints:
 
 The environment writes temporary reports to disk and the reporter reads them.
 
-The reporter can be configured by the standard jest reporter config syntax
+The reporter can be configured using standard Jest reporter configuration syntax.
 
 Options:
 
-- **jsonFile**: `string`: (default: null) file path where a json version of the report should be saved to.
-- **tmpDir**: `string` (default: `.tmp`) Directory used to exchange data between environment and reporter.
+- **jsonFile**: `string`: (default: null) File path where a JSON version of the report should be saved.
+- **tmpDir**: `string` (default: `.tmp`) Directory used to exchange data between the environment and the reporter. (should be added to `.gitignore`)
 
 ```js
 export default {
@@ -210,6 +118,18 @@ export default {
 
 ---
 
+## How jest-doctor works
+
+- Wraps the Jest environment
+- Tracks async resource creation
+- Checks at test boundaries
+- Throws or warns based on configuration
+- Optional: Reports through a custom reporter
+
+For a more detailed explanation, see the [architecture](./docs/architecture.md) section.
+
+---
+
 ## ⚠️ Limitations
 
 ### No it.concurrent
@@ -219,12 +139,12 @@ a synchronous version to guarantee deterministic cleanup.
 
 ### No done callbacks or generators
 
-Since this is also a legacy pattern, it is not supported to avoid unnecessary complexity.
+Callback-style async and generators are legacy patterns and are not supported to keep the implementation reliable and maintainable.
 
-### Results are inconsistent
+### Environment-dependent results
 
-Promises are handled differently depending on the OS and node version.
-This means the report will always look a bit different depending on the environment.
+Promise scheduling differs by OS and Node version,
+so exact leak ordering and grouping may vary.
 
 ### Microtasks resolving in same tick are not tracked
 
@@ -287,20 +207,13 @@ In such cases, consider selectively disabling checks or using ignore rules.
 ## 💡 Recommendations
 
 - Use ESLint to
-  - detect floating promises
-  - disallow setTimeout / setInterval in tests
-  - disallow console usage
-- Only mock console / process output _per test_ not globally, to avoid missing out on errors that are thrown in silence
-- Avoid listening for process.on event like unhandledRejection because jest already does this for you and it can lead to memory leaks if not unregistered properly.
-- Enable fake timers globally in config (be aware that there might be some issues ie axe needs real timers)
+  - Detect floating promises
+  - Disallow `setTimeout` or `setInterval` in tests
+  - Disallow console usage
+- Only mock console / process output _per test_ not globally, to avoid missing out on errors that are thrown in silence.
+- Avoid listening to process.on events like unhandledRejection, because Jest already handles these and failing to unregister handlers can cause memory leaks.
+- Enable fake timers globally in config.
 
-```js
-afterEach(async () => {
-  jest.useRealTimers();
-  await axe();
-  jest.useFakeTimers();
-});
-```
 
 ---
 
@@ -308,8 +221,8 @@ afterEach(async () => {
 
 This project is tested against the following combinations:
 
-- **jest**: 28, 29, 30
-- **node**: 20, 22, 24
+- **Jest**: 28, 29, 30
+- **Node**: 20, 22, 24
 
 ---
 
@@ -340,8 +253,8 @@ properly wait for or clean it up. This can:
 Treating console output as a leak is a deliberate strictness choice.
 This enforces explicit assertions and prevents silent failures in CI.
 
-- prevents pollutes the console
-- prevents real bug is logged but ignored
+- Prevents polluting the console
+- Prevents real bugs from being logged and ignored
 
 The [react example](./e2e/fixtures/react.fixture.tsx#L32-L37) shows a common problem that can be caught by tests that mock console correctly.
 

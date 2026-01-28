@@ -19,12 +19,12 @@ const patchDOMListeners = (
     if (leak) {
       const index = leak.domListeners.findLastIndex((record) => {
         const recordCapture =
-          typeof record.options === 'object'
+          (typeof record.options === 'object'
             ? record.options.capture
-            : record.options || false;
+            : record.options) || false;
 
         const capture =
-          typeof options === 'object' ? options.capture : options || false;
+          (typeof options === 'object' ? options.capture : options) || false;
 
         return (
           record.event === event &&

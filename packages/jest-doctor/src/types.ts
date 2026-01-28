@@ -91,16 +91,6 @@ export type OutputOptions = ReportOptions<OutputAddition>;
 
 type NormalizedReportOptions<Type = object> = false | ReportOptions<Type>;
 
-type RawConsoleAddition = {
-  methods?: Array<keyof Console>;
-  ignoreMessage?: RawIgnore;
-};
-
-type RawOutputAddition = {
-  methods?: Array<'stderr' | 'stdout'>;
-  ignoreMessage?: RawIgnore;
-};
-
 export interface NormalizedOptions {
   report: {
     console: NormalizedReportOptions<ConsoleAddition>;
@@ -115,6 +105,16 @@ export interface NormalizedOptions {
   timerIsolation: TimerIsolation;
   clearTimers: boolean;
 }
+
+type RawConsoleAddition = {
+  methods?: Array<keyof Console>;
+  ignoreMessage?: RawIgnore;
+};
+
+type RawOutputAddition = {
+  methods?: Array<'stderr' | 'stdout'>;
+  ignoreMessage?: RawIgnore;
+};
 
 type RawReportOptions<Type = object> =
   | false

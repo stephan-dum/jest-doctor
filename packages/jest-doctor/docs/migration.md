@@ -38,6 +38,9 @@ const options = {
     processOutputs: {
       onError: 'warn',
     },
+    domListeners: {
+      onError: 'warn',
+    },
   },
   delayThreshold: Infinity,
 };

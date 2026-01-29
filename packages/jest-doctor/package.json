@@ -1,7 +1,7 @@
 {
   "name": "jest-doctor",
   "version": "1.0.0",
-  "description": "jest environment for leak and issue detection",
+  "description": "Custom Jest environment that detects async leaks between tests, enforces test isolation, and prevents flaky failures in CI.",
   "license": "MIT",
   "author": "Stephan Dum",
   "type": "commonjs",
@@ -30,7 +30,13 @@
     "issue detection",
     "testing",
     "jest environment",
-    "test hygiene"
+    "test hygiene",
+    "flaky-tests",
+    "test-isolation",
+    "async-leaks",
+    "nodejs",
+    "developer-tools",
+    "ci"
   ],
   "types": "./dist/types.d.ts",
   "devDependencies": {

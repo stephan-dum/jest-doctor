@@ -1,0 +1,20 @@
+- title: Getting Started
+  url: /index.md
+
+- title: Configuration
+  url: /configuration
+
+- title: Migration
+  url: /migration
+
+- title: Motivation
+  url: /motivation
+
+- title: Build your own environment
+  url: /build_your_own_environment
+
+- title: Architecture
+  url: /architecture
+
+- title: How to contribute
+  url: /how_to_contribute

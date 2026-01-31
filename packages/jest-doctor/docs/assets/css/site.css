@@ -5,7 +5,7 @@ body {
 .github-corner > svg {
   fill:#151513;
   color:#fff;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   transform: rotate(90deg);
@@ -72,13 +72,11 @@ body {
   margin: 0;
 }
 
-.sidebar-nav li {
-  padding: 0.5rem;
-}
-
 .sidebar-nav a {
   text-decoration: none;
   color: #000;
+  padding: 0.5rem;
+  display: block;
 }
 
 .sidebar-nav a:hover {
@@ -158,6 +156,7 @@ body {
     top: 47px;
     width: 100%;
     background-color: #fff;
+    bottom: 0;
   }
 
   .nav-toggle:checked ~ .sidebar-nav {

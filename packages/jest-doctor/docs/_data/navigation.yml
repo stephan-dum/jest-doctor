@@ -1,20 +1,20 @@
 - title: Getting Started
-  url: /jest-doctor/
+  url: /
 
 - title: Configuration
-  url: /jest-doctor/configuration
+  url: /configuration
 
 - title: Migration
-  url: /jest-doctor/migration
+  url: /migration
 
 - title: Motivation
-  url: /jest-doctor/motivation
+  url: /motivation
 
 - title: Build your own environment
-  url: /jest-doctor/build_your_own_environment
+  url: /build_your_own_environment
 
 - title: Architecture
-  url: /jest-doctor/architecture
+  url: /architecture
 
 - title: How to contribute
-  url: /jest-doctor/how_to_contribute
+  url: /how_to_contribute

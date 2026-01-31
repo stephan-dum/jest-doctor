@@ -9,22 +9,33 @@
   </head>
   <body>
 
-    <header>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle">
-      <nav class="sidebar">
-        <label for="nav-toggle" class="nav-toggle-label"><span class="burger"></span></label>
-        <ul>
-          {% for item in site.data.navigation %}
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+
+  <header class="site-header">
+    <img class="logo" src="{{ '/assets/images/logo.png' | relative_url }}" alt="{{ site.title }}">
+    <label for="nav-toggle" class="nav-toggle-label">
+      <span class="burger"></span>
+    </label>
+  </header>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img class="logo" src="{{ '/assets/images/logo.png' | relative_url }}" alt="{{ site.title }}">
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        {% for item in site.data.navigation %}
           <li>
             <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
           </li>
-          {% endfor %}
-        </ul>
-      </nav>
-    </header>
+        {% endfor %}
+      </ul>
+    </nav>
+  </aside>
 
-    <main class="content">
-      {{ content }}
-    </main>
+  <main class="content">
+    {{ content }}
+  </main>
+
   </body>
 </html>

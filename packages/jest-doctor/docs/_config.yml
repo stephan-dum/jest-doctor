@@ -1,6 +1,8 @@
 title: jest-doctor Docs
 theme: minima
 markdown: kramdown
+permalink: pretty
+
 defaults:
   - scope:
       path: ''

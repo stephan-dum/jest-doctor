@@ -19,8 +19,7 @@
     "./reporter": "./dist/reporter.js"
   },
   "files": [
-    "dist",
-    "readme.md"
+    "dist"
   ],
   "keywords": [
     "jest",
@@ -63,6 +62,7 @@
     "nyc": "^17.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "shx": "^0.4.0",
     "ts-jest": "^29.4.6",
     "typescript": "5.9.3"
   },
@@ -83,6 +83,7 @@
     "zod": "^4.3.6"
   },
   "scripts": {
+    "prepublishOnly": "shx cp ./docs/index.md readme.md",
     "typecheck": "tsc",
     "build": "tsc --project tsconfig.build.json",
     "dev": "yarn typecheck --watch & yarn build --watch",

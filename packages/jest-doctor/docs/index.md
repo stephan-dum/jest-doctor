@@ -43,18 +43,18 @@ export default {
 
 After running tests, a report like this is shown for each detected leak:
 
-![report promise leak](./docs/leaks-promise.jpg)
+![report promise leak](https://raw.githubusercontent.com/stephan-dum/jest-doctor/refs/heads/main/packages/jest-doctor/docs/leaks-promise.jpg)
 
 ---
 
 **Other Docs**
 
-- [Configuration](./docs/configuration.md)
-- [Motivation](./docs/motivation.md)
-- [Migration](./docs/migration.md)
-- [Build your own environment](./docs/build_your_own_environment.md)
-- [Architecture](./docs/architecture.md)
-- [How to Contribute](./docs/how_to_contribute.md)
+- [Configuration](https://stephan-dum.github.io/jest-doctor/configuration)
+- [Motivation](https://stephan-dum.github.io/jest-doctor/motivation)
+- [Migration](https://stephan-dum.github.io/jest-doctor/migration)
+- [Build your own environment](https://stephan-dum.github.io/jest-doctor/build_your_own_environment)
+- [Architecture](https://stephan-dum.github.io/jest-doctor/architecture)
+- [How to Contribute](https://stephan-dum.github.io/jest-doctor/how_to_contribute)
 
 ---
 
@@ -62,7 +62,7 @@ After running tests, a report like this is shown for each detected leak:
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
-The [motivation page](./docs/motivation.md) goes into more detail.
+The [motivation page](./motivation.md) goes into more detail.
 
 ---
 
@@ -130,7 +130,7 @@ export default {
 - Throws or warns based on configuration
 - Optional: Reports through a custom reporter
 
-For a more detailed explanation, see the [architecture](./docs/architecture.md) section.
+For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture) section.
 
 ---
 
@@ -233,7 +233,7 @@ This project is tested against the following combinations:
 
 ### How to migrate an existing project?
 
-Please read the [migration guide](./docs/migration.md).
+Please read the [migration guide](https://stephan-dum.github.io/jest-doctor/docs/migration).
 
 ### Why is jest-doctor so strict?
 
@@ -260,7 +260,7 @@ This enforces explicit assertions and prevents silent failures in CI.
 - Prevents polluting the console
 - Prevents real bugs from being logged and ignored
 
-The [react example](./e2e/fixtures/react.fixture.tsx#L32-L37) shows a common problem that can be caught by tests that mock console correctly.
+The [react example](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/e2e/fixtures/react.fixture.tsx#L32-L37) shows a common problem that can be caught by tests that mock console correctly.
 
 ---
 

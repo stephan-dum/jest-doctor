@@ -1,3 +1,3 @@
 # jest-doctor
 
-Please find the documentation at [./packages/jest-doctor/readme.md](./packages/jest-doctor/readme.md).
+Please find the documentation at [https://stephan-dum.github.io/jest-doctor/](https://stephan-dum.github.io/jest-doctor/).

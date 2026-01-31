@@ -1,0 +1,128 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: #f5f5f5;
+  padding: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar li {
+  margin: 0.5rem 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar ul ul {
+  padding-left: 1rem;
+  font-size: 0.95rem;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+pre {
+  overflow-x: auto;
+  background: #f6f8fa;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 220px;
+    transform: translateX(-100%);
+    z-index: 1000;
+    padding-top: 3rem;
+  }
+
+  .nav-toggle:checked + .sidebar {
+    transform: translateX(0);
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .nav-toggle-label {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: 30px;
+    height: 24px;
+    cursor: pointer;
+    z-index: 1100;
+  }
+
+  .nav-toggle-label .burger,
+  .nav-toggle-label .burger::before,
+  .nav-toggle-label .burger::after {
+    display: block;
+    background-color: #333;
+    height: 3px;
+    width: 100%;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    transition: 0.3s ease;
+  }
+
+  .nav-toggle-label .burger {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-toggle-label .burger::before {
+    content: '';
+    top: -8px;
+  }
+
+  .nav-toggle-label .burger::after {
+    content: '';
+    top: 8px;
+  }
+
+  .nav-toggle:checked + .sidebar .nav-toggle-label .burger {
+    background: transparent; /* middle bar disappears */
+  }
+
+  .nav-toggle:checked + .sidebar .nav-toggle-label .burger::before {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .nav-toggle:checked + .sidebar .nav-toggle-label .burger::after {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+}
+
+.nav-toggle-label:hover .burger::before,
+.nav-toggle-label:hover .burger::after {
+  background-color: #555;
+}

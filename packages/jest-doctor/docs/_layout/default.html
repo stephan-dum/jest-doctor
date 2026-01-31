@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} · {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/github.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  </head>
+  <body>
+
+    <header>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <nav class="sidebar">
+        <label for="nav-toggle" class="nav-toggle-label"><span class="burger"></span></label>
+        <ul>
+          {% for item in site.data.navigation %}
+          <li>
+            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </header>
+
+    <main class="content">
+      {{ content }}
+    </main>
+  </body>
+</html>

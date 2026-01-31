@@ -1,5 +1,5 @@
 ---
-title: jest-doctor docs
+title: Getting Started
 ---
 # jest-doctor
 

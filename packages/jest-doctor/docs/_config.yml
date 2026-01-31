@@ -2,7 +2,7 @@ title: jest-doctor Docs
 markdown: kramdown
 permalink: pretty
 highlighter: rouge
-theme: minima
+theme: github
 
 baseurl: '/jest-doctor'
 

@@ -4,6 +4,8 @@ permalink: pretty
 highlighter: rouge
 theme: minima
 
+baseurl: '/jest-doctor'
+
 defaults:
   - scope:
       path: ''

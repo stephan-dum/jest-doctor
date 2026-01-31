@@ -17,28 +17,19 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
-
-      - name: Install Jekyll
-        run: gem install jekyll
-
-      - name: Build site
-        run: |
+      - run: gem install jekyll
+      - run: gem install minima
+      - run: |
           jekyll build \
             --source packages/jest-doctor/docs \
             --destination _site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 

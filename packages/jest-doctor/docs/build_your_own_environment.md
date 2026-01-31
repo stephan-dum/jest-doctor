@@ -1,3 +1,6 @@
+---
+title: Build your own environment
+---
 # Build your own environment
 
 Out-of-the-box node and jsdom are supported. If other environments are needed simple use the createEnvMixin helper.

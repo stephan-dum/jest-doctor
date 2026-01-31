@@ -1,3 +1,6 @@
+---
+title: Motivation
+---
 # Motivation
 
 Reliable tests are essential for maintaining confidence in your code.

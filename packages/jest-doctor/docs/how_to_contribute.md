@@ -1,3 +1,6 @@
+---
+title: How to contributing
+---
 # How to contributing
 
 Thank you for your interest in contributing to **jest-doctor**

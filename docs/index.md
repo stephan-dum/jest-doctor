@@ -2,4 +2,4 @@
 layout: default
 ---
 
-{% raw %}{% include_relative ../packages/jest-doctor/readme.md %}{% endraw %}
+{% include_relative ../packages/jest-doctor/readme.md %}

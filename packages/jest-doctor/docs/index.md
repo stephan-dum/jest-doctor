@@ -5,9 +5,11 @@ title: Getting started
 
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
 
-jest-doctor is a custom Jest environment that fails tests deterministically
-when [async work leaks](#what-is-an-async-leak) across test boundaries.
-The goal is to prevent flaky tests and enforce strong test hygiene.
+**jest-doctor** is a custom **Jest environment** that **detects [async leaks](#what-is-an-async-leak) between tests** and
+**fails flaky tests deterministically**. It enforces strong **test isolation and hygiene** by
+checking for unresolved promises, open timers, and other side effects at **test boundaries**.
+
+If your Jest tests sometimes fail only in CI or only when run together, async leaks are often the cause — and jest-doctor is designed to catch them reliably.
 
 ## 🚀 Quick Start
 
@@ -38,15 +40,17 @@ After running tests, a report like this is shown for each detected leak:
 
 ## 🔍 What problems does it catch?
 
-It detects and reports when tests:
+jest-doctor detects common causes of **flaky Jest tests** by checking that each test
+fully cleans up its async work and side effects before the next test runs.
 
+It detects and reports when tests that:
 - Leave unresolved promises
 - Leave open real or fake timers
 - Leave DOM listeners attached
 - Rely on excessive real-time delays
 - Produce unexpected console or process output
 
-###  Why Jest's `--detectOpenHandles` is not enough
+### Why Jest’s `--detectOpenHandles` is not enough to prevent flaky tests
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
@@ -115,7 +119,7 @@ export default {
 };
 ```
 
-## ⚠️ Limitations
+## ⚠️ Limitations and known edge cases
 
 ### No it.concurrent
 

@@ -1,12 +1,9 @@
 [
-  {% assign docs = site.pages %}
-  {% for page in docs %}
-    {% if page.title %}
-      {
-        "title": "{{ page.title | escape }}",
-        "url": "{{ page.url | relative_url }}",
-        "content": "{{ page.content | strip_html | strip_newlines | escape }}"
-      }{% if forloop.last == false %},{% endif %}
-    {% endif %}
+  {% for page in, site.pages %}
+    {
+      "title": "{{ page.title | escape }}",
+      "url": "{{ page.url | relative_url }}",
+      "content": "{{ page.content | strip_html | strip_newlines | escape }}"
+    }{% if forloop.last == false %},{% endif %}
   {% endfor %}
 ]

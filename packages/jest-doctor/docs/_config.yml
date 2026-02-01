@@ -1,8 +1,23 @@
 title: jest-doctor Docs
+
 markdown: kramdown
+
 permalink: pretty
+
 highlighter: rouge
+
 version: 1.0.0
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-minifier
+
+minifier:
+  remove_comments: true
+  minify_css: true
+  inline_css: true
+
+url: 'https://stephan-dum.github.io'
 
 baseurl: '/jest-doctor'
 

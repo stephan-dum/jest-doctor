@@ -51,6 +51,7 @@ body {
   line-height: 1.25em;
   font-size: 1em;
 }
+
 code {
   background-color: #f6f8fa;
   color: #24292f;
@@ -89,6 +90,30 @@ blockquote {
 }
 blockquote p {
   margin: 0;
+}
+
+#search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  max-height: 300px;
+  overflow-y: auto;
+  background: white;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+#search-results li a {
+  display: block;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  color: #333;
+}
+
+#search-results li a:hover {
+  background: #f0f0f0;
 }
 
 table {

@@ -1,0 +1,5 @@
+---
+layout: null
+permalink: /search.json
+---
+{% include generate_search.json %}

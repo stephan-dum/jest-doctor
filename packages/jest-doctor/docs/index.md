@@ -200,7 +200,7 @@ This project is tested against the following combinations:
 - **Jest**: 28, 29, 30
 - **Node**: 20, 22, 24
 
-# ❓ FAQ
+## ❓ FAQ
 
 ### How to migrate an existing project?
 

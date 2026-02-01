@@ -67,7 +67,12 @@ a:hover {
 a:visited {
   color: #369509;
 }
-
+ul {
+  margin-left: 0;
+}
+ul ul {
+  margin-left: 0.5rem;
+}
 .sidebar > .logo {
   color: #fff;
   background-color: #369509;

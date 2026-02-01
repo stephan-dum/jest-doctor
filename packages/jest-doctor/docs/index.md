@@ -45,7 +45,7 @@ It detects and reports when tests:
 - Leave DOM listeners attached
 - Rely on excessive real-time delays
 - Produce unexpected console or process output
--
+
 ###  Why Jest's `--detectOpenHandles` is not enough
 
 Jest already offers a built-in solution to detect open handles.

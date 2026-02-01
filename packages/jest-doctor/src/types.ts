@@ -58,7 +58,7 @@ export interface LeakRecord {
   console: ConsoleRecord[];
   processOutputs: OutputRecord[];
   totalDelay: number;
-  fakeTimers: Map<NodeJS.Timeout | NodeJS.Immediate, TimerRecord>;
+  fakeTimers: Map<number | NodeJS.Timeout | NodeJS.Immediate, TimerRecord>;
   domListeners: DOMListenerRecord[];
 }
 
@@ -150,7 +150,7 @@ export interface AggregatedReport {
 }
 export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
-  dom: jsdom.JSDOM;
+  dom?: jsdom.JSDOM;
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

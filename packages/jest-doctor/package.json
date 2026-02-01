@@ -80,6 +80,7 @@
   },
   "dependencies": {
     "chalk": "4.1.2",
+    "terminal-link": "^5.0.0",
     "zod": "^4.3.6"
   },
   "scripts": {

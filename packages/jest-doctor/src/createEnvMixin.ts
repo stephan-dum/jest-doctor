@@ -31,35 +31,23 @@ import getAllAfterEach from './utils/getAllAfterEach';
 import normalizeOptions from './utils/normalizeOptions';
 import getReporterTmpDir from './utils/getReporterTmpDir';
 import { Circus } from '@jest/types';
-import type { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
-import type { ModuleMocker } from 'jest-mock';
-import type { Context } from 'node:vm';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
 import patchProcessOutput from './patch/processOutput';
 
-interface JestDoctor extends JestDoctorEnvironment {
+export interface JestDoctor extends JestEnvironment {
   handleEvent?(
     event: Circus.AsyncEvent | Circus.SyncEvent,
     state: Circus.State,
   ): Promise<void>;
-  global: JestEnvironment['global'];
-  fakeTimers: LegacyFakeTimers | null;
-  fakeTimersModern: ModernFakeTimers | null;
-  moduleMocker: ModuleMocker | null;
-  getVmContext: () => Context | null;
-  exportConditions: (() => Array<string>) | undefined;
-  setup(): Promise<void>;
-  teardown(): Promise<void>;
-  handleTestEvent?: Circus.EventHandler;
 }
 
-export interface JestDoctorConstructor extends JestDoctor {
-  new (config: JestEnvironmentConfig, context: EnvironmentContext): JestDoctor;
+export interface JestDoctorConstructor<Environment = JestDoctor> {
+  new (config: JestEnvironmentConfig, context: EnvironmentContext): Environment;
 }
 
 const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
   Environment: EnvironmentConstructor,
-): EnvironmentConstructor => {
+): JestDoctorConstructor<JestDoctorEnvironment> => {
   // @ts-expect-error strange ts rule where constructor arguments should be any[] where again TypeScript complains
   return class Base extends Environment implements JestDoctorEnvironment {
     public currentTestName: string = MAIN_THREAD;

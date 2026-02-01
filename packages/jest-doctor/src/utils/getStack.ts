@@ -6,7 +6,6 @@ const getStack = (stackFrom: Function) => {
   Error.captureStackTrace(error, stackFrom);
 
   const lines = error.stack.replace(/\\/g, '/').split('\n');
-  lines.shift();
   const finalStack = [];
 
   for (const line of lines) {

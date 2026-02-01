@@ -1,9 +1,6 @@
 import createEnvMixin from './createEnvMixin';
 import NodeEnvironment from 'jest-environment-node';
-import type {
-  EnvironmentContext,
-  JestEnvironmentConfig,
-} from '@jest/environment';
+import { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
 import { Circus } from '@jest/types';
 
 const handleEvent = jest.fn();

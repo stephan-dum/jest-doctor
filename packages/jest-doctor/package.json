@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "Stephan Dum",
   "type": "commonjs",
-  "homepage": "https://github.com/stephan-dum/jest-doctor",
+  "homepage": "https://stephan-dum.github.io/jest-doctor/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stephan-dum/jest-doctor.git",
@@ -83,7 +83,7 @@
     "zod": "^4.3.6"
   },
   "scripts": {
-    "publish": "shx rm -fR dist & shx cp ./docs/index.md readme.md & yarn build & npm login & npm publish",
+    "publish": "shx rm -fR dist && shx cp ./docs/index.md readme.md && yarn build && npm login && npm publish",
     "typecheck": "tsc",
     "build": "tsc --project tsconfig.build.json",
     "dev": "yarn typecheck --watch & yarn build --watch",

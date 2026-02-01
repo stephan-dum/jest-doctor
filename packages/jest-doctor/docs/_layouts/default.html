@@ -67,12 +67,6 @@
 
       <nav class="sidebar-nav">
         <ul>
-          <li>
-            <form id="search-form" onsubmit="return false;">
-              <input type="text" id="search-box" placeholder="Search docs…">
-              <ul id="search-results"></ul>
-            </form>
-          </li>
           {% for item in site.data.navigation %}
             <li class="{% if page.url == item.url %}active{% endif %}">
               <a href="{{ item.url | relative_url }}">{{ item.title }}</a>

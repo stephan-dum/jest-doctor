@@ -1,6 +1,0 @@
----
-layout: null
-permalink: /search.json
-sitemap: false
----
-{% include generate_search.json %}

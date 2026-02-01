@@ -9,3 +9,5 @@ baseurl: '/jest-doctor'
 defaults:
   - scope:
       path: ''
+    values:
+      layout: default

@@ -189,29 +189,7 @@ table td {
   top: 8px;
 }
 
-.toc {
-  width: 12rem;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  right: 0;
-  overflow-y: auto;
-  box-sizing: border-box;
-  border-left: 1px solid #dadde1;
-  line-height: 1.25em;
-  font-size: 1em;
-}
-
-
-
-
 @media (max-width: 768px) {
-  .toc {
-    display: none;
-  }
   .nav-toggle-label {
     display: block;
   }

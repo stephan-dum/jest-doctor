@@ -2,19 +2,19 @@
   url: /
 
 - title: Configuration
-  url: /configuration
+  url: /configuration/
 
 - title: Migration
-  url: /migration
+  url: /migration/
 
 - title: Motivation
-  url: /motivation
+  url: /motivation/
 
 - title: Build your own environment
-  url: /build_your_own_environment
+  url: /build_your_own_environment/
 
 - title: Architecture
-  url: /architecture
+  url: /architecture/
 
 - title: How to contribute
-  url: /how_to_contribute
+  url: /how_to_contribute/

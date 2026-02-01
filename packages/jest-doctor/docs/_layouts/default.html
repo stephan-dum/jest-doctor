@@ -24,7 +24,6 @@
     <nav class="sidebar-nav">
       <ul>
         {% for item in site.data.navigation %}
-        <script>console.log({%page.url%},{%item.url%});</script>
           <li class="{% if page.url == item.url %}active{% endif %}">
             <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
           </li>

@@ -11,7 +11,7 @@ version: 1.0.0
 plugins:
   - jekyll-sitemap
   - jekyll-toc
-  -
+
 kramdown:
   auto_ids: true
   toc_levels: 2..2

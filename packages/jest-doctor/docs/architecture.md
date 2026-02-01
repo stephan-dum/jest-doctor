@@ -49,21 +49,16 @@ These environments:
 For each test:
 
 1. **Before test**
-
-- Initialize leak records
-- Patch globals (timers, console, test functions)
-- Start async_hooks tracking
-
+    - Initialize leak records
+    - Patch globals (timers, console, test functions)
+    - Start async_hooks tracking
 2. **During test**
-
-- Attribute async resources to current test
-- Capture creation stack traces
-
+    - Attribute async resources to current test
+    - Capture creation stack traces
 3. **After test**
-
-- Detect leftover async resources
-- Report leaks
-- Cleanup globals and hooks
+    - Detect leftover async resources
+    - Report leaks
+    - Cleanup globals and hooks
 
 ---
 

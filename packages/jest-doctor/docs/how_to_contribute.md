@@ -75,7 +75,7 @@ yarn test:matrix 30 fake-timer
 
 E2E tests execute real Jest runs using the fixtures in `e2e/fixtures` and are focused on case coverage.
 These tests are essential for validating behavior across environments and Jest versions.
-The [readme.md](../src/e2e/readme.md) gives more insights on how they work in the background.
+The [readme.md](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/e2e/readme.md) gives more insights on how they work in the background.
 
 ### Run unit tests
 
@@ -178,7 +178,7 @@ If you’re unsure about an approach:
 
 - Open a discussion
 - Start with a draft PR
-- read docs ie `docs/architecture.md`
+- read docs ie [architecture](https://stephan-dum.github.io/jest-doctor/architecture)
 
 Design discussion and questions are very welcome.
 

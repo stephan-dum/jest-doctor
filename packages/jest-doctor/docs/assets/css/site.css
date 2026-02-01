@@ -69,7 +69,7 @@ a:hover {
 a:visited {
   color: #369509;
 }
-ul {
+ol, ul {
   padding-left: 1em;
 }
 

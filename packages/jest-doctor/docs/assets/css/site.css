@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: sans-serif;
+  line-height: 1.5em;
 }
 .github-corner > svg {
   fill:#151513;
@@ -154,9 +155,8 @@ table td {
 
 .content {
   flex: 1;
-  margin-left: 12rem;
+  margin: 0 12rem;
   padding: 0 1rem;
-  max-width: 900px;
   box-sizing: border-box;
   margin-bottom: 2.5em;
 }
@@ -189,7 +189,29 @@ table td {
   top: 8px;
 }
 
+.toc {
+  width: 12rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-left: 1px solid #dadde1;
+  line-height: 1.25em;
+  font-size: 1em;
+}
+
+
+
+
 @media (max-width: 768px) {
+  .toc {
+    display: none;
+  }
   .nav-toggle-label {
     display: block;
   }

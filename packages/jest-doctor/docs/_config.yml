@@ -10,12 +10,12 @@ version: 1.0.0
 
 plugins:
   - jekyll-sitemap
-  - jekyll-minifier
+  - jekyll-compressor
 
-minifier:
-  remove_comments: true
-  minify_css: true
-  inline_css: true
+compressor:
+  css: true
+  js: true
+  html: true
 
 url: 'https://stephan-dum.github.io'
 

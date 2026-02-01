@@ -25,7 +25,7 @@ jobs:
           bundler-cache: true
       - run: gem install jekyll
       - run: gem install jekyll-sitemap
-      - run: gem install jekyll-minifier
+      - run: gem install jekyll-compressor
       - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
       - run: |
           jekyll build \

@@ -24,7 +24,7 @@
     <nav class="sidebar-nav">
       <ul>
         {% for item in site.data.navigation %}
-          <li class="{% page.url | remove_first: site.baseurl == item.url %}active{% endif %}">
+          <li class="{% if page.url | remove_first: site.baseurl == item.url %}active{% endif %}">
             <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
           </li>
         {% endfor %}

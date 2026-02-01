@@ -77,6 +77,7 @@ blockquote {
   padding: 0 1em;
   color: #59636e;
   border-left: .25em solid #d1d9e0;
+  margin: 0;
 }
 blockquote p {
   margin: 0;
@@ -161,6 +162,11 @@ blockquote p {
 @media (max-width: 768px) {
   .nav-toggle-label {
     display: block;
+  }
+  .sidebar-nav a {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #dadde1;
   }
 
   .nav-toggle-label {

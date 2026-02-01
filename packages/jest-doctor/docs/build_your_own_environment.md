@@ -1,5 +1,4 @@
 ---
-title: Build your own environment
 ---
 # Build your own environment
 

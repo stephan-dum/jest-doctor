@@ -1,5 +1,4 @@
 ---
-title: Getting Started
 ---
 # jest-doctor
 
@@ -18,8 +17,6 @@ It detects and reports when tests:
 - Leave DOM listeners attached
 - Rely on excessive real-time delays
 - Produce unexpected console or process output
-
----
 
 ## 🚀 Quick Start
 
@@ -48,15 +45,11 @@ After running tests, a report like this is shown for each detected leak:
 
 ![report promise leak](https://raw.githubusercontent.com/stephan-dum/jest-doctor/refs/heads/main/packages/jest-doctor/docs/leaks-promise.jpg)
 
----
-
 ## Why Jest's `--detectOpenHandles` is not enough
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
 The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation) goes into more detail.
-
----
 
 ## ⚙️ Configuration
 
@@ -77,8 +70,6 @@ List of all available options:
 - verbose
 
 A detailed description of the configuration options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration).
-
----
 
 ## 📊 Reporter
 
@@ -112,8 +103,6 @@ export default {
 };
 ```
 
----
-
 ## How jest-doctor works
 
 - Wraps the Jest environment
@@ -123,8 +112,6 @@ export default {
 - Optional: Reports through a custom reporter
 
 For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture) section.
-
----
 
 ## ⚠️ Limitations
 
@@ -188,8 +175,6 @@ These timers are not intercepted. This can also be used as an escape hatch.
 import { setTimeout, setInterval } from 'node:timers';
 ```
 
----
-
 ## 🚫 When not to use jest-doctor
 
 - Heavy integration tests with background workers
@@ -197,8 +182,6 @@ import { setTimeout, setInterval } from 'node:timers';
 - Legacy test suites using callback-based async
 
 In such cases, consider selectively disabling checks or using ignore rules.
-
----
 
 ## 💡 Recommendations
 
@@ -210,16 +193,12 @@ In such cases, consider selectively disabling checks or using ignore rules.
 - Avoid listening to process.on events like unhandledRejection, because Jest already handles these and failing to unregister handlers can cause memory leaks.
 - Enable fake timers globally in config.
 
----
-
 ## 🧪 Tested Against
 
 This project is tested against the following combinations:
 
 - **Jest**: 28, 29, 30
 - **Node**: 20, 22, 24
-
----
 
 # ❓ FAQ
 

@@ -51,6 +51,11 @@ body {
   line-height: 1.25em;
   font-size: 1em;
 }
+code {
+  background-color: #f6f8fa;
+  color: #24292f;
+  padding: 0 0.25rem;
+}
 hr {
   color: #dadde1;
 }

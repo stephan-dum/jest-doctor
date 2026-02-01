@@ -1,5 +1,4 @@
 ---
-title: How to contributing
 ---
 # How to contributing
 
@@ -8,8 +7,6 @@ Thank you for your interest in contributing to **jest-doctor**
 We welcome bug reports, documentation improvements, and code contributions. Because jest-doctor operates at a very low level of Jest’s runtime, contributions are expected to be **careful, well-tested, and explicit about tradeoffs**.
 
 By participating in this project, you agree to be [respectful and constructive](./CODE_OF_CONDUCT.md) in discussions and reviews.
-
----
 
 ## Project philosophy
 
@@ -21,8 +18,6 @@ Most design decisions in this repo are guided by the following principles:
 - **Determinism over convenience** – behavior must be predictable across machines and CI
 
 If a change weakens any of these guarantees, expect it to be discussed during review.
-
----
 
 ## Repository structure
 
@@ -44,8 +39,6 @@ docs/
 ```
 
 If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture).
-
----
 
 ## Getting started
 
@@ -93,8 +86,6 @@ yarn coverage:merge
 
 This will merge both unit and E2E coverage into a single report which is stored inside coverage directory.
 
----
-
 ## Development workflow
 
 1. Fork the repository
@@ -104,8 +95,6 @@ This will merge both unit and E2E coverage into a single report which is stored 
 5. Ensure all tests pass
 
 Avoid mixing unrelated changes in a single PR.
-
----
 
 ## Testing requirements
 
@@ -136,8 +125,6 @@ A PR that changes runtime behavior without tests is unlikely to be merged.
 
 Linting is enforced via ESLint.
 
----
-
 ## Documentation
 
 Documentation lives in `docs/` and `README.md`.
@@ -147,8 +134,6 @@ Please update docs when you:
 - Change observable behavior
 - Add configuration options
 - Introduce new reports or failure modes
-
----
 
 ## Submitting a pull request
 
@@ -169,8 +154,6 @@ A good PR description includes:
 - Any known limitations or follow-ups
 
 Small, focused PRs are strongly preferred over large refactors.
-
----
 
 ## Getting help
 

@@ -25,7 +25,7 @@ jobs:
           bundler-cache: true
       - run: gem install jekyll
       - run: gem install jekyll-sitemap
-      - run: gem install jekyll-toc
+      - run: gem install jekyll-table-of-contents
       - run: gem install cssmin
       - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
       - run: |

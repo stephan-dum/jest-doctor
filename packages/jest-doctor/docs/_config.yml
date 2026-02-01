@@ -10,11 +10,7 @@ version: 1.0.0
 
 plugins:
   - jekyll-sitemap
-  - jekyll-toc
-
-toc:
-  min_level: 2
-  max_level: 2
+  - jekyll-table-of-contents
 
 compressor:
   css: true

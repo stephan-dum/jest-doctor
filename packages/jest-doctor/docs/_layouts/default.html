@@ -30,16 +30,7 @@
     </main>
     <aside class="toc">
       <nav class="sidebar-nav">
-        <ul>
-          {% assign sections = content | split: '<h2' %}
-          {% for section in sections offset:1 %}
-            {% assign id = section | split: 'id="' | last | split: '"' | first %}
-            {% assign title = section | split: '>' | slice: 1 | join: '>' | split: '</h2>' | first | strip_html | strip %}
-            <li>
-              <a href="#{{ id }}">{{ title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
+        {{ content | toc_only: "h2" }}
       </nav>
     </aside>
     <a href="https://github.com/stephan-dum/jest-doctor/tree/main/packages/jest-doctor" class="github-corner" aria-label="View source on GitHub">

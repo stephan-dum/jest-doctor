@@ -10,6 +10,7 @@ version: 1.0.0
 
 plugins:
   - jekyll-sitemap
+  - jekyll-toc
 
 compressor:
   css: true

@@ -1,0 +1,54 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }} · {{ site.title }}</title>
+<meta name="description" content="{{ page.excerpt | strip_html | truncate:160 }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.excerpt | strip_html | truncate:160 }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ '/favicon.svg' | relative_url }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<style>
+  {% include github.min.css %}
+  {% include site.min.css %}
+</style>
+<link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | relative_url }}">
+<link rel="shortcut icon" href="/favicon.ico">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "jest-doctor",
+    "url": "https://stephan-dum.github.io/jest-doctor/",
+    "description": "Custom Jest environment that detects async leaks between tests, enforces test isolation, and prevents flaky failures in CI.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "softwareVersion": "{{ site.version | default: 'latest' }}",
+    "author": {
+      "@type": "Person",
+      "name": "Stephan Dum"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Stephan Dum"
+    },
+    "license": "https://opensource.org/licenses/MIT",
+    "codeRepository": "https://github.com/stephan-dum/jest-doctor",
+    "keywords": [
+      "jest",
+      "testing",
+      "debugging",
+      "test diagnostics",
+      "jest environment",
+      "test hygiene",
+      "flaky-tests",
+      "test-isolation",
+      "async-leaks",
+      "developer-tools",
+      "ci",
+      "leak detection",
+      "open handles",
+      "issue detection"
+    ]
+  }
+</script>

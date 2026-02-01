@@ -10,7 +10,6 @@ version: 1.0.0
 
 plugins:
   - jekyll-sitemap
-  - jekyll-compressor
 
 compressor:
   css: true

@@ -50,17 +50,6 @@ After running tests, a report like this is shown for each detected leak:
 
 ---
 
-**Other Docs**
-
-- [Configuration](https://stephan-dum.github.io/jest-doctor/configuration)
-- [Motivation](https://stephan-dum.github.io/jest-doctor/motivation)
-- [Migration](https://stephan-dum.github.io/jest-doctor/migration)
-- [Build your own environment](https://stephan-dum.github.io/jest-doctor/build_your_own_environment)
-- [Architecture](https://stephan-dum.github.io/jest-doctor/architecture)
-- [How to Contribute](https://stephan-dum.github.io/jest-doctor/how_to_contribute)
-
----
-
 ## Why Jest's `--detectOpenHandles` is not enough
 
 Jest already offers a built-in solution to detect open handles.

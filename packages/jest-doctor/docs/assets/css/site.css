@@ -159,6 +159,7 @@ table td {
   padding: 0 1rem;
   box-sizing: border-box;
   margin-bottom: 2.5em;
+  max-width: 900px;
 }
 
 .nav-toggle-label .burger,

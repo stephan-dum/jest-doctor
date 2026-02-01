@@ -9,16 +9,6 @@ jest-doctor is a custom Jest environment that fails tests deterministically
 when [async work leaks](#what-is-an-async-leak) across test boundaries.
 The goal is to prevent flaky tests and enforce strong test hygiene.
 
-## ✨ What problems does it catch?
-
-It detects and reports when tests:
-
-- Leave unresolved promises
-- Leave open real or fake timers
-- Leave DOM listeners attached
-- Rely on excessive real-time delays
-- Produce unexpected console or process output
-
 ## 🚀 Quick Start
 
 ```bash
@@ -46,11 +36,32 @@ After running tests, a report like this is shown for each detected leak:
 
 ![report promise leak](https://raw.githubusercontent.com/stephan-dum/jest-doctor/refs/heads/main/packages/jest-doctor/docs/leaks-promise.jpg)
 
-## Why Jest's `--detectOpenHandles` is not enough
+## 🔍 What problems does it catch?
+
+It detects and reports when tests:
+
+- Leave unresolved promises
+- Leave open real or fake timers
+- Leave DOM listeners attached
+- Rely on excessive real-time delays
+- Produce unexpected console or process output
+-
+###  Why Jest's `--detectOpenHandles` is not enough
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
 The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation) goes into more detail.
+
+### How jest-doctor works
+
+- Wraps the Jest environment
+- Tracks async resource creation
+- Checks at test boundaries
+- Throws or warns based on configuration
+- Optional: Reports through a custom reporter
+
+For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture) section.
+
 
 ## ⚙️ Configuration
 
@@ -103,16 +114,6 @@ export default {
   ],
 };
 ```
-
-## How jest-doctor works
-
-- Wraps the Jest environment
-- Tracks async resource creation
-- Checks at test boundaries
-- Throws or warns based on configuration
-- Optional: Reports through a custom reporter
-
-For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture) section.
 
 ## ⚠️ Limitations
 

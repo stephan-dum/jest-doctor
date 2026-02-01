@@ -1,5 +1,5 @@
 [
-  {% for page in, site.pages %}
+  {% for page in site.pages %}
     {
       "title": "{{ page.title | escape }}",
       "url": "{{ page.url | relative_url }}",

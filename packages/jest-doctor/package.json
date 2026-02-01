@@ -33,9 +33,9 @@
     "flaky-tests",
     "test-isolation",
     "async-leaks",
-    "nodejs",
     "developer-tools",
-    "ci"
+    "ci",
+    "test diagnostics"
   ],
   "types": "./dist/types.d.ts",
   "devDependencies": {

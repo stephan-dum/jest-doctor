@@ -2,6 +2,7 @@ title: jest-doctor Docs
 markdown: kramdown
 permalink: pretty
 highlighter: rouge
+version: 1.0.0
 
 baseurl: '/jest-doctor'
 

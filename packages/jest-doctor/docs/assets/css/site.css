@@ -51,6 +51,9 @@ body {
   line-height: 1.25em;
   font-size: 1em;
 }
+hr {
+  color: #dadde1;
+}
 img {
   max-width: 100%;
 }

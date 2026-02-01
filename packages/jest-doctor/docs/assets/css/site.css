@@ -155,7 +155,7 @@ table td {
 
 .content {
   flex: 1;
-  margin: 0 12rem;
+  margin-left: 12rem;
   padding: 0 1rem;
   box-sizing: border-box;
   margin-bottom: 2.5em;

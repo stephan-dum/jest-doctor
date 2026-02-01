@@ -31,12 +31,13 @@
     <aside class="toc">
       <nav class="sidebar-nav">
         <ul>
-          {% for heading in page.content | split:'\n' %}
-            {% if heading contains '## ' %}
-              <li>
-                <a href="#{{ heading | slugify }}">{{ heading | remove: '## ' }}</a>
-              </li>
-            {% endif %}
+          {% assign parts = content | split: '<h2' %}
+          {% for part in parts offset:1 %}
+            {% assign id_part = part | split: 'id="' | last | split: '"' | first %}
+            {% assign text_part = part | split: '>' | slice: 1 | join: '>' | split: '</h2>' | first %}
+            <li>
+              <a href="#{{ id_part }}">{{ text_part | strip_html }}</a>
+            </li>
           {% endfor %}
         </ul>
       </nav>

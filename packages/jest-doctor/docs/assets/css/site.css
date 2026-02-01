@@ -57,6 +57,8 @@ img {
 pre {
   max-width: 100%;
   overflow-x: auto;
+  padding: 0.5em;
+  margin: 0;
 }
 a {
   color: #369509;
@@ -68,11 +70,18 @@ a:visited {
   color: #369509;
 }
 ul {
-  margin-left: 0;
+  padding-left: 1em;
 }
-ul ul {
-  margin-left: 0.5rem;
+
+blockquote {
+  padding: 0 1em;
+  color: #59636e;
+  border-left: .25em solid #d1d9e0;
 }
+blockquote p {
+  margin: 0;
+}
+
 .sidebar > .logo {
   color: #fff;
   background-color: #369509;
@@ -118,7 +127,7 @@ ul ul {
   padding: 0 1rem;
   max-width: 900px;
   box-sizing: border-box;
-  margin-bottom: 1.5em;
+  margin-bottom: 2.5em;
 }
 
 .nav-toggle-label .burger,

@@ -12,9 +12,9 @@ The goal is:
 
 Before introducing jest-doctor:
 
-- check if your [environment is supported](../readme.md#-tested-against)
-- check the [when not to use jest-doctor](../readme.md#-when-not-to-use-jest-doctor) section
-- be aware of the [limitations](../readme.md#limitations)
+- check if your [environment is supported](https://stephan-dum.github.io/jest-doctor#-tested-against)
+- check the [when not to use jest-doctor](https://stephan-dum.github.io/jest-doctor#-when-not-to-use-jest-doctor) section
+- be aware of the [limitations](https://stephan-dum.github.io/jest-doctor#limitations)
 - Make sure to onboard all developers and they agree to that stricter enforcement
 - decide on the code hygiene level to apply.
 

@@ -51,6 +51,22 @@ body {
   line-height: 1.25em;
   font-size: 1em;
 }
+img {
+  max-width: 100%;
+}
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+a {
+  color: #369509;
+}
+a:hover {
+  color: #000;
+}
+a:visited {
+  color: #369509;
+}
 
 .sidebar > .logo {
   color: #fff;

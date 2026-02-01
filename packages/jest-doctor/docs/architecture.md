@@ -5,22 +5,6 @@ title: Architecture
 
 This document explains how jest-doctor integrates with Jest and enforces test isolation.
 
-- [Non goals](#non-goals)
-- [High-level design](#high-level-design)
-- [Integration points](#integration-points)
-- [Execution lifecycle](#execution-lifecycle)
-- [Leak Detection Internals](#leak-detection-internals)
-  - [Leak categories](#leak-categories)
-  - [Promise detection](#promise-detection)
-  - [Real timers](#real-timers)
-  - [Fake timers](#fake-timers)
-  - [Console detection](#console-detection)
-  - [Process outputs](#process-outputs)
-  - [DOM Listeners](#dom-listeners)
-  - [Ownership attribution](#ownership-attribution)
-- [Cleanup](#cleanup)
-- [Error reporting](#error-reporting)
-
 ---
 
 ## Non-goals

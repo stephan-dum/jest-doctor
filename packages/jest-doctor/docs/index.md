@@ -3,7 +3,7 @@ title: Getting Started
 ---
 # jest-doctor
 
-[![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](./LICENSE)
+[![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
 
 jest-doctor is a custom Jest environment that fails tests deterministically
 when [async work leaks](#what-is-an-async-leak) across test boundaries.
@@ -34,7 +34,7 @@ yarn add -D jest-doctor
 ```
 
 Add one of the provided environments to your `jest.config.js`.
-Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](./docs/build_your_own_environment.md).
+Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](https://stephan-dum.github.io/jest-doctor/build_your_own_environment).
 
 ```js
 export default {
@@ -65,7 +65,7 @@ After running tests, a report like this is shown for each detected leak:
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
-The [motivation page](./motivation.md) goes into more detail.
+The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation) goes into more detail.
 
 ---
 
@@ -87,7 +87,7 @@ List of all available options:
 - clearTimers
 - verbose
 
-A detailed description of the configuration options can be found at [./docs/configuration.md](./docs/configuration.md).
+A detailed description of the configuration options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration).
 
 ---
 

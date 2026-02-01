@@ -11,20 +11,6 @@ By participating in this project, you agree to be [respectful and constructive](
 
 ---
 
-## Table of contents
-
-- [Project philosophy](#project-philosophy)
-- [Repository structure](#repository-structure)
-- [Getting started](#getting-started)
-- [Development workflow](#development-workflow)
-- [Testing requirements](#testing-requirements)
-- [Style guidelines](#style-guidelines)
-- [Documentation](#documentation)
-- [Submitting a pull request](#submitting-a-pull-request)
-- [Getting help](#getting-help)
-
----
-
 ## Project philosophy
 
 Most design decisions in this repo are guided by the following principles:
@@ -57,7 +43,7 @@ docs/
   motivation.md      # Why the project exists
 ```
 
-If you are new to the project, start with **[docs/architecture.md](./docs/architecture.md)**.
+If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture).
 
 ---
 

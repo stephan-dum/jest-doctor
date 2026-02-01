@@ -27,8 +27,7 @@ jobs:
       - run: gem install jekyll-sitemap
       - run: gem install cssmin
       - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
-      - run: cssmin packages/jest-doctor/docs/assets/css/github.css > packages/jest-doctor/docs/_includes/github.min.css
-      - run: cssmin packages/jest-doctor/docs/assets/css/site.css > packages/jest-doctor/docs/_includes/site.min.css
+      - run: npx csso-cli packages/jest-doctor/docs/assets/css/github.css packages/jest-doctor/docs/assets/css/site.css --output packages/jest-doctor/docs/_includes/minified.css
       - run: |
           jekyll build \
             --source packages/jest-doctor/docs \

@@ -82,7 +82,7 @@ jest-doctor currently detects:
 - To support concurrent promises `Promise.race`, `Promise.any` and `Promise.all` they are patched as well.
   - [promiseConcurrency.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/promiseConcurrency.ts)
   - handles untracking of losing promises
-  - (!) cannot handle nested promises, see [known limitations](https://stephan-dum.github.io/jest-doctor#limitations)
+  - (!) cannot handle nested promises, see [known limitations](https://stephan-dum.github.io/jest-doctor/#limitations)
 
 ### Real timers
 

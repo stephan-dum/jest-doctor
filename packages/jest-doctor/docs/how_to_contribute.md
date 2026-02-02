@@ -7,7 +7,7 @@ Thank you for your interest in contributing to **jest-doctor**
 
 We welcome bug reports, documentation improvements, and code contributions. Because jest-doctor operates at a very low level of Jest’s runtime, contributions are expected to be **careful, well-tested, and explicit about tradeoffs**.
 
-By participating in this project, you agree to be [respectful and constructive](./CODE_OF_CONDUCT.md) in discussions and reviews.
+By participating in this project, you agree to be [respectful and constructive](https://github.com/stephan-dum/jest-doctor/blob/main/CODE_OF_CONDUCT.md) in discussions and reviews.
 
 ## Project philosophy
 
@@ -39,7 +39,7 @@ docs/
   motivation.md      # Why the project exists
 ```
 
-If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture).
+If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture/).
 
 ## Getting started
 
@@ -162,7 +162,7 @@ If you’re unsure about an approach:
 
 - Open a discussion
 - Start with a draft PR
-- read docs ie [architecture](https://stephan-dum.github.io/jest-doctor/architecture)
+- read docs ie [architecture](https://stephan-dum.github.io/jest-doctor/architecture/)
 
 Design discussion and questions are very welcome.
 

@@ -10,6 +10,7 @@ version: 1.0.0
 
 plugins:
   - jekyll-sitemap
+  - jekyll-seo-tag
 
 url: 'https://stephan-dum.github.io'
 

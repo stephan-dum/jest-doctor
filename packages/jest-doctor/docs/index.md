@@ -24,7 +24,7 @@ yarn add -D jest-doctor
 ```
 
 Add one of the provided environments to your `jest.config.js`.
-Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](https://stephan-dum.github.io/jest-doctor/build_your_own_environment).
+Out-of-the-box jest-doctor supports node and jsdom environments. But you can also [build your own environment](https://stephan-dum.github.io/jest-doctor/build_your_own_environment/).
 
 ```js
 export default {
@@ -54,7 +54,7 @@ It detects and reports when tests that:
 
 Jest already offers a built-in solution to detect open handles.
 But it often does not report any issues and will not provide actionable advice.
-The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation) goes into more detail.
+The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation/) goes into more detail.
 
 ### How jest-doctor works
 
@@ -64,7 +64,7 @@ The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation) goes
 - Throws or warns based on configuration
 - Optional: Reports through a custom reporter
 
-For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture) section.
+For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture/) section.
 
 
 ## ⚙️ Configuration
@@ -85,7 +85,7 @@ List of all available options:
 - clearTimers
 - verbose
 
-A detailed description of the configuration options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration).
+A detailed description of the configuration options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration/).
 
 ## 📊 Reporter
 
@@ -210,7 +210,7 @@ This project is tested against the following combinations:
 
 ### How to migrate an existing project?
 
-Please read the [migration guide](https://stephan-dum.github.io/jest-doctor/docs/migration).
+Please read the [migration guide](https://stephan-dum.github.io/jest-doctor/migration/).
 
 ### Why is jest-doctor so strict?
 

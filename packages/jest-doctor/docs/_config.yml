@@ -25,3 +25,4 @@ defaults:
     values:
       layout: default
       excerpt_separator: '<!--more-->'
+      excerpt: true

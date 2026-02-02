@@ -6,7 +6,7 @@ title: How to contributing
 Thank you for your interest in contributing to **jest-doctor**
 
 We welcome bug reports, documentation improvements, and code contributions. Because jest-doctor operates at a very low level of Jest’s runtime, contributions are expected to be **careful, well-tested, and explicit about tradeoffs**.
-
+<!--more-->
 By participating in this project, you agree to be [respectful and constructive](https://github.com/stephan-dum/jest-doctor/blob/main/CODE_OF_CONDUCT.md) in discussions and reviews.
 
 ## Project philosophy

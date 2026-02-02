@@ -16,6 +16,8 @@ url: 'https://stephan-dum.github.io'
 
 baseurl: '/jest-doctor'
 
+excerpt_separator: '<!--more-->'
+
 defaults:
   - scope:
       path: ''

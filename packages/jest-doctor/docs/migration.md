@@ -5,7 +5,7 @@ title: Migration
 
 This guide explains how to introduce jest-doctor into an existing Jest test suite with minimal disruption, predictable outcomes, and clear rollback options.
 Adopting jest-doctor in large or legacy codebases should be done incrementally to avoid blocking development while steadily improving test reliability
-
+<!--more-->
 The goal is:
 
 > Prevent new async leaks while gradually fixing existing ones.

@@ -254,3 +254,24 @@ table td {
     margin-top: 47px;
   }
 }
+
+
+#search-container .search-box {
+  margin-bottom: 10px;
+}
+
+#search-container .search-stats {
+  font-size: 0.9em;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+#search-container .search-hits .hit {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+#search-container .hit mark {
+  background: yellow;
+  font-weight: bold;
+}

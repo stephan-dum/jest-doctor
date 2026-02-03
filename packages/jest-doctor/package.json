@@ -1,6 +1,6 @@
 {
   "name": "jest-doctor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Custom Jest environment that detects async leaks between tests, enforces test isolation, and prevents flaky failures in CI.",
   "license": "MIT",
   "author": "Stephan Dum",
@@ -83,7 +83,7 @@
     "zod": "^4.3.6"
   },
   "scripts": {
-    "publish": "shx rm -fR dist && yarn build && npm login",
+    "prepare:publish": "shx rm -fR dist && yarn build && npm login && npm publish",
     "typecheck": "tsc",
     "build": "tsc --project tsconfig.build.json",
     "dev": "yarn typecheck --watch & yarn build --watch",

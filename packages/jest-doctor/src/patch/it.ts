@@ -13,13 +13,13 @@ const patchIt = (
     (
       testName: Circus.TestName,
       testFunction: Circus.TestFn,
-      timeout: number,
+      timeout: number = that.testTimeout,
     ) => {
       const testHandler = function (this: Circus.TestContext) {
-        return analyzeCallback(that, testFunction, this);
+        return analyzeCallback(that, testFunction, this, timeout, false);
       } as Circus.TestFn;
 
-      return originalFn(testName, testHandler, timeout);
+      return originalFn(testName, testHandler, timeout + 1_000);
     };
 
   const itPatch = createItPatch(originalIt);

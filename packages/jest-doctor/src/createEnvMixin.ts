@@ -33,6 +33,7 @@ import getReporterTmpDir from './utils/getReporterTmpDir';
 import { Circus } from '@jest/types';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
 import patchProcessOutput from './patch/processOutput';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 export interface JestDoctor extends JestEnvironment {
   handleEvent?(
@@ -50,7 +51,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
 ): JestDoctorConstructor<JestDoctorEnvironment> => {
   // @ts-expect-error strange ts rule where constructor arguments should be any[] where again TypeScript complains
   return class Base extends Environment implements JestDoctorEnvironment {
-    public currentTestName: string = MAIN_THREAD;
+    public get currentTestName() {
+      return this.asyncStorage.getStore() || MAIN_THREAD;
+    }
     public readonly leakRecords = new Map<string, LeakRecord>();
     public readonly original = initOriginal();
     public readonly promiseOwner = new Map<number, string>();
@@ -66,9 +69,16 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public asyncIdToPromise = new Map<number, Promise<unknown>>();
     public asyncRoot = 0;
     public asyncIdToParentId = new Map<number, number>();
+    public asyncStorage = new AsyncLocalStorage<string>();
+    public testTimeout: number;
 
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
       super(config, context);
+
+      this.testTimeout =
+        config.projectConfig.testTimeout ||
+        config.globalConfig.testTimeout ||
+        5_000;
 
       this.testPath = context.testPath.replace(/\W/g, '_');
       this.aggregatedReport = {

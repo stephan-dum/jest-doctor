@@ -1,6 +1,6 @@
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal';
-import type { AsyncHook } from 'node:async_hooks';
+import { AsyncHook, AsyncLocalStorage } from 'node:async_hooks';
 import type {
   beforeEach,
   beforeAll,
@@ -162,4 +162,6 @@ export interface JestDoctorEnvironment extends JestEnvironment {
   asyncHookDetector?: AsyncHook;
   asyncRoot: number;
   asyncIdToParentId: Map<number, number>;
+  asyncStorage: AsyncLocalStorage<string>;
+  testTimeout: number;
 }

@@ -2,38 +2,62 @@ import { executionAsyncId } from 'node:async_hooks';
 import type { Circus } from '@jest/types';
 import type { JestDoctorEnvironment } from '../types';
 import initLeakRecord from './initLeakRecord';
-import { MAIN_THREAD } from '../consts';
 import cleanupAfterTest from './cleanupAfterTest';
 import reportLeaks from './reportLeaks';
+
+const getTimeoutError = (timeout: number, isHook: boolean) => {
+  const error = new Error();
+
+  error.stack = [
+    `Exceeded timeout of ${timeout}ms for a ${isHook ? 'hook' : 'test'}.`,
+    `Add a timeout value to this test to increase the timeout, if this is a long-running test.`,
+    `\nSee https://jestjs.io/docs/api#testname-fn-timeout.`,
+  ].join(' ');
+  return error;
+};
 
 const analyzeCallback = async (
   that: JestDoctorEnvironment,
   callback: Circus.TestFn,
   testContext: Circus.TestContext,
+  timeout: number,
+  isHook: boolean,
 ) => {
-  // is used to avoid jest internal polluting test promises
-  await Promise.resolve().then(() => {});
   const testName =
     (that.global.expect as typeof expect).getState().currentTestName ||
     'unknown';
-  that.currentTestName = testName;
-  const leakRecord = initLeakRecord(that, that.currentTestName);
+
+  const leakRecord = initLeakRecord(that, testName);
   that.asyncRoot = executionAsyncId();
 
-  let returnValue: unknown;
-  try {
-    returnValue = await (callback as () => Promise<unknown>).call(testContext);
-  } finally {
-    that.currentTestName = MAIN_THREAD;
-    that.asyncRoot = 0;
-    // give the promise and intervals a tick time to resolve
-    await Promise.resolve().then(() => {});
+  let timerId: NodeJS.Timeout;
+  return that.asyncStorage.run('ignored', () => {
+    return new Promise((resolve, reject) => {
+      let isRejected = false;
+      timerId = setTimeout(() => {
+        isRejected = true;
+        reject(getTimeoutError(timeout, isHook));
+      }, timeout);
 
-    cleanupAfterTest(that, leakRecord, testName);
-  }
+      void Promise.resolve(
+        that.asyncStorage.run(testName, () =>
+          (callback as () => Promise<unknown>).call(testContext),
+        ),
+      )
+        .then((returnValue) => {
+          if (!isRejected) {
+            reportLeaks(that, leakRecord);
+            resolve(returnValue);
+          }
+        }, reject)
+        .catch(reject);
+    }).finally(() => {
+      clearTimeout(timerId);
+      that.asyncRoot = 0;
 
-  reportLeaks(that, leakRecord);
-  return returnValue;
+      cleanupAfterTest(that, leakRecord, testName);
+    });
+  });
 };
 
 export default analyzeCallback;

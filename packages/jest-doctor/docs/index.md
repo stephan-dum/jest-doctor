@@ -1,6 +1,7 @@
 ---
 title: Getting started
 ---
+
 # jest-doctor
 
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
@@ -44,6 +45,7 @@ jest-doctor detects common causes of **flaky Jest tests** by checking that each 
 fully cleans up its async work and side effects before the next test runs.
 
 It detects and reports when tests that:
+
 - Leave unresolved promises
 - Leave open real or fake timers
 - Leave DOM listeners attached
@@ -65,7 +67,6 @@ The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation/) goe
 - Optional: Reports through a custom reporter
 
 For a more detailed explanation, see the [architecture](https://stephan-dum.github.io/jest-doctor/architecture/) section.
-
 
 ## ⚙️ Configuration
 

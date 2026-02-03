@@ -1,13 +1,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ page.title }} · {{ site.title }}</title>
-{% assign paragraphs = content | markdownify | split: '</p>' %}
-{% assign first_paragraph = paragraphs[0]
-| strip_html
-| strip_newlines
-| replace: '"', ''
-| replace: '`', ''
-| strip %}
+{% assign parts = content | split: "<p>" %}
+{% assign first_paragraph = "" %}
+
+{% for part in parts offset:1 %}
+  {% assign candidate = part | split: "</p>" | first
+  | strip_html
+  | strip_newlines
+  | replace: '"', ''
+  | strip %}
+
+  {% if candidate != "" %}
+    {% assign first_paragraph = candidate %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
 <meta name="description" content="{{ page.description | default: first_paragraph }}">
 <meta property="og:title" content="{{ page.title }}">
 <meta property="og:description" content="{{ page.excerpt | strip_html | truncate:160 }}">
@@ -19,7 +28,7 @@
   {% include minified.css %}
 </style>
 <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | relative_url }}">
-<link rel="shortcut icon" href="/favicon.ico">
+<link rel="shortcut icon" href="{{ /favicon.ico | relative_url }}">
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",

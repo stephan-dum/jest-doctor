@@ -28,7 +28,6 @@ jobs:
       - run: gem install jekyll-seo-tag
       - run: gem install cssmin
       - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
-      - run: mkdir packages/jest-doctor/docs/_includes
       - run: |
           cat packages/jest-doctor/docs/assets/css/github.css \
           packages/jest-doctor/docs/assets/css/site.css \

@@ -17,7 +17,8 @@
       <nav class="sidebar-nav">
         <ul>
           <li>
-            <div id="search-container"></div>
+            <div id="search-box"></div>
+            <div id="search-hits"></div>
           </li>
           {% for item in site.data.navigation %}
             <li class="{% if page.url == item.url %}active{% endif %}">

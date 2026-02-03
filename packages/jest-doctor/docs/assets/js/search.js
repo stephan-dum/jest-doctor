@@ -12,22 +12,15 @@ const search = instantsearch({
 
 search.addWidgets([
   instantsearch.widgets.searchBox({
-    container: '#search-container',
+    container: '#search-box',
     placeholder: 'Search the docs…',
     cssClasses: {
       root: 'search-box', // adds a wrapper class for styling
     },
   }),
 
-  instantsearch.widgets.stats({
-    container: '#search-container',
-    cssClasses: {
-      root: 'search-stats',
-    },
-  }),
-
   instantsearch.widgets.hits({
-    container: '#search-container',
+    container: '#search-hits',
     templates: {
       item(hit, { html, components }) {
         return html` <article>

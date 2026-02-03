@@ -16,6 +16,9 @@
 
       <nav class="sidebar-nav">
         <ul>
+          <li>
+            <div id="search-container"></div>
+          </li>
           {% for item in site.data.navigation %}
             <li class="{% if page.url == item.url %}active{% endif %}">
               <a href="{{ item.url | relative_url }}">{{ item.title }}</a>

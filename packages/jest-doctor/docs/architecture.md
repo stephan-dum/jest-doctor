@@ -4,7 +4,7 @@ title: Architecture
 # Architecture
 
 This document explains how jest-doctor integrates with Jest and enforces test isolation.
-<!--more-->
+
 ## Non-goals
 
 - Not a performance profiler

@@ -34,9 +34,15 @@ it('should patch on global and run', () => {
 
   const handler = () => {};
   that.global.it('test name', handler);
-  expect(analyzeCallback).toHaveBeenCalledWith(that, handler, {
-    testName: 'test name',
-  });
+  expect(analyzeCallback).toHaveBeenCalledWith(
+    that,
+    handler,
+    {
+      testName: 'test name',
+    },
+    undefined,
+    false,
+  );
   expect(itPatch).toHaveBeenCalledTimes(1);
   (analyzeCallback as jest.Mock).mockReset();
 

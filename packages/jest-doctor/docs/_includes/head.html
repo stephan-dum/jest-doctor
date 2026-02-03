@@ -1,20 +1,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ page.title }} · {{ site.title }}</title>
-
-{% assign blocks = content | strip | split: "\n\n" %}
+{% assign parts = content | split: "<p>" %}
 {% assign first_paragraph = "" %}
 
-{% for block in blocks %}
-  {% assign trimmed = block | strip %}
-  {% assign first_char = trimmed | slice: 0, 1 %}
+{% for part in parts offset:1 %}
+  {% assign candidate = part | split: "</p>" | first
+  | strip_html
+  | strip_newlines
+  | replace: '"', ''
+  | strip %}
 
-  {% if trimmed != "" and first_char != "#" %}
-    {% assign first_paragraph = trimmed
-      | strip_html
-      | strip_newlines
-      | replace: '"', ''
-      | strip %}
+  {% if candidate != "" %}
+    {% assign first_paragraph = candidate %}
     {% break %}
   {% endif %}
 {% endfor %}

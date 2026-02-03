@@ -4,36 +4,39 @@ body {
   line-height: 1.5em;
 }
 .github-corner > svg {
-  fill:#151513;
-  color:#fff;
+  fill: #151513;
+  color: #fff;
   position: fixed;
   bottom: 0;
   right: 0;
   transform: rotate(90deg);
 }
 
-.github-corner:hover .octo-arm{
-  animation:octocat-wave 560ms ease-in-out
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
 }
 
 @keyframes octocat-wave {
-  0%,100%{
-    transform:rotate(0)
+  0%,
+  100% {
+    transform: rotate(0);
   }
-  20%,60% {
-    transform:rotate(-25deg)
+  20%,
+  60% {
+    transform: rotate(-25deg);
   }
-  40%,80%{
-    transform:rotate(10deg)
+  40%,
+  80% {
+    transform: rotate(10deg);
   }
 }
 
-@media (max-width:500px){
-  .github-corner:hover .octo-arm{
-    animation:none
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    animation: none;
   }
-  .github-corner .octo-arm{
-    animation:octocat-wave 560ms ease-in-out
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
   }
 }
 
@@ -79,14 +82,15 @@ a:hover {
 a:visited {
   color: #369509;
 }
-ol, ul {
+ol,
+ul {
   padding-left: 1em;
 }
 
 blockquote {
   padding: 0 1em;
   color: #59636e;
-  border-left: .25em solid #d1d9e0;
+  border-left: 0.25em solid #d1d9e0;
   margin: 0;
 }
 blockquote p {
@@ -107,7 +111,8 @@ table th {
 table tr:nth-child(2n) {
   background-color: rgb(247.3, 247.3, 247.3);
 }
-table th, table td {
+table th,
+table td {
   padding: 0.75rem 1rem;
 }
 table td {
@@ -127,7 +132,6 @@ table td {
   display: none;
 }
 
-
 .sidebar-nav ul {
   list-style: none;
   padding-left: 0;
@@ -146,7 +150,7 @@ table td {
   text-decoration: underline;
 }
 .sidebar-nav li.active {
-  background-color: #f2f2f2
+  background-color: #f2f2f2;
 }
 .sidebar-nav li.active a {
   color: #369509;

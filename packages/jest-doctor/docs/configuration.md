@@ -1,6 +1,7 @@
 ---
 title: Configuration
 ---
+
 # Configuration
 
 This page explains how to configure jest-doctor in detail.

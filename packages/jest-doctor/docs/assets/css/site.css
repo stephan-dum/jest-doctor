@@ -235,16 +235,16 @@ table td {
     display: block;
   }
 
-  .nav-toggle:checked ~ .nav-toggle-label > .burger {
+  .nav-toggle:checked ~ .sidebar-icons .burger {
     background: transparent;
   }
 
-  .nav-toggle:checked ~ .nav-toggle-label > .burger::before {
+  .nav-toggle:checked ~ .sidebar-icons .burger::before {
     transform: rotate(45deg) translate(5px, 5px);
     background: #fff;
   }
 
-  .nav-toggle:checked ~ .nav-toggle-label > .burger::after {
+  .nav-toggle:checked ~ .sidebar-icons .burger::after {
     transform: rotate(-45deg) translate(5px, -5px);
     background: #fff;
   }
@@ -255,23 +255,7 @@ table td {
   }
 }
 
-
-#search-container .search-box {
-  margin-bottom: 10px;
-}
-
-#search-container .search-stats {
-  font-size: 0.9em;
-  color: gray;
-  margin-bottom: 10px;
-}
-
-#search-container .search-hits .hit {
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-#search-container .hit mark {
-  background: yellow;
-  font-weight: bold;
+.DocSearch-Button {
+  border: 0;
+  margin-top: 0.5em;
 }

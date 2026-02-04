@@ -10,15 +10,14 @@
 
       <a class="logo" href="/jest-doctor">jest-doctor</a>
 
-      <label for="nav-toggle" class="nav-toggle-label">
-        <span class="burger"></span>
-      </label>
-
+      <div class="sidebar-icons">
+        <div id="docsearch"></div>
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span class="burger"></span>
+        </label>
+      </div>
       <nav class="sidebar-nav">
         <ul>
-          <li>
-            <div id="docsearch"></div>
-          </li>
           {% for item in site.data.navigation %}
             <li class="{% if page.url == item.url %}active{% endif %}">
               <a href="{{ item.url | relative_url }}">{{ item.title }}</a>

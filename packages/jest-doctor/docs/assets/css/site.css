@@ -121,6 +121,7 @@ table td {
 
 .sidebar > .logo {
   color: #fff;
+  font-size: 1.25em;
   background-color: #369509;
   text-decoration: none;
   text-align: center;
@@ -251,7 +252,7 @@ table td {
 
   .content {
     margin-left: 0;
-    margin-top: 47px;
+    margin-top: 62px;
   }
   .DocSearch-Button {
     color: #369509;

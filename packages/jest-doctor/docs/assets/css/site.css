@@ -253,6 +253,13 @@ table td {
     margin-left: 0;
     margin-top: 47px;
   }
+  .DocSearch-Button {
+    margin-bottom: 0.5em;
+  }
+  .sidebar-icons {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .DocSearch-Button {

@@ -196,6 +196,11 @@ table td {
 }
 
 @media (max-width: 768px) {
+  /* fix layout shift */
+  #jest-doctor + p {
+    height: 53px;
+  }
+
   .nav-toggle-label {
     display: block;
   }

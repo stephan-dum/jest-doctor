@@ -29,7 +29,9 @@
 <style>
   {% include minified.css %}
 </style>
-<script src="{{ /assets/js/docSearch.js | relative_url }}"></script>
+<script type="javascript">
+  {% include docSearch.js %}
+</script>
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",

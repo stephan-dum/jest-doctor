@@ -3,6 +3,10 @@ body {
   font-family: sans-serif;
   line-height: 1.5em;
 }
+h1, h2, h3, h4 {
+  line-height: 1.5em;
+}
+
 .github-corner > svg {
   fill: #151513;
   color: #fff;

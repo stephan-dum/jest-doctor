@@ -30,6 +30,7 @@ jobs:
       - run: |
           cat packages/jest-doctor/docs/assets/css/github.css \
           packages/jest-doctor/docs/assets/css/site.css \
+          packages/jest-doctor/docs/assets/css/docSearch.css \
           | npx csso-cli \
           > packages/jest-doctor/docs/_includes/minified.css
       - run: |

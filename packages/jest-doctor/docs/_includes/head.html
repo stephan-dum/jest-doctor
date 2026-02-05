@@ -25,7 +25,9 @@
 <meta property="og:image" content="{{ '/favicon.svg' | relative_url }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
 <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | relative_url }}">
-<link rel="shortcut icon" href="{{/favicon.ico | relative_url }}">
+<link rel="shortcut icon" href="{{ /favicon.ico | relative_url }}">
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@4"></script>
+
 <style>
   {% include minified.css %}
 </style>

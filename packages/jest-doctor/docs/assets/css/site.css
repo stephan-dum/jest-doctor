@@ -200,6 +200,12 @@ table td {
   top: 8px;
 }
 
+.DocSearch-Button {
+  color: #000;
+  border: 0;
+  margin-top: 0.5em;
+}
+
 @media (max-width: 768px) {
   /* fix layout shift */
   #jest-doctor + p {
@@ -274,8 +280,3 @@ table td {
   }
 }
 
-.DocSearch-Button {
-  color: #000;
-  border: 0;
-  margin-top: 0.5em;
-}

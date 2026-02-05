@@ -8,9 +8,6 @@ highlighter: rouge
 
 version: 1.0.0
 
-plugins:
-  - jekyll-sitemap
-
 url: 'https://stephan-dum.github.io'
 
 baseurl: '/jest-doctor'

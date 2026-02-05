@@ -67,6 +67,7 @@
     "typescript": "5.9.3"
   },
   "peerDependencies": {
+    "jest": ">=28",
     "jest-environment-jsdom": "*",
     "jest-environment-node": "*"
   },

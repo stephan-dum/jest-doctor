@@ -5275,6 +5275,7 @@ __metadata:
     typescript: "npm:5.9.3"
     zod: "npm:^4.3.6"
   peerDependencies:
+    jest: ">=28"
     jest-environment-jsdom: "*"
     jest-environment-node: "*"
   peerDependenciesMeta:

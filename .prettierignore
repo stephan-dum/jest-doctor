@@ -4,3 +4,4 @@ node_modules
 dist
 .yarn
 .c8_output
+docSearch.js

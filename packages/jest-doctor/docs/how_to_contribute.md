@@ -11,7 +11,7 @@ Because jest-doctor operates at a very low level of Jest’s runtime, contributi
 
 By participating in this project, you agree to be [respectful and constructive](https://github.com/stephan-dum/jest-doctor/blob/main/CODE_OF_CONDUCT.md) in discussions and reviews.
 
-## Project philosophy
+## 📜 Project philosophy
 
 Most design decisions in this repo are guided by the following principles:
 
@@ -22,7 +22,7 @@ Most design decisions in this repo are guided by the following principles:
 
 If a change weakens any of these guarantees, expect it to be discussed during review.
 
-## Repository structure
+## 📁 Repository structure
 
 ```
 src/
@@ -39,7 +39,7 @@ e2e/
 
 If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture/).
 
-## Getting started
+## 🏁 Getting started
 
 ### Prerequisites
 
@@ -85,7 +85,7 @@ yarn coverage:merge
 
 This will merge both unit and E2E coverage into a single report which is stored inside coverage directory.
 
-## Development workflow
+## 🔄 Development workflow
 
 1. Fork the repository
 2. Create a new branch from `main`
@@ -95,7 +95,7 @@ This will merge both unit and E2E coverage into a single report which is stored 
 
 Avoid mixing unrelated changes in a single PR.
 
-## Testing requirements
+## ✅ Testing requirements
 
 jest-doctor is **test-heavy by design**.
 
@@ -115,7 +115,7 @@ jest-doctor is **test-heavy by design**.
 
 A PR that changes runtime behavior without tests is unlikely to be merged.
 
-## Style guidelines
+## 🎨 Style guidelines
 
 - TypeScript (strict mode)
 - Prefer clarity over cleverness
@@ -124,7 +124,7 @@ A PR that changes runtime behavior without tests is unlikely to be merged.
 
 Linting is enforced via ESLint.
 
-## Documentation
+## 📚 Documentation
 
 Documentation lives in `docs/`.
 
@@ -134,7 +134,7 @@ Please update docs when you:
 - Add configuration options
 - Introduce new reports or failure modes
 
-## Submitting a pull request
+## 🔀 Submitting a pull request
 
 ### Pull request checklist
 
@@ -154,7 +154,7 @@ A good PR description includes:
 
 Small, focused PRs are strongly preferred over large refactors.
 
-## Getting help
+## 🙋 Getting help
 
 If you’re unsure about an approach:
 

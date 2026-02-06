@@ -6,13 +6,13 @@ title: Architecture
 
 This document explains how jest-doctor integrates with Jest and enforces test isolation.
 
-## Non-goals
+## 🚫 Non-goals
 
 - Not a performance profiler
 - Not a linter
 - Not a replacement for Jest's `--detectOpenHandles`
 
-## High-level design
+## 🧩 High-level design
 
 jest-doctor works by **augmenting the Jest test environment**, not by modifying test code.
 
@@ -24,7 +24,7 @@ Core ideas:
 
 This design prioritizes deterministic failures over permissive behavior.
 
-## Integration points
+## 🔌 Integration points
 
 jest-doctor provides custom environments:
 
@@ -37,7 +37,7 @@ These environments:
 - Patch global APIs
 - Track async lifecycle per test
 
-## Execution lifecycle
+## 🌀 Execution lifecycle
 
 1. **On test suite setup**
    - Initialize empty global leak records
@@ -58,7 +58,7 @@ These environments:
    - Clean up timers
    - Cleanup globals and hooks
 
-## Leak Detection Internals
+## 🕵️ Leak Detection Internals
 
 This section describes how jest-doctor detects leaks.
 
@@ -174,7 +174,7 @@ This ensures:
 - all leaks attributed with `main-thread` will be reported at the end of the test suite
   - usually this is a sign that the `beforeAll`, `afterAll` or other global code has leaks.
 
-## Cleanup
+## 🧹 Cleanup
 
 jest-doctor will clear open timers to avoid cascading failures and ensure test isolation.
 Clean up happens after each test and will not interfere with reporting.
@@ -184,7 +184,7 @@ Warnings and errors never suppress cleanup or attribution.
 
 [cleanupAfterTest.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/cleanupAfterTest.ts)
 
-## Error reporting
+## 🐞 Error reporting
 
 Leaks are reported with:
 

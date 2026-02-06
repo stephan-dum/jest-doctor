@@ -212,7 +212,7 @@ table td {
 .DocSearch-Button {
   color: #000;
   border: 0;
-  margin-top: 0.5em;
+  margin: 0.5em 0;
 }
 
 @media (max-width: 768px) {
@@ -281,7 +281,6 @@ table td {
   }
   .DocSearch-Button {
     color: #369509;
-    margin-bottom: 0.5em;
   }
   .sidebar-icons {
     display: flex;

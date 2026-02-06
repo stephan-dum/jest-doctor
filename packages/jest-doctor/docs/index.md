@@ -48,7 +48,7 @@ It detects and reports when tests:
 
 - Leave unresolved promises
 - Leave open real or fake timers
-- Leave DOM listeners attached
+- Leave window DOM listeners attached
 - Rely on excessive real-time delays
 - Produce unexpected console or process output
 

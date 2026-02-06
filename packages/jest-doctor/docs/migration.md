@@ -20,7 +20,7 @@ Before introducing jest-doctor:
 - Make sure to onboard all developers and they agree to that stricter enforcement
 - decide on the code hygiene level to apply
 
-## Phase 1 — Observe (Warnings Only)
+## 👀 Phase 1 — Observe (Warnings Only)
 
 Enable jest-doctor but configure all leak types as warnings.
 This will help to find existing issues while avoiding CI failures.
@@ -51,7 +51,7 @@ const options = {
 };
 ```
 
-## Phase 2 — Analyze & Fix High-Impact Leaks
+## 🔧 Phase 2 — Analyze & Fix High-Impact Leaks
 
 Enable the reporter and do a first run to get a baseline.
 Repeat this to track progress and gain metrics over time using the reports json output.
@@ -67,7 +67,7 @@ Prioritize fixing:
 
 This usually removes most flakiness quickly.
 
-## Phase 3 continuously improve tests
+## 📈 Phase 3 continuously improve tests
 
 Chose one of the following plans depending on your needs.
 

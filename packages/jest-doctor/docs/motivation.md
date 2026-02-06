@@ -7,7 +7,7 @@ title: Motivation
 Reliable tests are essential for maintaining confidence in your code.
 But in Jest, a test can pass while still **leaking async work**.
 
-## The problem
+## 🔥 The problem
 
 Jest does not fully enforce async test isolation.
 Even with `--detectOpenHandles`, it does not fail when some async work continues after a test ends.
@@ -35,7 +35,7 @@ This test: **Passes**, but leaves async work running.
 This can mutate global state later.
 To address these issues, jest-doctor ensures tests fail if any async operations remain unresolved.
 
-## Why this matters
+## 💡 Why this matters
 
 A failing test is noisy and clear.
 A leaking test is silent and can corrupt other tests.
@@ -49,7 +49,7 @@ Leaks often show up as:
 
 By the time you see the failure, the leaking test may be far earlier in the run.
 
-## Async leaks break determinism
+## ⚡ Async leaks break determinism
 
 A fundamental invariant of testing is:
 

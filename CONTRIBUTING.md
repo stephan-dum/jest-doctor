@@ -1,3 +1,3 @@
 # How to contribute
 
-Please find the guide at [./packages/jest-doctor/docs/how_to_contribute.md](./packages/jest-doctor/docs/how_to_contribute.md)
+Please find the guide at [https://stephan-dum.github.io/jest-doctor/how_to_contribute/](https://stephan-dum.github.io/jest-doctor/how_to_contribute/)

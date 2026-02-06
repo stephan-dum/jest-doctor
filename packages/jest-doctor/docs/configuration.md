@@ -39,7 +39,7 @@ export default {
 };
 ```
 
-## `report`
+## 📊 `report`
 
 Controls which leak types are detected and how they are reported.
 
@@ -70,7 +70,7 @@ These options are common to all `report` subtypes.
   - `methods`: `Array<'stderr' | 'stdout'>` (default: both) which process output methods should be tracked
   - `ignoreMessage`: same as ignoreStack but for the message
 
-## `timerIsolation`
+## 🔒 `timerIsolation`
 
 Controls when timers are validated and cleared.
 
@@ -113,7 +113,7 @@ afterAll   → ✅
 
 Use `immediate` if you need stricter timing checks.
 
-## `delayThreshold`
+## 📏 `delayThreshold`
 
 `number` in milliseconds (default: `0`)
 
@@ -122,13 +122,13 @@ If the sum is higher than the threshold, an error is thrown; otherwise if not 0 
 This feature helps detect tests that unintentionally rely on real time.
 Setting it to `Infinity` will disable the detection.
 
-## `clearTimers`
+## ⏹️ `clearTimers`
 
 `boolean` (default: `true`)
 
 Whether timers should be cleared automatically based on `timerIsolation`.
 
-## `verbose`
+## 💬 `verbose`
 
 `boolean` (default: `false`)
 

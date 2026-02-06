@@ -119,12 +119,19 @@ table td {
   top: 0;
   left: 0;
   right: 0;
-  height: 2.5em;
+  height: 3em;
   background-color: #369509;
   display: flex;
+}
+
+.sidebar-header > .max-content {
+  max-width: 68.25rem;
+  display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 0.25rem 1rem;
+  box-sizing: border-box;
 }
 
 .sidebar .logo {
@@ -191,11 +198,10 @@ table td {
 .content {
   flex: 1;
   margin-left: 12rem;
-  padding: 0 1rem;
   box-sizing: border-box;
   margin-bottom: 1rem;
   max-width: 900px;
-  padding-top: 3rem
+  padding: 3rem 1rem 0;
 }
 
 .nav-toggle-label .burger,

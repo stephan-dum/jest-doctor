@@ -2,7 +2,7 @@
 title: Build your own environment
 ---
 
-# 🛠 Build your own environment
+# 🛠️ Build your own environment
 
 Out-of-the-box __node__ and __jsdom__ are supported.
 If other environments are needed simple use the `createEnvMixin` helper.

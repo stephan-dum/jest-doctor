@@ -46,6 +46,14 @@
     </main>
     <script src="{{ '/assets/js/docSearch.js' | relative_url }}"></script>
     <script>
+      const naviToggle = document.querySelector('#nav-toggle')
+
+      document.querySelector('#doc-search').addEventListener('click', () => {
+        if (naviToggle.checked) {
+          naviToggle.click();
+        }
+      });
+
       docsearch({
         container: '#doc-search',
         appId: 'MEKQ8454N7',

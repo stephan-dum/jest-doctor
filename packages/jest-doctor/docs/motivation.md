@@ -49,7 +49,7 @@ Leaks often show up as:
 
 By the time you see the failure, the leaking test may be far earlier in the run.
 
-## ⚡ Async leaks break determinism
+## 💥 Async leaks break determinism
 
 A fundamental invariant of testing is:
 

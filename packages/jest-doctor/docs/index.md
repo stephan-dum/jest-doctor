@@ -12,7 +12,7 @@ It enforces strong **test isolation and hygiene** by checking for unresolved pro
 
 If your Jest tests sometimes fail only in CI or only when run together, async leaks are often the cause — and jest-doctor is designed to catch them reliably.
 
-## Quick Start
+## ⚡ Quick Start
 
 ```bash
 npm install --save-dev jest-doctor

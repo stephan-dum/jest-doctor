@@ -39,7 +39,7 @@ export default {
 };
 ```
 
-## 📊 `report`
+## 📄 `report`
 
 Controls which leak types are detected and how they are reported.
 

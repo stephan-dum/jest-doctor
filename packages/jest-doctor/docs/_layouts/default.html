@@ -44,9 +44,7 @@
     <main class="content">
       {{ content }}
     </main>
-    <script>
-      {% include docSearch.js %}
-    </script>
+    <script src="{{ '/assets/js/dochSearch.js' | relative_url }}"></script>
     <script>
       docsearch({
         container: '#doc-search',

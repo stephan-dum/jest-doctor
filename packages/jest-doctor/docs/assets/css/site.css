@@ -227,6 +227,7 @@ table td {
 }
 #doc-search {
   margin-left: 1rem;
+  width: 174px;
 }
 .DocSearch-Button {
   color: #000;
@@ -242,6 +243,9 @@ table td {
   }
 }
 @media (max-width: 768px) {
+  #doc-search {
+    width: 36px;
+  }
   .sidebar-nav a {
     padding: 0.75rem 0.5rem;
     text-align: center;

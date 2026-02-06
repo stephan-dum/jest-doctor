@@ -235,7 +235,7 @@ table td {
   height: 30px;
 }
 
-@media (max-width: 596px) {
+@media (max-width: 446px) {
   /* fix layout shift */
   #-getting-started + p {
     height: 53px;

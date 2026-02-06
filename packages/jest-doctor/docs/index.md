@@ -120,7 +120,7 @@ export default {
 };
 ```
 
-## ⚠️ Limitations and known edge cases
+## 🚧️ Limitations and known edge cases
 
 ### No it.concurrent
 

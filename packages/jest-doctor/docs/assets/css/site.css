@@ -235,12 +235,13 @@ table td {
   height: 30px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 596px) {
   /* fix layout shift */
-  #jest-doctor + p {
+  #-getting-started + p {
     height: 53px;
   }
-
+}
+@media (max-width: 768px) {
   .sidebar-nav a {
     padding: 0.75rem 0.5rem;
     text-align: center;

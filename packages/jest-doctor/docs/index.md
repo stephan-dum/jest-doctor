@@ -2,7 +2,7 @@
 title: Getting started
 ---
 
-# jest-doctor
+# 🚀 Getting started
 
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
 
@@ -12,7 +12,7 @@ It enforces strong **test isolation and hygiene** by checking for unresolved pro
 
 If your Jest tests sometimes fail only in CI or only when run together, async leaks are often the cause — and jest-doctor is designed to catch them reliably.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 npm install --save-dev jest-doctor
@@ -217,7 +217,6 @@ Because flaky tests cost more than failing tests.
 
 ### Does this slow tests down?
 
-Slightly. Overhead is intentional and bounded.
 `async_hooks` used for promise detection will have most impact and can be turned off if the performance goes down.
 Instead use eslint with typescript (typeChecked) to avoid floating promises.
 

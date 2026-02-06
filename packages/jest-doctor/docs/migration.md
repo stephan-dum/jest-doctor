@@ -2,7 +2,7 @@
 title: Migration
 ---
 
-# Migration
+# 📦 Migration
 
 This guide explains how to introduce jest-doctor into an existing test suite with minimal disruption, predictable outcomes, and clear rollback options.
 

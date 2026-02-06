@@ -2,7 +2,7 @@
 title: Configuration
 ---
 
-# Configuration
+# ⚙️ Configuration
 
 This page explains how to configure jest-doctor in detail.
 
@@ -61,7 +61,7 @@ These options are common to all `report` subtypes.
 
 - `timers`: track real timers
 - `fakeTimers`: track fake timers
-- `promises`: track not awaited promises
+- `promises`: track not awaited promises. Prefer eslint with typescript and disable the rule to improve performance.
 - `domListeners`: track not removed window DOM listeners
 - `console`: track console output
   - `methods`: `Array<keyof Console>` (default: all) which console methods should be tracked

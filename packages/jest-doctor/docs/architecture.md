@@ -2,7 +2,7 @@
 title: Architecture
 ---
 
-# Architecture
+# 🏛️ Architecture
 
 This document explains how jest-doctor integrates with Jest and enforces test isolation.
 

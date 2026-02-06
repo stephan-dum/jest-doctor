@@ -41,9 +41,6 @@ class MyEnv extends createEnvMixin(NodeEnvironment) {
 }
 ```
 
-In general it is up to you if you want to extend the class or get extended.
-If you extend dont forget to call all required super methods.
-
 The prototype of JestEnvironment is using an arrow function for handleTestEvent.
 This is sub optimal as it can not be called with super.handleTestEvent.
 To mitigate this issue jest-doctor introduces a new class property handleEvent which should be called instead.

@@ -2,7 +2,7 @@
 title: Motivation
 ---
 
-# Motivation
+# 🎯 Motivation
 
 Reliable tests are essential for maintaining confidence in your code.
 But in Jest, a test can pass while still **leaking async work**.

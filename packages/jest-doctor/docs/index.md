@@ -37,7 +37,7 @@ export default {
 
 After running tests, a report like this is shown for each detected leak:
 
-![report promise leak](https://raw.githubusercontent.com/stephan-dum/jest-doctor/refs/heads/main/packages/jest-doctor/docs/leaks-promise.jpg)
+![report promise leak](https://stephan-dum.github.io/jest-doctor/assets/img/leaks-promise.jpg)
 
 ## 🔍 What problems does it catch?
 

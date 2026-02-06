@@ -4,8 +4,9 @@ title: Migration
 
 # Migration
 
-This guide explains how to introduce jest-doctor into an existing Jest test suite with minimal disruption, predictable outcomes, and clear rollback options.
-Adopting jest-doctor in large or legacy codebases should be done incrementally to avoid blocking development while steadily improving test reliability
+This guide explains how to introduce jest-doctor into an existing test suite with minimal disruption, predictable outcomes, and clear rollback options.
+
+Adopting jest-doctor in large or legacy codebases should be done incrementally to avoid blocking development while steadily improving test reliability.
 
 The goal is:
 
@@ -17,7 +18,7 @@ Before introducing jest-doctor:
 - check the [when not to use jest-doctor](https://stephan-dum.github.io/jest-doctor/#-when-not-to-use-jest-doctor) section
 - be aware of the [limitations](https://stephan-dum.github.io/jest-doctor/#-Limitations-and-known-edge-cases)
 - Make sure to onboard all developers and they agree to that stricter enforcement
-- decide on the code hygiene level to apply.
+- decide on the code hygiene level to apply
 
 ## Phase 1 — Observe (Warnings Only)
 
@@ -53,10 +54,10 @@ const options = {
 ## Phase 2 — Analyze & Fix High-Impact Leaks
 
 Enable the reporter and do a first run to get a baseline.
-Repeat this to track progress and gain metrics over time.
+Repeat this to track progress and gain metrics over time using the reports json output.
 
-The reporter sorts the leaks by severity so you can quickly tell which test needs most attention.
-Analyze the report and create tasks for repetitive leaks and low hanging fruits.
+The reporter sorts the leaks by severity, so you can quickly tell which test needs most attention.
+Analyze the report and create tasks for repetitive leaks and low-hanging fruits.
 
 Prioritize fixing:
 
@@ -70,7 +71,7 @@ This usually removes most flakiness quickly.
 
 Chose one of the following plans depending on your needs.
 
-### ✅ Use --changedSince
+### Use --changedSince
 
 If jest internal `--changedSince` flag is already used it makes transition straight forward.
 By creating a separate config for jest-doctor all tests can be still executed without disruption.
@@ -79,7 +80,7 @@ By creating a separate config for jest-doctor all tests can be still executed wi
 jest --config jest.doctor.config.js --changedSince=origin/main
 ```
 
-### ✅ Use Separate Jest Config with Patterns
+### Use Separate Jest Config with Patterns
 
 Opt-in strict testing via file naming or folders:
 

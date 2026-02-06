@@ -39,18 +39,23 @@ These environments:
 
 ## Execution lifecycle
 
-For each test:
-
-1. **Before test**
-   - Initialize leak records
+1. **On test suite setup**
+   - Initialize empty global leak records
    - Patch globals (timers, console, test functions)
    - Start async_hooks tracking
-2. **During test**
+2. **Before each test**
+   - Initialize empty leak records
+3. **During each test**
    - Attribute async resources to current test
    - Capture creation stack traces
-3. **After test**
+4. **After each test**
    - Detect leftover async resources
    - Report leaks
+   - Clean up timers
+5. **On test suite teardown**
+   - Detect global leftover async resources
+   - Report leaks
+   - Clean up timers
    - Cleanup globals and hooks
 
 ## Leak Detection Internals
@@ -61,14 +66,15 @@ This section describes how jest-doctor detects leaks.
 
 jest-doctor currently detects:
 
-| Category       | Detection mechanism                 |
-| -------------- | ----------------------------------- |
-| Promises       | `async_hooks`                       |
-| Timers         | Global API patching                 |
-| Fake timers    | Jest fake timer patching            |
-| Console output | Console method patching             |
-| Process output | process method patching             |
-| DOM listeners  | (add/remove)-EventListener patching |
+| Category              | Detection mechanism                                     |
+|-----------------------|---------------------------------------------------------|
+| Promises              | `async_hooks`                                           |
+| Timers                | Global API patching                                     |
+| Fake timers           | Jest fake timer patching                                |
+| Console output        | Console method patching                                 |
+| Process output        | process method patching                                 |
+| window listeners      | window.(add/remove)-EventListener patching              |
+| excessive timer usage | add up all delays inside interval and timeout callbacks |
 
 ### Promise detection
 
@@ -80,7 +86,7 @@ jest-doctor currently detects:
   - stack trace
   - asyncId
   - parentAsyncId
-- To support concurrent promises `Promise.race`, `Promise.any` and `Promise.all` they are patched as well.
+- To support concurrent promises `Promise.race`, `Promise.any` and `Promise.all` are patched as well.
   - [promiseConcurrency.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/promiseConcurrency.ts)
   - handles untracking of losing promises
   - (!) cannot handle nested promises, see [known limitations](https://stephan-dum.github.io/jest-doctor/#limitations)
@@ -102,13 +108,13 @@ Records:
 - type: which of the patched method created the leak
 - isAllowed: if the leak should be reported. It is still necessary to track all timers if the option `clearTimers` is `true` but `report.timers` is `false`, to be able to clear them.
 
-The legacy fake timer global useRealTimers function is also patched to restore patches once applied.
+The **legacy** fake timer global `useRealTimers` function is also patched to restore patches once applied.
 
 ### Fake timers
 
 Used when Jest fake timers are enabled [fakeTimers.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/fakeTimers.ts):
 
-- patches global useFakeTimers for legacy and modern fake timers to know when to patch the timers
+- patches global `useFakeTimers` for legacy and modern fake timers to know when to patch the timers
 - patches same methods as real timers with similar records
 - it uses `Object.assign` to preserve existing mocking
 
@@ -154,7 +160,9 @@ Records:
 
 All resources are associated using:
 
-- `currentTestName` (becomes `main-thread` if not associated with a test)
+- `currentTestName`
+  - defined by `AsyncLocalStorage.run`
+  - becomes `main-thread` if not associated with a test
 - Patches `it`, `test`, and lifecycle hooks
   - [it.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/it.ts)
   - [hook.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/hook.ts)

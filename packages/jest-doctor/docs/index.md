@@ -6,9 +6,9 @@ title: Getting started
 
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
 
-**jest-doctor** is a custom **Jest environment** that **detects [async leaks](#what-is-an-async-leak) between tests** and
-**fails flaky tests deterministically**. It enforces strong **test isolation and hygiene** by
-checking for unresolved promises, open timers, and other side effects at **test boundaries**.
+**jest-doctor** is a custom **Jest environment** that **detects [async leaks](#what-is-an-async-leak) within tests** and **fails flaky tests deterministically**.
+
+It enforces strong **test isolation and hygiene** by checking for unresolved promises, open timers, and other side effects at **test boundaries**.
 
 If your Jest tests sometimes fail only in CI or only when run together, async leaks are often the cause — and jest-doctor is designed to catch them reliably.
 
@@ -44,7 +44,7 @@ After running tests, a report like this is shown for each detected leak:
 jest-doctor detects common causes of **flaky Jest tests** by checking that each test
 fully cleans up its async work and side effects before the next test runs.
 
-It detects and reports when tests that:
+It detects and reports when tests:
 
 - Leave unresolved promises
 - Leave open real or fake timers
@@ -60,8 +60,8 @@ The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation/) goe
 
 ### How jest-doctor works
 
-- Wraps the Jest environment
-- Tracks async resource creation
+- Patching globals like setTimeout and related APIs
+- Tracking async resources created during each test (via `async_hooks`)
 - Checks at test boundaries
 - Throws or warns based on configuration
 - Optional: Reports through a custom reporter
@@ -86,11 +86,11 @@ List of all available options:
 - clearTimers
 - verbose
 
-A detailed description of the configuration options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration/).
+A detailed description of options can be found at [configuration](https://stephan-dum.github.io/jest-doctor/configuration/) section.
 
 ## 📊 Reporter
 
-The reporter aggregates leaks across all test environments and prints:
+The reporter aggregates leaks across all tests and prints:
 
 - Total number of leaks
 - Grouped by type (timers, promises, console, etc.)
@@ -134,11 +134,9 @@ Callback-style async and generators are legacy patterns and are not supported to
 ### Environment-dependent results
 
 Promise scheduling differs by OS and Node version,
-so exact leak ordering and grouping may vary.
+so exact leak count, ordering and grouping may vary.
 
 ### Microtasks resolving in same tick are not tracked
-
-This is a JavaScript limitation, not specific to jest-doctor.
 
 ```js
 Promise.resolve().then(() => {
@@ -176,7 +174,7 @@ await Promise.race([p1, p2, doSomething()]);
 
 ### Imported timers bypass tracking
 
-These timers are not intercepted. This can also be used as an escape hatch.
+Imported timer functions are not intercepted. This can also be used as an escape hatch.
 
 ```js
 import { setTimeout, setInterval } from 'node:timers';
@@ -215,11 +213,13 @@ Please read the [migration guide](https://stephan-dum.github.io/jest-doctor/migr
 
 ### Why is jest-doctor so strict?
 
-Because flaky tests cost more than broken builds.
+Because flaky tests cost more than failing tests.
 
 ### Does this slow tests down?
 
 Slightly. Overhead is intentional and bounded.
+`async_hooks` used for promise detection will have most impact and can be turned off if the performance goes down.
+Instead use eslint with typescript (typeChecked) to avoid floating promises.
 
 ### What is an async leak?
 

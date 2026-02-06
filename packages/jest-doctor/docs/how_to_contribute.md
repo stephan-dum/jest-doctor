@@ -4,9 +4,10 @@ title: How to contributing
 
 # How to contributing
 
-Thank you for your interest in contributing to **jest-doctor**
+Thank you for your interest in contributing to **jest-doctor**!
 
-We welcome bug reports, documentation improvements, and code contributions. Because jest-doctor operates at a very low level of Jest’s runtime, contributions are expected to be **careful, well-tested, and explicit about tradeoffs**.
+We welcome bug reports, documentation improvements, and code contributions.
+Because jest-doctor operates at a very low level of Jest’s runtime, contributions are expected to be **careful, well-tested, and explicit about tradeoffs**.
 
 By participating in this project, you agree to be [respectful and constructive](https://github.com/stephan-dum/jest-doctor/blob/main/CODE_OF_CONDUCT.md) in discussions and reviews.
 
@@ -34,10 +35,6 @@ src/
 e2e/
   fixtures/          # Jest projects used for end‑to‑end testing
   tests/             # E2E tests asserting real Jest behavior
-
-docs/
-  architecture.md    # How jest-doctor works internally
-  motivation.md      # Why the project exists
 ```
 
 If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture/).
@@ -70,7 +67,7 @@ yarn test:matrix 30 fake-timer
 
 E2E tests execute real Jest runs using the fixtures in `e2e/fixtures` and are focused on case coverage.
 These tests are essential for validating behavior across environments and Jest versions.
-The [readme.md](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/e2e/readme.md) gives more insights on how they work in the background.
+The [readme.md](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/e2e/readme.md) inside e2e folder gives more insights on how they work in the background.
 
 ### Run unit tests
 
@@ -113,7 +110,7 @@ jest-doctor is **test-heavy by design**.
 - Located in `e2e/tests`
 - Assert **observable Jest behavior**, not implementation details
 - Prefer adding E2E coverage for bug fixes and new detection logic
-- (!) be aware that windows symlinks will resolve to the wrong directory,
+- be aware that windows symlinks will resolve to the wrong directory,
   effectively only testing jest 30 which is installed globally. (use the PR pipeline in such cases)
 
 A PR that changes runtime behavior without tests is unlikely to be merged.
@@ -129,7 +126,7 @@ Linting is enforced via ESLint.
 
 ## Documentation
 
-Documentation lives in `docs/` and `README.md`.
+Documentation lives in `docs/`.
 
 Please update docs when you:
 
@@ -141,11 +138,11 @@ Please update docs when you:
 
 ### Pull request checklist
 
-Before opening a PR, make sure you have:
+When opening a PR, make sure:
 
-- documentation is updated accordingly
-- PR description highlights the most important changes
+- Documentation is updated accordingly
 - coverage at 100% (unit + e2e merged)
+- PR description highlights the most important changes
 
 ### PR description guidelines
 

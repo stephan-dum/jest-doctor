@@ -10,8 +10,7 @@ But in Jest, a test can pass while still **leaking async work**.
 ## The problem
 
 Jest does not fully enforce async test isolation.
-Even with `--detectOpenHandles`,
-it does not fail when some async work continues after a test ends.
+Even with `--detectOpenHandles`, it does not fail when some async work continues after a test ends.
 
 Nothing in Jest guarantees that:
 

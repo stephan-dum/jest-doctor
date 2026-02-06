@@ -53,7 +53,7 @@ Each option can be:
 These options are common to all `report` subtypes.
 
 - `onError`: `'warn' | 'throw'` (default: `'throw'`)
-  controls how leaks are handled
+  controls how leaks are reported
 - `ignoreStack`: `string | RegExp | Array<string | RegExp>` (default: `[]`)
   If the stack trace matches any entry, the leak is ignored.
 
@@ -62,7 +62,7 @@ These options are common to all `report` subtypes.
 - `timers`: track real timers
 - `fakeTimers`: track fake timers
 - `promises`: track not awaited promises
-- `domListeners`: track not removed DOM listeners
+- `domListeners`: track not removed window DOM listeners
 - `console`: track console output
   - `methods`: `Array<keyof Console>` (default: all) which console methods should be tracked
   - `ignoreMessage`: same as ignoreStack but for the message
@@ -90,7 +90,7 @@ afterAll   → ✅
 ```
 
 - ✅ = timer and async leaks are checked immediately
-- ⏳ = timer leaks are deferred until the final afterEach
+- ⏳ = timer leaks are deferred until the final `afterEach`, other async leaks are still checked
 
 This allows easier cleanup. For example, React Testing Library registers an unmount function in an `afterEach` block.
 The disadvantage is that if a long-running task executes in an `afterEach` block, timers may resolve without being tracked.
@@ -118,7 +118,7 @@ Use `immediate` if you need stricter timing checks.
 `number` in milliseconds (default: `0`)
 
 The delay in milliseconds of all `setTimeout` and `setInterval` callback that get executed is added up.
-If the sum is higher than the threshold, an error is thrown; otherwise a warning is logged.
+If the sum is higher than the threshold, an error is thrown; otherwise if not 0 a warning is logged.
 This feature helps detect tests that unintentionally rely on real time.
 Setting it to `Infinity` will disable the detection.
 
@@ -132,5 +132,5 @@ Whether timers should be cleared automatically based on `timerIsolation`.
 
 `boolean` (default: `false`)
 
-By default, Jest hides some stack traces and only reports one error type at a time.
+By default, Jest hides some frames of stack traces and only reports one error type at a time.
 Enabling verbose prints all detected leaks with full stack traces, making debugging easier.

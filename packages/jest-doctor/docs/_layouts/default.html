@@ -44,7 +44,9 @@
     <main class="content">
       {{ content }}
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@4"></script>
+    <script>
+      {% include docSearch.js %}
+    </script>
     <script>
       docsearch({
         container: '#doc-search',

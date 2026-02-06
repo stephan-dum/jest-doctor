@@ -269,11 +269,8 @@ table td {
 
   .sidebar-nav {
     display: none;
-    position: fixed;
-    top: 53px;
     width: 100%;
     background-color: #fff;
-    bottom: 0;
   }
 
   .nav-toggle:checked ~ .sidebar-nav {

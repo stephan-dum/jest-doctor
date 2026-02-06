@@ -47,22 +47,6 @@ h4 {
   }
 }
 
-.sidebar {
-  width: 12rem;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-y: auto;
-  box-sizing: border-box;
-  border-right: 1px solid #dadde1;
-  line-height: 1.25em;
-  font-size: 1em;
-}
-
 code {
   background-color: #f6f8fa;
   color: #24292f;
@@ -126,16 +110,32 @@ table td {
   border: 1px solid #dadde1;
 }
 
-.sidebar > .logo {
+.sidebar {
+  line-height: 1.25em;
+  font-size: 1em;
+}
+.sidebar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5em;
+  background-color: #369509;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 1rem;
+}
+
+.sidebar .logo {
   color: #fff;
   font-size: 1.25em;
-  background-color: #369509;
   text-decoration: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem;
 }
+
 .logo > svg {
   height: 1rem;
   margin-right: 0.5em;
@@ -144,6 +144,16 @@ table td {
 .nav-toggle,
 .nav-toggle-label {
   display: none;
+}
+.sidebar-nav {
+  width: 12rem;
+  position: fixed;
+  top: 3em;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-right: 1px solid #dadde1;
 }
 
 .sidebar-nav ul {
@@ -171,14 +181,21 @@ table td {
   color: #369509;
   text-decoration: none;
 }
-
+.sidebar-icons {
+  display: flex;
+  align-items: center;
+}
+.sidebar-icons .github {
+  height: 26px;
+}
 .content {
   flex: 1;
   margin-left: 12rem;
   padding: 0 1rem;
   box-sizing: border-box;
-  margin-bottom: 2.5em;
+  margin-bottom: 1rem;
   max-width: 900px;
+  margin-top: 3rem
 }
 
 .nav-toggle-label .burger,
@@ -208,11 +225,14 @@ table td {
   content: '';
   top: 8px;
 }
-
+#doc-search {
+  margin-left: 1rem;
+}
 .DocSearch-Button {
   color: #000;
   border: 0;
   margin: 0.5em 0;
+  height: 30px;
 }
 
 @media (max-width: 768px) {
@@ -221,9 +241,6 @@ table td {
     height: 53px;
   }
 
-  .nav-toggle-label {
-    display: block;
-  }
   .sidebar-nav a {
     padding: 0.75rem 0.5rem;
     text-align: center;
@@ -231,23 +248,14 @@ table td {
   }
 
   .nav-toggle-label {
+    display: block;
     width: 30px;
     height: 24px;
     cursor: pointer;
     position: relative;
-    margin: 0 1rem;
+    margin-left: 1rem;
   }
 
-  .sidebar {
-    height: unset;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    border-right: unset;
-    border-bottom: 1px solid #dadde1;
-    background-color: #369509;
-  }
   .sidebar-nav {
     display: none;
     position: fixed;
@@ -261,29 +269,24 @@ table td {
     display: block;
   }
 
-  .nav-toggle:checked ~ .sidebar-icons .burger {
+  .nav-toggle:checked ~ .sidebar-header .burger {
     background: transparent;
   }
 
-  .nav-toggle:checked ~ .sidebar-icons .burger::before {
+  .nav-toggle:checked ~ .sidebar-header .burger::before {
     transform: rotate(45deg) translate(5px, 5px);
     background: #fff;
   }
 
-  .nav-toggle:checked ~ .sidebar-icons .burger::after {
+  .nav-toggle:checked ~ .sidebar-header .burger::after {
     transform: rotate(-45deg) translate(5px, -5px);
     background: #fff;
   }
 
   .content {
     margin-left: 0;
-    margin-top: 74px;
   }
   .DocSearch-Button {
     color: #369509;
-  }
-  .sidebar-icons {
-    display: flex;
-    align-items: center;
   }
 }

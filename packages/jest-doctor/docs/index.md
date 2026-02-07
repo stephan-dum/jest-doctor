@@ -6,7 +6,9 @@ title: Getting started
 
 [![main](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml/badge.svg)](https://github.com/stephan-dum/jest-doctor/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/stephan-dum/jest-doctor/branch/main/graph/badge.svg)](https://codecov.io/gh/stephan-dum/jest-doctor) [![npm version](https://img.shields.io/npm/v/jest-doctor.svg)](https://www.npmjs.com/package/jest-doctor) [![License](https://img.shields.io/npm/l/jest-doctor.svg)](https://github.com/stephan-dum/jest-doctor/blob/main/LICENSE)
 
-**jest-doctor** is a custom **Jest environment** that **detects [async leaks](#what-is-an-async-leak) within tests** and **fails flaky tests deterministically**.
+![jest-doctor mascot](https://stephan-dum.github.io/jest-doctor/assets/img/jest-doctor_mascot.png)
+
+jest-doctor is a custom Jest environment that detects [async leaks](#what-is-an-async-leak) within tests and fails flaky tests deterministically.
 
 It enforces strong **test isolation and hygiene** by checking for unresolved promises, open timers, and other side effects at **test boundaries**.
 

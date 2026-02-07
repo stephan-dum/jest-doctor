@@ -19,7 +19,7 @@ import patchConsole from './patch/console';
 import initOriginal from './utils/initOriginal';
 import patchFakeTimers from './patch/fakeTimers';
 import { MAIN_THREAD } from './consts';
-import timers from './patch/timers';
+import patchTimers from './patch/timers';
 import patchIt from './patch/it';
 import createAsyncHookDetector from './patch/createAsyncHookDetector';
 import createAsyncHookCleaner from './patch/createAsyncHookCleaner';
@@ -125,7 +125,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       }
 
       // always patch to be able to clean them
-      timers(this);
+      patchTimers(this);
 
       if (report.console) {
         patchConsole(this, report.console);

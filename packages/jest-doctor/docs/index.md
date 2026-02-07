@@ -244,6 +244,6 @@ The [react example](https://github.com/stephan-dum/jest-doctor/blob/main/package
 If jest-doctor helped you eliminate flaky tests, consider ⭐ starring the repo —
 it helps others discover the project and motivates continued development.
 
-<div style="text-align: center">
+<p align="center">
   <img src="https://stephan-dum.github.io/jest-doctor/assets/img/jest-doctor_mascot.png" alt="jest-doctor mascot" />
-</div>
+</p>

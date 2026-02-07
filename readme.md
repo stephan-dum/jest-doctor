@@ -27,6 +27,6 @@ Full documentation, configuration and more:
 
 If jest-doctor helped you eliminate flaky tests, consider ⭐ starring the repo.
 
-<div style="text-align: center">
+<p align="center">
   <img src="https://stephan-dum.github.io/jest-doctor/assets/img/jest-doctor_mascot.png" alt="jest-doctor mascot" />
-</div>
+</p>

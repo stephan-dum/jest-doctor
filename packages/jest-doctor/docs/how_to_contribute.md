@@ -1,8 +1,8 @@
 ---
-title: How to contributing
+title: How to contribute
 ---
 
-# 🤝 How to contributing
+# 🤝 How to contribute
 
 Thank you for your interest in contributing to **jest-doctor**!
 

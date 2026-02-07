@@ -1,3 +1,6 @@
+---
+title: Examples
+---
 # 🙈 Examples
 
 This page illustrates some examples that would fail the test with jest-doctor and how to fix them.

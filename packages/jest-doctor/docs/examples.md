@@ -10,16 +10,14 @@ This page illustrates some examples that would fail the test with jest-doctor an
 
 Timers frequently cause flaky or hanging tests in large codebases.
 
-In this example, a setInterval remains active after the test completes, preventing the process from exiting naturally. Jest may eventually force termination, but the root cause remains hidden.
+In this example, a setInterval remains active after the test completes,
+preventing the process from exiting naturally.
+Jest will force termination, but the root cause remains hidden.
 ```js
 const doSomething = jest.fn();
 
-const preventProcessExit = () => {
-  setInterval(() =>{ doSomething() } , 100);
-}
-
 it('will run but never stop', async () => {
-  preventProcessExit();
+  setInterval(() =>{ doSomething() } , 100);
   await waitFor(() => expect(doSomething).toHaveBeenCalled());
 });
 ```
@@ -30,14 +28,11 @@ To fix the issue:
 - clear timers when test is complete
 
 ```js
-
-const preventProcessExit = () => {
-  setInterval(() =>{ doSomething() } , 100);
-}
+const doSomething = jest.fn();
 
 it('will run but never stop', async () => {
   jest.useFakeTimers()
-  preventProcessExit();
+  setInterval(() =>{ doSomething() } , 100);
   jest.runOnlyPendingTimers();
   expect(doSomething).toHaveBeenCalled();
   jest.clearAllTimers();
@@ -116,6 +111,7 @@ it('should have awaited the promise', () => {
 
 Now it is not clear at which point in time the promise will resolve and set the value which can result in flaky tests.
 
+To fix it simply `await` the function.
 ```js
 it('awaits the promise', async () => {
   await mutateGlobalState();
@@ -144,9 +140,8 @@ React logs an error due to an invalid prop, but the test still passes, hiding th
 Adding global listeners without a cleanup can leak state or throw errors in later tests.
 
 ```js
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { useState, useEffect } from 'react';
-
 
 const calculateViewport = () => {
   const width = window.innerWidth;
@@ -181,7 +176,7 @@ it('should set the viewport on window changes', () => {
 });
 ```
 
-To fix the issue, simple return a cleanup function inside useEffect:
+To fix the issue, simple return a cleanup function inside `useEffect`:
 
 ```js
 useEffect(() => {
@@ -197,10 +192,13 @@ useEffect(() => {
 }, []);
 ```
 
+Usually rule of thumb if you are using a `useEffect` there should be a cleanup function, there are only some rare exceptions to it.
+Most `useEffect` can be converted to `useMemo`
+
 ## 📌 Conclusion
 - use fake timers
 - clear timers after each test
 - be careful when mutating global/shared states
 - use eslint with typescript to detect floating promises
 - spy on console and assert on it
-- clear all listeners / timeouts in a useEffect (usually rule of thumb if you are using a useEffect there should be a cleanup function, there are only some rare exceptions to it.)
+- clear all listeners / timeouts in a useEffect

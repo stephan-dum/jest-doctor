@@ -216,8 +216,8 @@ Please read the [migration guide](https://stephan-dum.github.io/jest-doctor/migr
 Because flaky tests cost more than failing tests.
 
 ### Does this slow tests down?
-Slightly, `async_hooks` used for promise detection will have most impact and are be turned off by default for that reason.
-Instead use eslint with typescript (`recommendedTypeChecked`) to avoid floating promises!
+Slightly, `async_hooks` used for promise detection will have most impact and are turned off by default for that reason.
+Instead, use eslint with typescript (`recommendedTypeChecked`) to avoid floating promises!
 
 ### What is an async leak?
 

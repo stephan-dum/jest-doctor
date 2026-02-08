@@ -26,7 +26,7 @@ jobs:
       - run: gem install jekyll
       - run: gem install jekyll-sitemap
       - run: gem install cssmin
-      - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
+      - run: rougify style github > docs/assets/css/github.css
       - run: |
           cat docs/assets/css/github.css \
           docs/assets/css/docSearch.css \

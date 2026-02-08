@@ -34,7 +34,7 @@ const DEFAULTS = {
     },
     timers: reportHandler,
     fakeTimers: reportHandler,
-    promises: reportHandler,
+    promises: false as const,
     domListeners: reportHandler,
   },
   verbose: false,

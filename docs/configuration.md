@@ -21,7 +21,7 @@ export default {
         onError: 'warn',
       },
       fakeTimers: {}, // enabled, will use defaults
-      promises: false,
+      promises: false, // default
       domListeners: {
         onError: 'warn',
         ignoreStack: 'node_modules/history',
@@ -48,6 +48,9 @@ Each option can be:
 - `false` → disabled
 - `object` → enabled with configuration
 
+All options **except promises** are enabled by default.
+Promises are disabled because the have a significant performance impact.
+Prefer Eslint with `recommendedTypeChecked` to find floating promises instead.
 ### Common options
 
 These options are common to all `report` subtypes.

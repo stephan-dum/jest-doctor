@@ -28,14 +28,14 @@ jobs:
       - run: gem install cssmin
       - run: rougify style github > packages/jest-doctor/docs/assets/css/github.css
       - run: |
-          cat packages/jest-doctor/docs/assets/css/github.css \
-          packages/jest-doctor/docs/assets/css/docSearch.css \
-          packages/jest-doctor/docs/assets/css/site.css \
+          cat docs/assets/css/github.css \
+          docs/assets/css/docSearch.css \
+          docs/assets/css/site.css \
           | npx csso-cli \
-          > packages/jest-doctor/docs/_includes/minified.css
+          > docs/_includes/minified.css
       - run: |
           jekyll build \
-            --source packages/jest-doctor/docs \
+            --source docs \
             --destination _site
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -10,43 +10,6 @@ h4 {
   line-height: 1.5em;
 }
 
-.github-corner > svg {
-  fill: #151513;
-  color: #fff;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  transform: rotate(90deg);
-}
-
-.github-corner:hover .octo-arm {
-  animation: octocat-wave 560ms ease-in-out;
-}
-
-@keyframes octocat-wave {
-  0%,
-  100% {
-    transform: rotate(0);
-  }
-  20%,
-  60% {
-    transform: rotate(-25deg);
-  }
-  40%,
-  80% {
-    transform: rotate(10deg);
-  }
-}
-
-@media (max-width: 500px) {
-  .github-corner:hover .octo-arm {
-    animation: none;
-  }
-  .github-corner .octo-arm {
-    animation: octocat-wave 560ms ease-in-out;
-  }
-}
-
 code {
   background-color: #f6f8fa;
   color: #24292f;
@@ -125,7 +88,7 @@ table td {
 }
 
 .sidebar-header > .max-content {
-  max-width: 68.25rem;
+  max-width: 75.5rem;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -153,7 +116,7 @@ table td {
   display: none;
 }
 .sidebar-nav {
-  width: 12rem;
+  width: 13rem;
   position: fixed;
   top: 3em;
   left: 0;
@@ -197,10 +160,10 @@ table td {
 }
 .content {
   flex: 1;
-  margin-left: 12rem;
+  margin-left: 13rem;
   box-sizing: border-box;
   margin-bottom: 1rem;
-  max-width: 900px;
+  max-width: 1000px;
   padding: 3rem 1rem 0;
 }
 

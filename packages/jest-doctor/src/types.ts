@@ -80,6 +80,10 @@ type OutputAddition = {
   ignoreMessage: IsIgnored;
 };
 
+type PromiseAddition = {
+  mode: 'async_hooks' | 'subclass';
+};
+
 export type ReportOptions<Type = object> = {
   onError: ThrowOrWarn;
   ignoreStack: IsIgnored;
@@ -97,7 +101,7 @@ export interface NormalizedOptions {
     processOutputs: NormalizedReportOptions<OutputAddition>;
     timers: NormalizedReportOptions;
     fakeTimers: NormalizedReportOptions;
-    promises: NormalizedReportOptions;
+    promises: NormalizedReportOptions<PromiseAddition>;
     domListeners: NormalizedReportOptions;
   };
   verbose: boolean;
@@ -129,7 +133,7 @@ export interface RawOptions {
     processOutputs?: RawReportOptions<RawOutputAddition>;
     timers?: RawReportOptions;
     fakeTimers?: RawReportOptions;
-    promises?: RawReportOptions;
+    promises?: RawReportOptions<Partial<PromiseAddition>>;
     domListeners?: RawReportOptions;
   };
   verbose?: boolean;

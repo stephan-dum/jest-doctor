@@ -28,7 +28,11 @@ const analyzeCallback = async (
     'unknown';
 
   const leakRecord = initLeakRecord(that, testName);
-  that.asyncRoot = executionAsyncId();
+
+  const option = that.options.report.promises;
+  if (option && option.mode === 'async_hooks') {
+    that.asyncRoot = executionAsyncId();
+  }
 
   let timerId: NodeJS.Timeout;
   return that.asyncStorage.run('ignored', () => {

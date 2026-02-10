@@ -2,6 +2,7 @@
 title: Examples
 sitemap: false
 ---
+
 # 🙈 Examples
 
 This page illustrates some examples that would fail the test with jest-doctor and how to fix them.
@@ -13,16 +14,20 @@ Timers frequently cause flaky or hanging tests in large codebases.
 In this example, a setInterval remains active after the test completes,
 preventing the process from exiting naturally.
 Jest will force termination, but the root cause remains hidden.
+
 ```js
 const doSomething = jest.fn();
 
 it('will run but never stop', async () => {
-  setInterval(() =>{ doSomething() } , 100);
+  setInterval(() => {
+    doSomething();
+  }, 100);
   await waitFor(() => expect(doSomething).toHaveBeenCalled());
 });
 ```
 
 To fix the issue:
+
 - use fake timers
 - run pending timers
 - clear timers when test is complete
@@ -31,8 +36,10 @@ To fix the issue:
 const doSomething = jest.fn();
 
 it('will run but never stop', async () => {
-  jest.useFakeTimers()
-  setInterval(() =>{ doSomething() } , 100);
+  jest.useFakeTimers();
+  setInterval(() => {
+    doSomething();
+  }, 100);
   jest.runOnlyPendingTimers();
   expect(doSomething).toHaveBeenCalled();
   jest.clearAllTimers();
@@ -53,7 +60,7 @@ const debounce = (func, wait) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
-}
+};
 
 const mock = jest.fn();
 
@@ -61,7 +68,7 @@ jest.useFakeTimers();
 
 afterEach(() => {
   jest.clearAllMocks();
-})
+});
 
 it('should not fire immediatly', () => {
   const debouncer = debounce(mock, 100);
@@ -80,11 +87,12 @@ it('should fire once timeout complete', () => {
 The second test will fail because the timeout of the first test is still pending and will also fire.
 
 To fix it run `jest.clearAllTimers` in `afterEach` hook.
+
 ```js
 afterEach(() => {
   jest.clearAllMocks();
   jest.clearAllTimers();
-})
+});
 ```
 
 ## ⏳ Promises
@@ -100,23 +108,24 @@ const mutateGlobalState = async () => {
 
 beforeEach(() => {
   localStorage.removeItem('status');
-})
+});
 
 it('should have awaited the promise', () => {
   // ups forgot to await the promise
   mutateGlobalState();
-  expect(localStorage.getItem('status')).toEqual('pending')
-})
+  expect(localStorage.getItem('status')).toEqual('pending');
+});
 ```
 
 Now it is not clear at which point in time the promise will resolve and set the value which can result in flaky tests.
 
 To fix it simply `await` the function.
+
 ```js
 it('awaits the promise', async () => {
   await mutateGlobalState();
-  expect(localStorage.getItem('status')).toEqual('pending')
-})
+  expect(localStorage.getItem('status')).toEqual('pending');
+});
 ```
 
 ## 🖨️ Console Output
@@ -151,16 +160,16 @@ const calculateViewport = () => {
 };
 
 const useViewport = () => {
-  const [viewport, setViewport] = useState('sm')
+  const [viewport, setViewport] = useState('sm');
 
   useEffect(() => {
     window.addEventListener('resize', () => {
       setViewport(calculateViewport());
-    })
+    });
   }, []);
 
   return viewport;
-}
+};
 
 it('should set the viewport on window changes', () => {
   const { result } = renderHook(useViewport);
@@ -196,6 +205,7 @@ Usually rule of thumb if you are using a `useEffect` there should be a cleanup f
 Most `useEffect` can be converted to `useMemo`
 
 ## 📌 Conclusion
+
 - use fake timers
 - clear timers after each test
 - be careful when mutating global/shared states

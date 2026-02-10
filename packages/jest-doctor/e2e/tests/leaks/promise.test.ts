@@ -10,10 +10,13 @@ const expectPromise = (assertionResults: AssertionResults[]) => {
   const promiseRace = assertionResults[2];
   expect(promiseRace.status).toEqual('passed');
 
-  const promiseAll = assertionResults[3];
+  const promiseAny = assertionResults[3];
   expect(promiseAll.status).toEqual('passed');
 
-  const leaksResolved = assertionResults[4];
+  const promiseAll = assertionResults[4];
+  expect(promiseAll.status).toEqual('passed');
+
+  const leaksResolved = assertionResults[5];
   expect(leaksResolved.failureMessages[0]).toContain('open promise');
 };
 

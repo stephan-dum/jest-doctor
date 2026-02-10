@@ -23,8 +23,6 @@ const JestDoctorMyEnv = createEnvMixin(MyEnv);
 
 // or extend from it
 class MyEnv extends createEnvMixin(NodeEnvironment) {
-  function;
-
   async setup() {
     // dont forget to call super methods
     await super.setup();

@@ -74,7 +74,7 @@ const schema = zod
         timers: createReportHandler().default(DEFAULTS.report.timers),
         fakeTimers: createReportHandler().default(DEFAULTS.report.fakeTimers),
         promises: createReportHandler({
-          mode: zod.enum(['async_hooks', 'subclass']).default('async_hooks'),
+          mode: zod.enum(['async_hooks', 'subclass']),
         }).default(DEFAULTS.report.promises),
         domListeners: createReportHandler().default(
           DEFAULTS.report.domListeners,

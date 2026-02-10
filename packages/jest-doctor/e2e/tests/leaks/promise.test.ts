@@ -11,7 +11,7 @@ const expectPromise = (assertionResults: AssertionResults[]) => {
   expect(promiseRace.status).toEqual('passed');
 
   const promiseAny = assertionResults[3];
-  expect(promiseAll.status).toEqual('passed');
+  expect(promiseAny.status).toEqual('passed');
 
   const promiseAll = assertionResults[4];
   expect(promiseAll.status).toEqual('passed');

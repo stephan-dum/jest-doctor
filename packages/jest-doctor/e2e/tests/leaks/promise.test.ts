@@ -1,11 +1,6 @@
-import { runTest } from '../../runJest';
+import { AssertionResults, runTest } from '../../runJest';
 
-it('detects unresolved promises by patch async_hooks', async () => {
-  const result = await runTest(`leaks/promise.fixture.ts`, {
-    report: { promises: { onError: 'throw' } },
-  });
-  const assertionResults = result.testResults[0].assertionResults;
-
+const expectPromise = (assertionResults: AssertionResults[]) => {
   const resolves = assertionResults[0];
   expect(resolves.status).toEqual('passed');
 
@@ -20,6 +15,20 @@ it('detects unresolved promises by patch async_hooks', async () => {
 
   const leaksResolved = assertionResults[4];
   expect(leaksResolved.failureMessages[0]).toContain('open promise');
+};
+
+it('detects unresolved promises by patch async_hooks', async () => {
+  const result = await runTest(`leaks/promise.fixture.ts`, {
+    report: { promises: { onError: 'throw', mode: 'async_hooks' } },
+  });
+  expectPromise(result.testResults[0].assertionResults);
+});
+
+it('detects unresolved promises by patch async_hooks', async () => {
+  const result = await runTest(`leaks/promise.fixture.ts`, {
+    report: { promises: { onError: 'throw', mode: 'subclass' } },
+  });
+  expectPromise(result.testResults[0].assertionResults);
 });
 
 it('ignores promise leaks if mock.promise is set to false', async () => {

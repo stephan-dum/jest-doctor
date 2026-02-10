@@ -34,6 +34,7 @@ import { Circus } from '@jest/types';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
 import patchProcessOutput from './patch/processOutput';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import patchPromise from './patch/promise';
 
 export interface JestDoctor extends JestEnvironment {
   handleEvent?(
@@ -109,7 +110,8 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
 
       initLeakRecord(this, MAIN_THREAD);
 
-      if (this.options.report.promises) {
+      const promiseOptions = this.options.report.promises;
+      if (promiseOptions && promiseOptions.mode === 'async_hooks') {
         this.asyncHookCleaner = createAsyncHookCleaner(this);
         this.asyncHookDetector = createAsyncHookDetector(this);
       }
@@ -135,7 +137,11 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       }
 
       if (report.promises) {
-        patchPromiseConcurrency(this);
+        if (report.promises.mode === 'async_hooks') {
+          patchPromiseConcurrency(this);
+        } else {
+          patchPromise(this);
+        }
       }
     }
 

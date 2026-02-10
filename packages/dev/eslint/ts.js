@@ -14,5 +14,8 @@ export default [
         projectService: true,
       },
     },
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+    },
   },
 ];

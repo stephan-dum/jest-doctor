@@ -11,9 +11,9 @@ Add one of the environments to your Jest config:
 
 ```js
 export default {
-  testEnvironment: "jest-doctor/env/node",
+  testEnvironment: 'jest-doctor/env/node',
   // optional
-  reporters: ["default", "jest-doctor/reporter"],
+  reporters: ['default', 'jest-doctor/reporter'],
 };
 ```
 

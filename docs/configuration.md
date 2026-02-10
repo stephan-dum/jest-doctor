@@ -51,6 +51,7 @@ Each option can be:
 All options **except promises** are enabled by default.
 Promises are disabled because the have a significant performance impact.
 Prefer Eslint with `recommendedTypeChecked` to find floating promises instead.
+
 ### Common options
 
 These options are common to all `report` subtypes.
@@ -75,6 +76,7 @@ These options are common to all `report` subtypes.
   - `ignoreMessage`: same as ignoreStack but for the message
 
 ### special case `promises`
+
 This is the only report option which is disabled by default because of its performance impact.
 Eslint and TypeScript is the preferred way to detect floating promises.
 However, if the target project is not TypeScript this option can be enabled with two different modes:

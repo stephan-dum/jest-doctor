@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 2.0.1
+## 2.0.1
 - added 'subclass' mode for promises
 
 ## 2.0.0

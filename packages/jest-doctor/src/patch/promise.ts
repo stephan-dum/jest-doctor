@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment } from '../types';
+import { IsIgnored, JestDoctorEnvironment } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
 
@@ -9,14 +9,12 @@ const patchPromise = (that: JestDoctorEnvironment) => {
   const global = that.global;
   const OriginalPromise = global.Promise;
   const ignoreStack =
-    (that.options.report.promises &&
-      that.options.report.promises.ignoreStack) ||
-    [];
+    that.options.report.promises && that.options.report.promises.ignoreStack;
 
   const track = (promise: Promise<unknown>, stackFrom: Function) => {
     const stack = getStack(stackFrom);
 
-    if (!isIgnored(stack, ignoreStack)) {
+    if (!isIgnored(stack, ignoreStack as IsIgnored)) {
       const promises = that.leakRecords.get(that.currentTestName)?.promises;
 
       promises?.set(promise, {

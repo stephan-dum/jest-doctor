@@ -5,14 +5,15 @@ import initLeakRecord from './initLeakRecord';
 import cleanupAfterTest from './cleanupAfterTest';
 import reportLeaks from './reportLeaks';
 
-const getTimeoutError = (timeout: number, isHook: boolean) => {
+const getTimeoutError = (timeout: number, isHook: boolean, trace: string) => {
   const error = new Error();
 
   error.stack = [
     `Exceeded timeout of ${timeout}ms for a ${isHook ? 'hook' : 'test'}.`,
     `Add a timeout value to this test to increase the timeout, if this is a long-running test.`,
-    `\nSee https://jestjs.io/docs/api#testname-fn-timeout.`,
-  ].join(' ');
+    `See https://jestjs.io/docs/api#testname-fn-timeout.`,
+    trace,
+  ].join('\n');
   return error;
 };
 
@@ -22,6 +23,7 @@ const analyzeCallback = async (
   testContext: Circus.TestContext,
   timeout: number,
   isHook: boolean,
+  trace: string,
 ) => {
   const testName =
     (that.global.expect as typeof expect).getState().currentTestName ||
@@ -40,7 +42,7 @@ const analyzeCallback = async (
       let isRejected = false;
       timerId = setTimeout(() => {
         isRejected = true;
-        reject(getTimeoutError(timeout, isHook));
+        reject(getTimeoutError(timeout, isHook, trace));
       }, timeout);
 
       void Promise.resolve(

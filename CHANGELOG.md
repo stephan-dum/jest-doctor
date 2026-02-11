@@ -1,7 +1,12 @@
 # CHANGELOG
 
+## 2.0.2
+
+- fix `subclass` instantiation not complete issue
+
 ## 2.0.1
-- added 'subclass' mode for promises
+
+- added `subclass` mode for promises
 
 ## 2.0.0
 

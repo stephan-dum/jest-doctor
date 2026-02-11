@@ -48,9 +48,14 @@ Each option can be:
 - `false` → disabled
 - `object` → enabled with configuration
 
-All options **except promises** are enabled by default.
-Promises are disabled because the have a significant performance impact.
-Prefer Eslint with `recommendedTypeChecked` to find floating promises instead.
+### Special case `promises`
+
+All options **except promises** are enabled by default, because of its performance impact.
+Prefer Eslint with [recommendedTypeChecked](https://typescript-eslint.io/getting-started/typed-linting/) to find floating promises instead.
+However, if the target project is not TypeScript this option can be enabled with two different modes:
+
+- `async_hooks`: costly, but will detect every floating promise
+- `subclass`: minimal overhead, but only detects promises that use Promise constructor. (no async functions or resources)
 
 ### Common options
 
@@ -65,7 +70,7 @@ These options are common to all `report` subtypes.
 
 - `timers`: track real timers
 - `fakeTimers`: track fake timers
-- `promises`: track not awaited promises. Prefer eslint with typescript and disable the rule to improve performance.
+- `promises`: track not awaited promises.
   - `mode`: `'async_hooks' | 'subclass'`: how to track promise creation
 - `domListeners`: track not removed window DOM listeners
 - `console`: track console output
@@ -74,15 +79,6 @@ These options are common to all `report` subtypes.
 - `processOutputs`: track process output
   - `methods`: `Array<'stderr' | 'stdout'>` (default: both) which process output methods should be tracked
   - `ignoreMessage`: same as ignoreStack but for the message
-
-### special case `promises`
-
-This is the only report option which is disabled by default because of its performance impact.
-Eslint and TypeScript is the preferred way to detect floating promises.
-However, if the target project is not TypeScript this option can be enabled with two different modes:
-
-- `async_hooks`: costly, but will detect every floating promise
-- `subclass`: minimal overhead, but only detects promises that use Promise constructor. (no async functions or resources)
 
 ## 🔒 `timerIsolation`
 

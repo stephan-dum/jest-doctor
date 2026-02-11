@@ -209,6 +209,6 @@ Most `useEffect` can be converted to `useMemo`
 - use fake timers
 - clear timers after each test
 - be careful when mutating global/shared states
-- use eslint with typescript to detect floating promises
+- use eslint with typescript to [detect floating promises](https://typescript-eslint.io/getting-started/typed-linting/)
 - spy on console and assert on it
 - clear all listeners / timeouts in a useEffect

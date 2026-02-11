@@ -1,8 +1,12 @@
 # CHANGELOG
 
-## 2.0.2
+# 2.0.3
 
 - fix `subclass` instantiation not complete issue
+
+## 2.0.2
+
+- small documentation fix
 
 ## 2.0.1
 

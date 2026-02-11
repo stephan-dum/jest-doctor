@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 2.0.4
+
+- added a stack trace for test/hook timeout error message
+
 # 2.0.3
 
 - fix `subclass` instantiation not complete issue

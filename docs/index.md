@@ -191,7 +191,7 @@ In such cases, consider selectively disabling checks or using ignore rules.
 ## 💡 Recommendations
 
 - Use ESLint to
-  - Detect floating promises
+  - [Detect floating promises](https://typescript-eslint.io/getting-started/typed-linting/)
   - Disallow `setTimeout` or `setInterval` in tests
   - Disallow console usage
 - Only mock console / process output _per test_ not globally, to avoid missing out on errors that are thrown in silence.
@@ -218,7 +218,7 @@ Because flaky tests cost more than failing tests.
 ### Does this slow tests down?
 
 Slightly, `async_hooks` used for promise detection will have most impact and are turned off by default for that reason.
-Instead, use eslint with typescript (`recommendedTypeChecked`) to avoid floating promises!
+Instead, use eslint with typescript ([recommendedTypeChecked](https://typescript-eslint.io/getting-started/typed-linting/)) to avoid floating promises!
 
 ### What is an async leak?
 

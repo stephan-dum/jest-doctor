@@ -30,22 +30,21 @@ const patchPromise = (that: JestDoctorEnvironment) => {
   };
 
   const concurrencyFactory = (
-    promises: TrackedPromise<unknown>[],
+    promises: (undefined | TrackedPromise<unknown>)[],
     method: 'all' | 'race' | 'any',
   ) => {
     promises.forEach((promise) => {
-      promise.untrack = true;
+      if (promise instanceof TrackedPromise) {
+        promise.untrack = true;
+        untrack(promise);
+      }
     });
 
     return (
       OriginalPromise[method] as unknown as (
-        promises: Promise<unknown>[],
+        promises: (undefined | Promise<unknown>)[],
       ) => Promise<never>
-    )(promises).finally(() => {
-      promises.forEach((promise) => {
-        untrack(promise);
-      });
-    });
+    )(promises);
   };
 
   class TrackedPromise<T> extends OriginalPromise<T> {
@@ -53,6 +52,14 @@ const patchPromise = (that: JestDoctorEnvironment) => {
 
     constructor(executor: Executor<T>) {
       const promises = that.leakRecords.get(that.currentTestName)?.promises;
+      let resolver: Resolve<T>;
+      let rejecter: Reject;
+
+      super((resolve, reject) => {
+        resolver = resolve;
+        rejecter = reject;
+      });
+
       const innerExecutor: Executor<T> = (resolve, reject) => {
         const wrappedResolve: Resolve<T> = (value) => {
           promises?.delete(this);
@@ -63,12 +70,17 @@ const patchPromise = (that: JestDoctorEnvironment) => {
           reject(reason);
         };
 
-        return executor(wrappedResolve, wrappedReject);
+        try {
+          executor(wrappedResolve, wrappedReject);
+        } catch (error) {
+          wrappedReject(error);
+        }
       };
 
-      super(innerExecutor);
-
       track(this, TrackedPromise);
+
+      // @ts-expect-error constructor will run first
+      innerExecutor(resolver, rejecter);
     }
 
     then<TResult1 = T, TResult2 = unknown>(

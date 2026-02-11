@@ -7,16 +7,19 @@ const expectPromise = (assertionResults: AssertionResults[]) => {
   const rejects = assertionResults[1];
   expect(rejects.failureMessages[0]).toContain('Promise rejected');
 
-  const promiseRace = assertionResults[2];
+  const throws = assertionResults[2];
+  expect(throws.failureMessages[0]).toContain('Error: Throws');
+
+  const promiseRace = assertionResults[3];
   expect(promiseRace.status).toEqual('passed');
 
-  const promiseAny = assertionResults[3];
+  const promiseAny = assertionResults[4];
   expect(promiseAny.status).toEqual('passed');
 
-  const promiseAll = assertionResults[4];
+  const promiseAll = assertionResults[5];
   expect(promiseAll.status).toEqual('passed');
 
-  const leaksResolved = assertionResults[5];
+  const leaksResolved = assertionResults[6];
   expect(leaksResolved.failureMessages[0]).toContain('open promise');
 };
 

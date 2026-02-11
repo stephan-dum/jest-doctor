@@ -16,6 +16,12 @@ const rejectFnToTest = () => {
   });
 };
 
+const throFnToTest = () => {
+  return new Promise<void>(() => {
+    throw new Error('Throws');
+  });
+};
+
 // the order matters because we are leaking a promise which would interfere with other tests
 describe('correct promise usage', () => {
   it('resolves a promise', async () => {
@@ -24,6 +30,10 @@ describe('correct promise usage', () => {
 
   it('rejects a promise', () => {
     return rejectFnToTest();
+  });
+
+  it('rejects a promise by throwing an error', () => {
+    return throFnToTest();
   });
 
   it('Promise.race', async () => {

@@ -42,6 +42,7 @@ it('should patch on global and run', () => {
     },
     undefined,
     false,
+    expect.anything(),
   );
   expect(itPatch).toHaveBeenCalledTimes(1);
   (analyzeCallback as jest.Mock).mockReset();

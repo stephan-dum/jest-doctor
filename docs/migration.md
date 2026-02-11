@@ -19,6 +19,7 @@ Before introducing jest-doctor:
 - be aware of the [limitations](https://stephan-dum.github.io/jest-doctor/#-Limitations-and-known-edge-cases)
 - Make sure to onboard all developers and they agree to that stricter enforcement
 - decide on the code hygiene level to apply
+- include eslint [typeCheck](https://typescript-eslint.io/getting-started/typed-linting/) to detect floating promises
 
 ## 👀 Phase 1 — Observe (Warnings Only)
 
@@ -34,7 +35,9 @@ const options = {
     fakeTimers: {
       onError: 'warn',
     },
+    // if no eslint typeChecked
     promises: {
+      mode: 'subclass',
       onError: 'warn',
     },
     console: {

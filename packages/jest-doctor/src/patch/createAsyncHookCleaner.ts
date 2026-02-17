@@ -1,23 +1,17 @@
 import type { JestDoctorEnvironment } from '../types';
-import { createHook } from 'node:async_hooks';
+import { promiseHooks } from 'node:v8';
 
 const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
-  return createHook({
-    promiseResolve(asyncId: number) {
-      that.asyncIdToParentId.delete(asyncId);
-      const owner = that.promiseOwner.get(asyncId);
+  return promiseHooks.createHook({
+    settled(promise) {
+      const owner = that.promiseOwner.get(promise);
 
       if (!owner) {
         return;
       }
 
-      const promise = that.asyncIdToPromise.get(asyncId);
-
-      if (promise) {
-        that.leakRecords.get(owner)?.promises.delete(promise);
-        that.promiseOwner.delete(asyncId);
-        that.asyncIdToPromise.delete(asyncId);
-      }
+      that.leakRecords.get(owner)?.promises.delete(promise);
+      that.promiseOwner.delete(promise);
     },
   });
 };

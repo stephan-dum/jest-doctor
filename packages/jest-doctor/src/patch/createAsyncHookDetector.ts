@@ -1,22 +1,16 @@
-import { createHook, type HookCallbacks } from 'node:async_hooks';
+import { promiseHooks, type Init } from 'node:v8';
 import getStack from '../utils/getStack';
-import { JestDoctorEnvironment, ReportOptions } from '../types';
+import { JestDoctorEnvironment, TrackedPromise, ReportOptions } from '../types';
 import isIgnored from '../utils/isIgnored';
 
 const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
-  const init: HookCallbacks['init'] = (
-    asyncId,
-    type,
-    parentAsyncId,
-    resource,
-  ) => {
-    if (type !== 'PROMISE') {
+  const init: Init = (promise, parent: TrackedPromise) => {
+    if (parent?.untrack) {
       return;
     }
 
-    that.asyncIdToParentId.set(asyncId, parentAsyncId);
-
     const stack = getStack(init as Function);
+
     if (
       !isIgnored(
         stack,
@@ -24,19 +18,15 @@ const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
       )
     ) {
       const owner = that.currentTestName;
-      that.promiseOwner.set(asyncId, owner);
-      const promise = resource as Promise<unknown>;
-      that.asyncIdToPromise.set(asyncId, promise);
+      that.promiseOwner.set(promise, owner);
 
       that.leakRecords.get(owner)?.promises.set(promise, {
         stack,
-        asyncId,
-        parentAsyncId,
       });
     }
   };
 
-  return createHook({ init });
+  return promiseHooks.createHook({ init });
 };
 
 export default createAsyncHookDetector;

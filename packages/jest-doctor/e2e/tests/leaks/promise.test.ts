@@ -30,7 +30,7 @@ it('detects unresolved promises by patch async_hooks', async () => {
   expectPromise(result.testResults[0].assertionResults);
 });
 
-it('detects unresolved promises by patch async_hooks', async () => {
+it('detects unresolved promises by subclassing Promise', async () => {
   const result = await runTest(`leaks/promise.fixture.ts`, {
     report: { promises: { onError: 'throw', mode: 'subclass' } },
   });

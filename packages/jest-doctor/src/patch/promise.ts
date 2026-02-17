@@ -19,8 +19,6 @@ const patchPromise = (that: JestDoctorEnvironment) => {
 
       promises?.set(promise, {
         stack,
-        asyncId: 0,
-        parentAsyncId: 0,
       });
     }
   };

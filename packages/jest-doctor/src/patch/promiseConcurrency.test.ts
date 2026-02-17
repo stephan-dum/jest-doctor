@@ -34,16 +34,11 @@ const setupPromises = (shouldResolve: boolean) => {
     setTimeout(shouldResolve ? resolve : reject, 100);
   });
 
-  // this promise simulated the child promise created by Promise.race
-  const p3 = Promise.resolve();
-
   that.promiseOwner.set(p1, 'test');
   that.promiseOwner.set(p2, 'test');
-  that.promiseOwner.set(p3, 'test');
 
-  promises.set(p1, { asyncId: 1 });
-  promises.set(p2, { asyncId: 2 });
-  promises.set(p3, { parentAsyncId: 2, asyncId: 3 });
+  promises.set(p1, {});
+  promises.set(p2, {});
 
   return [p1, p2];
 };

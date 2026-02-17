@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.5
+
+- closes [issue#42](https://github.com/stephan-dum/jest-doctor/issues/42) use v8.promiseHooks instead of async_hooks
+- fixed an issue where errors would be reported in the next afterEach block
+
 ## 2.0.4
 
 - added a stack trace for test/hook timeout error message

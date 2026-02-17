@@ -8,7 +8,6 @@ import type {
 
 import path from 'node:path';
 import { writeFileSync } from 'node:fs';
-import type { AsyncHook } from 'node:async_hooks';
 
 import type {
   JestDoctorEnvironment,
@@ -57,9 +56,9 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     }
     public readonly leakRecords = new Map<string, LeakRecord>();
     public readonly original = initOriginal();
-    public readonly promiseOwner = new Map<number, string>();
-    public readonly asyncHookDetector?: AsyncHook;
-    public readonly asyncHookCleaner?: AsyncHook;
+    public readonly promiseOwner = new Map<Promise<unknown>, string>();
+    public asyncHookDetector?: Function;
+    public asyncHookCleaner?: Function;
     public readonly options: NormalizedOptions;
     public seenTearDown = false;
     public currentAfterEachCount = 0;
@@ -67,9 +66,10 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public readonly testPath: string;
     public readonly aggregatedReport;
     public tearDownError?: Error;
-    public asyncIdToPromise = new Map<number, Promise<unknown>>();
+    public promiseToAsyncId = new Map<Promise<unknown>, number>();
     public asyncRoot = 0;
     public asyncIdToParentId = new Map<number, number>();
+    public asyncIdToPromise = new Map<number, Promise<void>>();
     public asyncStorage = new AsyncLocalStorage<string>();
     public testTimeout: number;
 
@@ -109,12 +109,6 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       );
 
       initLeakRecord(this, MAIN_THREAD);
-
-      const promiseOptions = this.options.report.promises;
-      if (promiseOptions && promiseOptions.mode === 'async_hooks') {
-        this.asyncHookCleaner = createAsyncHookCleaner(this);
-        this.asyncHookDetector = createAsyncHookDetector(this);
-      }
     }
 
     async setup() {
@@ -157,11 +151,14 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         }
       } else if (circusEvent.name === 'teardown') {
         // the detector needs to be disabled here to avoid the teardown promise polluting the report
-        this.asyncHookDetector?.disable();
+        this.asyncHookDetector?.();
         this.seenTearDown = true;
       } else if (circusEvent.name === 'setup') {
-        this.asyncHookCleaner?.enable();
-        this.asyncHookDetector?.enable();
+        const promiseOptions = this.options.report.promises;
+        if (promiseOptions && promiseOptions.mode === 'async_hooks') {
+          this.asyncHookCleaner = createAsyncHookCleaner(this);
+          this.asyncHookDetector = createAsyncHookDetector(this);
+        }
 
         patchIt(this, circusEvent.runtimeGlobals);
         patchHook(this, 'beforeEach', circusEvent.runtimeGlobals);
@@ -204,10 +201,10 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         process.stdout.write = this.original.process.stdout;
         process.stderr.write = this.original.process.stderr;
 
-        this.asyncHookCleaner?.disable();
+        this.asyncHookCleaner?.();
         // this is added here for safety reasons,
         // because jest could abort and don't hit teardown event
-        this.asyncHookDetector?.disable();
+        this.asyncHookDetector?.();
 
         const hasLeak =
           this.aggregatedReport.promises +

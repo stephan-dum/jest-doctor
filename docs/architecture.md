@@ -42,7 +42,7 @@ These environments:
 1. **On test suite setup**
    - Initialize empty global leak records
    - Patch globals (timers, console, test functions)
-   - Start async_hooks tracking
+   - Start promise tracking
 2. **Before each test**
    - Initialize empty leak records
 3. **During each test**
@@ -68,7 +68,7 @@ jest-doctor currently detects:
 
 | Category              | Detection mechanism                                     |
 | --------------------- | ------------------------------------------------------- |
-| Promises              | `async_hooks`                                           |
+| Promises              | `v8.promiseHooks` or subclassing `Promise`              |
 | Timers                | Global API patching                                     |
 | Fake timers           | Jest fake timer patching                                |
 | Console output        | Console method patching                                 |
@@ -78,10 +78,11 @@ jest-doctor currently detects:
 
 ### Promise detection
 
-- Uses `node:async_hooks`
+- Uses `node:v8.promiseHooks`
   - [createAsyncHookDetector.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/createAsyncHookCleaner.ts)
   - [createAsyncHookCleaner.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/createAsyncHookCleaner.ts)
-- Tracks async resources of type `PROMISE`
+- Or subclasses `Promise`
+  - [promise.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/promise.ts)
 - Records:
   - stack trace
   - asyncId

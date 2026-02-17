@@ -61,7 +61,7 @@ The [motivation page](https://stephan-dum.github.io/jest-doctor/motivation/) goe
 ### How jest-doctor works
 
 - Patching globals like setTimeout and related APIs
-- Tracking async resources created during each test (via `async_hooks`)
+- Tracking async resources created during each test (via `v8.promiseHooks` or subclassing `Promise`)
 - Checks at test boundaries
 - Throws or warns based on configuration
 - Optional: Reports through a custom reporter
@@ -158,7 +158,7 @@ const doSomething = async () => {
 };
 
 const p1 = Promise.resolve().then(() => {
-  /* no problem if not async */
+  /* this will always be tracked */
 });
 
 const p2 = Promise.resolve().then(
@@ -217,7 +217,7 @@ Because flaky tests cost more than failing tests.
 
 ### Does this slow tests down?
 
-Slightly, `async_hooks` used for promise detection will have most impact and are turned off by default for that reason.
+Slightly, `v8.promiseHooks` used for promise detection will have most impact and is turned off by default for that reason.
 Instead, use eslint with typescript ([recommendedTypeChecked](https://typescript-eslint.io/getting-started/typed-linting/)) to avoid floating promises!
 
 ### What is an async leak?

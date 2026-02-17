@@ -36,10 +36,10 @@ const analyzeCallback = async (
     that.asyncRoot = executionAsyncId();
   }
 
+  let isRejected = false;
   let timerId: NodeJS.Timeout;
   return that.asyncStorage.run('ignored', () => {
     return new Promise((resolve, reject) => {
-      let isRejected = false;
       timerId = setTimeout(() => {
         isRejected = true;
         reject(getTimeoutError(timeout, isHook, trace));
@@ -50,18 +50,24 @@ const analyzeCallback = async (
           (callback as () => Promise<unknown>).call(testContext),
         ),
       )
-        .then((returnValue) => {
-          if (!isRejected) {
-            reportLeaks(that, leakRecord);
-            resolve(returnValue);
-          }
-        }, reject)
+        .then(
+          (returnValue) => {
+            if (!isRejected) {
+              reportLeaks(that, leakRecord);
+              resolve(returnValue);
+            }
+          },
+          (reason: Error) => {
+            isRejected = true;
+            reject(reason);
+          },
+        )
         .catch(reject);
     }).finally(() => {
       clearTimeout(timerId);
       that.asyncRoot = 0;
 
-      cleanupAfterTest(that, leakRecord, testName);
+      cleanupAfterTest(that, leakRecord, testName, isRejected);
     });
   });
 };

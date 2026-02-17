@@ -4,8 +4,9 @@ const cleanupAfterTest = (
   that: JestDoctorEnvironment,
   leakRecord: LeakRecord,
   testName: string,
+  ignoreAfterEach: boolean = false,
 ) => {
-  if (that.currentAfterEachCount === 0) {
+  if (ignoreAfterEach || that.currentAfterEachCount === 0) {
     if (that.options.clearTimers) {
       // @ts-expect-error it is public but signaled as internal
       if (that.fakeTimers?._fakingTime) {

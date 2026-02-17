@@ -1,4 +1,3 @@
-import { executionAsyncId } from 'node:async_hooks';
 import type { Circus } from '@jest/types';
 import type { JestDoctorEnvironment } from '../types';
 import initLeakRecord from './initLeakRecord';
@@ -30,11 +29,6 @@ const analyzeCallback = async (
     'unknown';
 
   const leakRecord = initLeakRecord(that, testName);
-
-  const option = that.options.report.promises;
-  if (option && option.mode === 'async_hooks') {
-    that.asyncRoot = executionAsyncId();
-  }
 
   let isRejected = false;
   let timerId: NodeJS.Timeout;

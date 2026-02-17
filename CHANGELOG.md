@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.7
+
+- fix promise concurrency for non-promises
+
 ## 2.0.6
 
 - remove a left over async_hooks

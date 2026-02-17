@@ -4,9 +4,6 @@ import { promiseHooks } from 'node:v8';
 const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
   return promiseHooks.createHook({
     settled(promise) {
-      const asyncId = that.promiseToAsyncId.get(promise) as number;
-      that.asyncIdToParentId.delete(asyncId);
-      that.asyncIdToPromise.delete(asyncId);
       const owner = that.promiseOwner.get(promise);
 
       if (!owner) {
@@ -15,7 +12,6 @@ const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
 
       that.leakRecords.get(owner)?.promises.delete(promise);
       that.promiseOwner.delete(promise);
-      that.promiseToAsyncId.delete(promise);
     },
   });
 };

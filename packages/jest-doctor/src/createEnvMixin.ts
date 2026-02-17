@@ -56,7 +56,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     }
     public readonly leakRecords = new Map<string, LeakRecord>();
     public readonly original = initOriginal();
-    public readonly promiseOwner = new Map<Promise<void>, string>();
+    public readonly promiseOwner = new Map<Promise<unknown>, string>();
     public asyncHookDetector?: Function;
     public asyncHookCleaner?: Function;
     public readonly options: NormalizedOptions;

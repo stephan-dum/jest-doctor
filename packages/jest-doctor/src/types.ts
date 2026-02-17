@@ -32,8 +32,6 @@ export interface TimerRecord {
 
 export interface PromiseRecord {
   stack: string;
-  asyncId: number;
-  parentAsyncId: number;
 }
 
 export interface ConsoleRecord {
@@ -162,10 +160,11 @@ export interface JestDoctorEnvironment extends JestEnvironment {
   currentAfterEachCount: number;
   options: NormalizedOptions;
   aggregatedReport: AggregatedReport;
-  promiseToAsyncId: Map<Promise<unknown>, number>;
   asyncRoot: number;
-  asyncIdToParentId: Map<number, number>;
-  asyncIdToPromise: Map<number, Promise<unknown>>;
   asyncStorage: AsyncLocalStorage<string>;
   testTimeout: number;
+}
+
+export interface TrackedPromise extends Promise<unknown> {
+  untrack?: boolean;
 }

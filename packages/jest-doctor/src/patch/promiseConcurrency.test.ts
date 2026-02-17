@@ -7,9 +7,7 @@ const that = {
     Promise: Promise,
   },
   currentTestName: 'test',
-  asyncIdToPromise: new Map(),
   promiseOwner: new Map(),
-  asyncIdToParentId: new Map(),
   leakRecords: new Map([
     [
       'test',
@@ -39,13 +37,9 @@ const setupPromises = (shouldResolve: boolean) => {
   // this promise simulated the child promise created by Promise.race
   const p3 = Promise.resolve();
 
-  that.asyncIdToPromise.set(1, p1);
-  that.asyncIdToPromise.set(2, p2);
-  that.asyncIdToPromise.set(3, p3);
-
-  that.promiseOwner.set(1, 'test');
-  that.promiseOwner.set(2, 'test');
-  that.promiseOwner.set(3, 'test');
+  that.promiseOwner.set(p1, 'test');
+  that.promiseOwner.set(p2, 'test');
+  that.promiseOwner.set(p3, 'test');
 
   promises.set(p1, { asyncId: 1 });
   promises.set(p2, { asyncId: 2 });
@@ -62,7 +56,6 @@ it('should remove all promises if any resolves', async () => {
   await promise;
 
   expect(promises.size).toBe(0);
-  expect(that.asyncIdToPromise.size).toBe(0);
   expect(that.promiseOwner.size).toBe(0);
 });
 it('should remove all promises if all reject', async () => {
@@ -75,6 +68,5 @@ it('should remove all promises if all reject', async () => {
   );
 
   expect(promises.size).toBe(0);
-  expect(that.asyncIdToPromise.size).toBe(0);
   expect(that.promiseOwner.size).toBe(0);
 });

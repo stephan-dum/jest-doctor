@@ -86,7 +86,30 @@ Controls when timers are validated and cleared.
 
 ### `afterEach` (default)
 
-`beforeAll`, `beforeEach` and `afterAll` are still immediate but `test` / `it` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
+`beforeAll` and `afterAll` are still immediate but `test` / `it`, `beforeEach` and `afterEach` block defer reporting and cleanup until the last `afterEach` block is executed (or directly after the test if there are no `afterEach` blocks).
+
+```
+Hook       → Check?
+--------------------
+beforeAll  → ✅
+beforeEach → ⏳
+test       → ⏳
+afterEach  → ⏳
+afterEach  → ✅
+afterAll   → ✅
+```
+
+- ✅ = timer and async leaks are checked immediately
+- ⏳ = timer leaks are deferred until the final `afterEach`, other async leaks are still checked
+
+This allows easier cleanup. For example, React Testing Library registers an unmount function in an `afterEach` block.
+The disadvantage is that if a long-running task executes in an `afterEach` block, timers may resolve without being tracked.
+
+Use `afterEach` if your tests clean up resources in hooks (e.g., React Testing Library).
+
+## `beforeEach`
+
+similar to `afterEach` strategy but `beforeEach` is also immediate.
 
 ```
 Hook       → Check?
@@ -102,10 +125,7 @@ afterAll   → ✅
 - ✅ = timer and async leaks are checked immediately
 - ⏳ = timer leaks are deferred until the final `afterEach`, other async leaks are still checked
 
-This allows easier cleanup. For example, React Testing Library registers an unmount function in an `afterEach` block.
-The disadvantage is that if a long-running task executes in an `afterEach` block, timers may resolve without being tracked.
-
-Use `afterEach` if your tests clean up resources in hooks (e.g., React Testing Library).
+Use `beforeEach` if your tests should not leave open timers in setup code.
 
 ### `immediate`
 

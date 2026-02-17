@@ -60,7 +60,7 @@ export interface LeakRecord {
   domListeners: DOMListenerRecord[];
 }
 
-export type TimerIsolation = 'afterEach' | 'immediate';
+export type TimerIsolation = 'afterEach' | 'immediate' | 'beforeEach';
 
 export type ThrowOrWarn = 'throw' | 'warn';
 

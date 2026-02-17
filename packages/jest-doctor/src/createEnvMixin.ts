@@ -145,8 +145,12 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       const circusEvent = event as Circus.AsyncEvent;
       const circusState = state as Circus.State;
 
-      if (circusEvent.name === 'test_fn_start') {
+      if (circusEvent.name === 'test_start') {
         if (this.options.timerIsolation === 'afterEach') {
+          this.currentAfterEachCount = getAllAfterEach(circusEvent.test.parent);
+        }
+      } else if (circusEvent.name === 'test_fn_start') {
+        if (this.options.timerIsolation === 'beforeEach') {
           this.currentAfterEachCount = getAllAfterEach(circusEvent.test.parent);
         }
       } else if (circusEvent.name === 'teardown') {

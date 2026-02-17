@@ -1,6 +1,6 @@
 {
   "name": "jest-doctor",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Custom Jest environment that detects async leaks between tests, enforces test isolation, and prevents flaky failures in CI.",
   "license": "MIT",
   "author": "Stephan Dum",

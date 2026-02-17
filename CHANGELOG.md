@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.6
+
+- remove a left over async_hooks
+
 ## 2.0.5
 
 - closes [issue#42](https://github.com/stephan-dum/jest-doctor/issues/42) use v8.promiseHooks instead of async_hooks

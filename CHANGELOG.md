@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.8
+
+- add beforeEach timerIsolation strategy
+
 ## 2.0.7
 
 - fix promise concurrency for non-promises

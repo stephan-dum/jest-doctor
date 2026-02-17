@@ -67,7 +67,7 @@ This section describes how jest-doctor detects leaks.
 jest-doctor currently detects:
 
 | Category              | Detection mechanism                                     |
-| --------------------- |---------------------------------------------------------|
+| --------------------- | ------------------------------------------------------- |
 | Promises              | `v8.promiseHooks` or subclassing `Promise`              |
 | Timers                | Global API patching                                     |
 | Fake timers           | Jest fake timer patching                                |

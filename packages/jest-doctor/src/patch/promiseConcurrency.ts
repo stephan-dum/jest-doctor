@@ -2,14 +2,20 @@ import { JestDoctorEnvironment, TrackedPromise } from '../types';
 
 const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
   const env = that.global;
+  const setup = (concurrentPromises: TrackedPromise[]) => {
+    concurrentPromises.forEach((concurrentPromise) => {
+      if (concurrentPromise instanceof env.Promise) {
+        concurrentPromise.untrack = true;
+      }
+    });
+
+    return that.leakRecords.get(that.currentTestName)?.promises;
+  };
 
   const concurrencyFactor =
     (fn: (handler: Promise<unknown>[]) => Promise<unknown>) =>
     (concurrentPromises: TrackedPromise[]) => {
-      const promises = that.leakRecords.get(that.currentTestName)?.promises;
-      concurrentPromises.forEach((concurrentPromise) => {
-        concurrentPromise.untrack = true;
-      });
+      const promises = setup(concurrentPromises);
 
       return fn(concurrentPromises).finally(() => {
         concurrentPromises.forEach((concurrentPromise) => {
@@ -24,10 +30,7 @@ const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
 
   const originalPromiseAll = env.Promise.all.bind(env.Promise);
   env.Promise.all = (concurrentPromises: TrackedPromise[]) => {
-    const promises = that.leakRecords.get(that.currentTestName)?.promises;
-    concurrentPromises.forEach((concurrentPromise) => {
-      concurrentPromise.untrack = true;
-    });
+    const promises = setup(concurrentPromises);
 
     return originalPromiseAll(concurrentPromises).catch((reason) => {
       concurrentPromises.forEach((concurrentPromise) => {

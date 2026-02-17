@@ -51,8 +51,10 @@ describe('correct promise usage', () => {
 
   it('Promise.any', async () => {
     jest.useFakeTimers();
-    const p1 = new Promise((resolve) => setTimeout(resolve, 1000));
+    const p1 = undefined;
     const p2 = new Promise((resolve) => setTimeout(resolve, 100));
+
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     const p3 = Promise.any([p1, p2]);
 
     jest.advanceTimersToNextTimer();

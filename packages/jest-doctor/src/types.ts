@@ -1,6 +1,6 @@
 import { JestEnvironment } from '@jest/environment';
 import initOriginal from './utils/initOriginal';
-import { AsyncHook, AsyncLocalStorage } from 'node:async_hooks';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import type {
   beforeEach,
   beforeAll,
@@ -158,14 +158,14 @@ export interface JestDoctorEnvironment extends JestEnvironment {
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;
-  promiseOwner: Map<number, string>;
+  promiseOwner: Map<Promise<unknown>, string>;
   currentAfterEachCount: number;
   options: NormalizedOptions;
   aggregatedReport: AggregatedReport;
-  asyncIdToPromise: Map<number, Promise<unknown>>;
-  asyncHookDetector?: AsyncHook;
+  promiseToAsyncId: Map<Promise<unknown>, number>;
   asyncRoot: number;
   asyncIdToParentId: Map<number, number>;
+  asyncIdToPromise: Map<number, Promise<unknown>>;
   asyncStorage: AsyncLocalStorage<string>;
   testTimeout: number;
 }

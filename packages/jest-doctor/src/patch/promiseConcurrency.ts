@@ -22,7 +22,8 @@ const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
     asyncId: number,
   ) => {
     that.asyncIdToPromise.delete(asyncId);
-    that.promiseOwner.delete(asyncId);
+    that.promiseToAsyncId.delete(promise);
+    that.promiseOwner.delete(promise);
     that.asyncIdToParentId.delete(asyncId);
     promises.delete(promise);
   };

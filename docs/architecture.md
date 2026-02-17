@@ -82,7 +82,7 @@ jest-doctor currently detects:
   - [createAsyncHookDetector.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/createAsyncHookCleaner.ts)
   - [createAsyncHookCleaner.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/createAsyncHookCleaner.ts)
 - Or subclasses `Promise`
-  - [patchPromise](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/promise.ts)
+  - [promise.ts](https://github.com/stephan-dum/jest-doctor/blob/main/packages/jest-doctor/src/patch/promise.ts)
 - Records:
   - stack trace
   - asyncId

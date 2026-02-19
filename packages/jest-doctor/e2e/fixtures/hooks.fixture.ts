@@ -1,5 +1,8 @@
+jest.useFakeTimers();
+beforeEach(() => {
+  setTimeout(() => {}, 100);
+});
 it('sets up a timer', () => {
-  jest.useFakeTimers();
   setTimeout(() => {}, 100);
 });
 

@@ -66,10 +66,6 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public readonly testPath: string;
     public readonly aggregatedReport;
     public tearDownError?: Error;
-    public promiseToAsyncId = new Map<Promise<unknown>, number>();
-    public asyncRoot = 0;
-    public asyncIdToParentId = new Map<number, number>();
-    public asyncIdToPromise = new Map<number, Promise<void>>();
     public asyncStorage = new AsyncLocalStorage<string>();
     public testTimeout: number;
 

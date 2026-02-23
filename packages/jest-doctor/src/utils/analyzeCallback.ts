@@ -32,37 +32,34 @@ const analyzeCallback = async (
 
   let isRejected = false;
   let timerId: NodeJS.Timeout;
-  return that.asyncStorage.run('ignored', () => {
-    return new Promise((resolve, reject) => {
-      timerId = setTimeout(() => {
-        isRejected = true;
-        reject(getTimeoutError(timeout, isHook, trace));
-      }, timeout);
 
-      void Promise.resolve(
-        that.asyncStorage.run(testName, () =>
-          (callback as () => Promise<unknown>).call(testContext),
-        ),
+  return new Promise((resolve, reject) => {
+    timerId = setTimeout(() => {
+      isRejected = true;
+      reject(getTimeoutError(timeout, isHook, trace));
+    }, timeout);
+
+    void Promise.resolve(
+      that.asyncStorage.run(testName, () =>
+        (callback as () => Promise<unknown>).call(testContext),
+      ),
+    )
+      .then(
+        (returnValue) => {
+          if (!isRejected) {
+            reportLeaks(that, leakRecord);
+            resolve(returnValue);
+          }
+        },
+        (reason: Error) => {
+          isRejected = true;
+          reject(reason);
+        },
       )
-        .then(
-          (returnValue) => {
-            if (!isRejected) {
-              reportLeaks(that, leakRecord);
-              resolve(returnValue);
-            }
-          },
-          (reason: Error) => {
-            isRejected = true;
-            reject(reason);
-          },
-        )
-        .catch(reject);
-    }).finally(() => {
-      clearTimeout(timerId);
-      that.asyncRoot = 0;
-
-      cleanupAfterTest(that, leakRecord, testName, isRejected);
-    });
+      .catch(reject);
+  }).finally(() => {
+    clearTimeout(timerId);
+    cleanupAfterTest(that, leakRecord, testName, isRejected);
   });
 };
 

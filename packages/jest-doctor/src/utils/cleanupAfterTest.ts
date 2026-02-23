@@ -20,8 +20,10 @@ const cleanupAfterTest = (
       for (const [timerId, record] of leakRecord.timers.entries()) {
         if (record.type === 'timeout') {
           that.original.timer.clearTimeout(timerId as NodeJS.Timeout);
-        } else {
+        } else if (record.type === 'interval') {
           that.original.timer.clearInterval(timerId as NodeJS.Timeout);
+        } else {
+          that.original.timer.clearImmediate(timerId as NodeJS.Immediate);
         }
       }
     }

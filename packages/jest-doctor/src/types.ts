@@ -48,6 +48,7 @@ interface DOMListenerRecord {
   listener: (...args: unknown[]) => void;
   options: { capture?: boolean } | false | undefined;
   stack: string;
+  abort: () => void;
 }
 
 export interface LeakRecord {
@@ -160,7 +161,6 @@ export interface JestDoctorEnvironment extends JestEnvironment {
   currentAfterEachCount: number;
   options: NormalizedOptions;
   aggregatedReport: AggregatedReport;
-  asyncRoot: number;
   asyncStorage: AsyncLocalStorage<string>;
   testTimeout: number;
 }

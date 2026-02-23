@@ -25,7 +25,7 @@ const patchTimers = (that: JestDoctorEnvironment) => {
         });
 
         leakRecord?.timers.set(timerId, {
-          type: 'setImmediate',
+          type: 'immediate',
           stack,
           isAllowed,
         });

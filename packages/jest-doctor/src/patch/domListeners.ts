@@ -36,6 +36,13 @@ const patchDOMListeners = (
         });
 
         if (index !== -1) {
+          if (options && options.signal) {
+            options.signal.removeEventListener(
+              'abort',
+              leak.domListeners[index].abort,
+            );
+          }
+
           leak.domListeners.splice(index, 1);
         }
       }
@@ -52,25 +59,37 @@ const patchDOMListeners = (
         const stack = getStack(window.addEventListener);
 
         if (!isIgnored(stack, listenerOptions.ignoreStack)) {
+          const abort = () => {
+            removeEventLeak(event, listener, options);
+          };
+
           leak.domListeners.push({
             event: event,
             listener,
             stack,
             options,
+            abort,
           });
+
+          if (typeof options === 'object') {
+            if (options.signal) {
+              options.signal.addEventListener('abort', abort);
+            }
+
+            if (options.once) {
+              return originalWindowAddEventListener(
+                event,
+                function (this: Window, ...args) {
+                  removeEventLeak(event, listener, options);
+                  listener.call(this, ...args);
+                },
+                options,
+              );
+            }
+          }
         }
       }
 
-      if (typeof options === 'object' && options.once) {
-        return originalWindowAddEventListener(
-          event,
-          function (this: Window, ...args) {
-            removeEventLeak(event, listener, options);
-            listener.call(this, ...args);
-          },
-          options,
-        );
-      }
       return originalWindowAddEventListener(event, listener, options);
     };
 

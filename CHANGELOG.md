@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.9
+
+- event handler support AbortController.signal to unregister
+
 ## 2.0.8
 
 - add beforeEach timerIsolation strategy

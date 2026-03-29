@@ -88,7 +88,7 @@ const schema = zod
       })
       .default(DEFAULTS.report),
     verbose: zod.boolean().default(false),
-    delayThreshold: zod.int().gte(0).default(0),
+    delayThreshold: zod.int().gte(0).or(zod.literal(Infinity)).default(0),
     timerIsolation: zod
       .enum(['afterEach', 'immediate', 'beforeEach'])
       .default('afterEach'),

@@ -106,4 +106,4 @@ it('accepts infinity for delayThreshold', () => {
   const result = normalizeOptions({ delayThreshold: Infinity });
 
   expect(result.delayThreshold).toBe(Infinity);
-})
+});

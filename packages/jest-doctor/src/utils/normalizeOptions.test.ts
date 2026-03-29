@@ -101,3 +101,9 @@ it('should normalize if report is undefined', () => {
     timerIsolation: 'afterEach',
   });
 });
+
+it('accepts infinity for delayThreshold', () => {
+  const result = normalizeOptions({ delayThreshold: Infinity });
+
+  expect(result.delayThreshold).toBe(Infinity);
+});

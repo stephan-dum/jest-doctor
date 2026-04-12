@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.1.1
+
+- input validation accepts now string Infinity for delayThreshold
+- adopt docs accordingly
+
 ## 2.1.0
 
 - input validation accepts Infinity for delayThreshold

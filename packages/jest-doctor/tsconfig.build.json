@@ -9,7 +9,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "verbatimModuleSyntax": false,
-    "baseUrl": ".",
     "rootDir": "src",
     "declaration": true,
     "outDir": "dist"

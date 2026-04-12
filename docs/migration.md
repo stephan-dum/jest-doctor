@@ -37,7 +37,6 @@ const options = {
     },
     // if no eslint typeChecked
     promises: {
-      mode: 'subclass',
       onError: 'warn',
     },
     console: {
@@ -50,7 +49,7 @@ const options = {
       onError: 'warn',
     },
   },
-  delayThreshold: Infinity,
+  delayThreshold: 'Infinity',
 };
 ```
 

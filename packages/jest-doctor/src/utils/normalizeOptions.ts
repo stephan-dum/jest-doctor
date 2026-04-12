@@ -88,7 +88,12 @@ const schema = zod
       })
       .default(DEFAULTS.report),
     verbose: zod.boolean().default(false),
-    delayThreshold: zod.int().gte(0).or(zod.literal(Infinity)).default(0),
+    delayThreshold: zod
+      .int()
+      .gte(0)
+      .or(zod.literal('Infinity'))
+      .default(0)
+      .transform((value) => (value === 'Infinity' ? Infinity : value)),
     timerIsolation: zod
       .enum(['afterEach', 'immediate', 'beforeEach'])
       .default('afterEach'),

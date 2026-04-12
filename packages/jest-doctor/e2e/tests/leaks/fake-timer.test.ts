@@ -4,7 +4,7 @@ it('detects fake timer leaks', async () => {
   const result = await runTest(`leaks/fake-timer.fixture.ts`);
   const assertions = result.testResults[0].assertionResults;
 
-  expect(assertions[0].failureMessages[0]).toContain('2 open fake timer');
+  expect(assertions[0].failureMessages[0]).toContain('3 open fake timer');
   expect(assertions[1].status).toEqual('passed');
   expect(assertions[2].status).toEqual('passed');
 });

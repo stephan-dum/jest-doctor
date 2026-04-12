@@ -32,7 +32,7 @@ export default {
       },
     },
     verbose: true,
-    delayThreshold: Infinity, // disabled
+    delayThreshold: 'Infinity', // disabled
     timerIsolation: 'immediate',
     clearTimers: false,
   },

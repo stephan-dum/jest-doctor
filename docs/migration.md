@@ -37,7 +37,6 @@ const options = {
     },
     // if no eslint typeChecked
     promises: {
-      mode: 'subclass',
       onError: 'warn',
     },
     console: {

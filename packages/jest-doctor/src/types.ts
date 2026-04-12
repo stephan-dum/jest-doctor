@@ -136,7 +136,7 @@ export interface RawOptions {
     domListeners?: RawReportOptions;
   };
   verbose?: boolean;
-  delayThreshold?: number;
+  delayThreshold?: number | 'Infinity';
   timerIsolation?: TimerIsolation;
   clearTimers?: boolean;
 }

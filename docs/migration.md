@@ -50,7 +50,7 @@ const options = {
       onError: 'warn',
     },
   },
-  delayThreshold: Infinity,
+  delayThreshold: 'Infinity',
 };
 ```
 

@@ -1,6 +1,7 @@
 const fnToTest = () => {
   setTimeout(() => {});
   setInterval(() => {});
+  setImmediate(() => {});
 };
 
 jest.useFakeTimers();

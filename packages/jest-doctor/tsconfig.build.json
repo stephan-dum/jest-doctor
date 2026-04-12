@@ -7,9 +7,8 @@
     "noEmit": false,
     "target": "esnext",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "verbatimModuleSyntax": false,
-    "baseUrl": ".",
     "rootDir": "src",
     "declaration": true,
     "outDir": "dist"

@@ -4,8 +4,8 @@ export default {
   coverageDirectory: '.nyc_output',
   resetMocks: true,
   coverageProvider: 'v8',
-  transform: {
-    '^.+\\.ts?$': 'ts-jest',
-  },
   preset: 'ts-jest',
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+  },
 };

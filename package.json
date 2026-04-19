@@ -18,7 +18,7 @@
     "coverage:merge": "yarn workspace jest-doctor run coverage:merge"
   },
   "devDependencies": {
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.3"
   },
   "packageManager": "yarn@4.9.4",
   "resolutions": {

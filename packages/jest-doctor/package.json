@@ -58,7 +58,7 @@
     "jest": "30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-environment-node": "^30.3.0",
-    "memfs": "^4.57.1",
+    "memfs": "^4.57.2",
     "nyc": "^18.0.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

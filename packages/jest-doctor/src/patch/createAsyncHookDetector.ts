@@ -9,7 +9,7 @@ const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
       return;
     }
 
-    const stack = getStack(init as Function);
+    const stack = getStack(init);
 
     if (
       !isIgnored(

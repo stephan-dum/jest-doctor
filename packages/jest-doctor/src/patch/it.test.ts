@@ -8,7 +8,7 @@ jest.mock('../utils/analyzeCallback', () => jest.fn());
 const itHandler = (testName: Circus.TestName, testHandler: Circus.TestFn) => {
   return (testHandler as () => Promise<unknown>).call({
     testName,
-  } as Circus.TestContext);
+  });
 };
 
 it('should patch on global and run', () => {

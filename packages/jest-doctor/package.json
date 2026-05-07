@@ -54,7 +54,7 @@
     "@types/react-dom": "^19.2.3",
     "c8": "^11.0.0",
     "cross-spawn": "^7.0.6",
-    "eslint": "^10.2.1",
+    "eslint": "^10.3.0",
     "jest": "30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-environment-node": "^30.3.0",

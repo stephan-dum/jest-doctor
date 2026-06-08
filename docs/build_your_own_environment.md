@@ -5,16 +5,16 @@ title: Build your own environment
 # 🛠️ Build your own environment
 
 Out-of-the-box **node** and **jsdom** are supported.
-If other environments are needed simple use the `createEnvMixin` helper.
+If other environments are needed simply use the `createEnvMixin` helper.
 
-Create a new file in your code base and reference it in you jest.config.js as testEnvironment.
+Create a new file in your code base and reference it in your jest.config.js as testEnvironment.
 
 ```js
 import createEnvMixin from 'jest-doctor/createEnvMixin';
 import NodeEnvironment from 'jest-environment-node';
-import ThirdPartyEnv from 'thrid-party-env';
+import ThirdPartyEnv from 'third-party-env';
 
-// eigther wrap the desire existing environment
+// either wrap the desired existing environment
 const JestDoctorThirdPartyEnv = createEnvMixin(ThirdPartyEnv);
 
 // or pass in your own class

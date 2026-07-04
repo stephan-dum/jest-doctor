@@ -20,11 +20,7 @@ const DEFAULTS = {
       ...reportHandler,
       ignoreMessage: ignore,
       methods: ['log', 'warn', 'error', 'info', 'debug'] as (
-        | 'warn'
-        | 'log'
-        | 'error'
-        | 'info'
-        | 'debug'
+        'warn' | 'log' | 'error' | 'info' | 'debug'
       )[],
     },
     processOutputs: {

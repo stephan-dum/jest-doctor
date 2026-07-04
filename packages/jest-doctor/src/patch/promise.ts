@@ -84,8 +84,7 @@ const patchPromise = (that: JestDoctorEnvironment) => {
     then<TResult1 = T, TResult2 = unknown>(
       onFulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
       onRejected?:
-        | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
-        | null,
+        ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
     ) {
       const promise = super.then(onFulfilled, onRejected);
 

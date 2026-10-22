@@ -41,7 +41,7 @@
   "devDependencies": {
     "@dev/eslint": "1.0.0",
     "@dev/tsconfig": "1.0.0",
-    "@jest/reporters": "30.4.1",
+    "@jest/reporters": "30.5.2",
     "@swc/core": "^1.16.2",
     "@swc/jest": "^0.2.39",
     "@testing-library/dom": "^10.4.2",

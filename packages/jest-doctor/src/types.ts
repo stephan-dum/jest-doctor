@@ -152,7 +152,21 @@ export interface AggregatedReport {
 }
 export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
-  dom?: { window: Window };
+  // instead of using jsdom, use a structural type to avoid consumers having to install jsdom
+  dom?: {
+    window: {
+      addEventListener: (
+        event: string,
+        listener: (...args: unknown[]) => void,
+        options?: false | AddEventListenerOptions,
+      ) => void;
+      removeEventListener: (
+        event: string,
+        listener: (...args: unknown[]) => void,
+        options?: false | AddEventListenerOptions,
+      ) => void;
+    };
+  };
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

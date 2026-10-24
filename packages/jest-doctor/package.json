@@ -12,8 +12,14 @@
     "directory": "packages/jest-doctor"
   },
   "exports": {
+    ".": {
+      "types": "./dist/types.d.ts"
+    },
     "./package.json": "./package.json",
-    "./createEnvMixin": "./dist/createEnvMixin.js",
+    "./createEnvMixin": {
+      "types": "./dist/createEnvMixin.d.ts",
+      "require": "./dist/createEnvMixin.js"
+    },
     "./env/node": "./dist/env/node.js",
     "./env/jsdom": "./dist/env/jsdom.js",
     "./reporter": "./dist/reporter.js"

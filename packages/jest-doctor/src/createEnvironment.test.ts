@@ -1,4 +1,4 @@
-import createEnvMixin from './createEnvMixin';
+import createEnvironment from './createEnvironment';
 import NodeEnvironment from 'jest-environment-node';
 import { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
 import { Circus } from '@jest/types';
@@ -11,7 +11,7 @@ class FakeEnvironment extends NodeEnvironment {
   }
 }
 
-const Env = createEnvMixin(FakeEnvironment);
+const Env = createEnvironment(FakeEnvironment);
 
 // simulate a worker thread
 process.send = jest.fn();

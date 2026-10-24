@@ -1,4 +1,4 @@
-import { type JestDoctorConstructor } from '../createEnvMixin';
+import { type JestDoctorConstructor } from '../createEnvironment';
 const saveRequire = (envName: string) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports

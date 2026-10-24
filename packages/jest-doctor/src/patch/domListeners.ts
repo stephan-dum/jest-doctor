@@ -56,7 +56,6 @@ const patchDOMListeners = (
       const leak = that.leakRecords.get(that.currentTestName);
 
       if (leak) {
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         const stack = getStack(window.addEventListener);
 
         if (!isIgnored(stack, listenerOptions.ignoreStack)) {

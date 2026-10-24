@@ -26,15 +26,15 @@ If a change weakens any of these guarantees, expect it to be discussed during re
 
 ```
 src/
-  env/               # Custom Jest environments (node / jsdom)
-  patch/             # Global API patches (timers, promises, console, it/test)
-  utils/             # Shared helpers and leak-reporting utilities
-  reporter.ts        # Jest reporter implementation
-  createEnvMixin.ts  # mixin to create jest environments
+  env/                  # Custom Jest environments (node / jsdom)
+  patch/                # Global API patches (timers, promises, console, it/test)
+  utils/                # Shared helpers and leak-reporting utilities
+  reporter.ts           # Jest reporter implementation
+  createEnvironment.ts  # mixin to create jest environments
 
 e2e/
-  fixtures/          # Jest projects used for end‑to‑end testing
-  tests/             # E2E tests asserting real Jest behavior
+  fixtures/             # Jest projects used for end‑to‑end testing
+  tests/                # E2E tests asserting real Jest behavior
 ```
 
 If you are new to the project, start with [architecture](https://stephan-dum.github.io/jest-doctor/architecture/).

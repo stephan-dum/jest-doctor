@@ -17,7 +17,7 @@ import type {
 import patchConsole from './patch/console';
 import initOriginal from './utils/initOriginal';
 import patchFakeTimers from './patch/fakeTimers';
-import { MAIN_THREAD } from './consts';
+import { DEFAULT_TIMEOUT, MAIN_THREAD } from './consts';
 import patchTimers from './patch/timers';
 import patchIt from './patch/it';
 import createAsyncHookDetector from './patch/createAsyncHookDetector';
@@ -46,7 +46,9 @@ export interface JestDoctorConstructor<Environment = JestDoctor> {
   new (config: JestEnvironmentConfig, context: EnvironmentContext): Environment;
 }
 
-const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
+const createEnvironment = <
+  EnvironmentConstructor extends JestDoctorConstructor,
+>(
   Environment: EnvironmentConstructor,
 ): JestDoctorConstructor<JestDoctorEnvironment> => {
   // @ts-expect-error strange ts rule where constructor arguments should be any[] where again TypeScript complains
@@ -75,7 +77,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       this.testTimeout =
         config.projectConfig.testTimeout ||
         config.globalConfig.testTimeout ||
-        5_000;
+        DEFAULT_TIMEOUT;
 
       this.testPath = context.testPath.replace(/\W/g, '_');
       this.aggregatedReport = {
@@ -227,4 +229,4 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
   };
 };
 
-export default createEnvMixin;
+export default createEnvironment;

@@ -23,6 +23,7 @@ const analyzeCallback = async (
   timeout: number,
   isHook: boolean,
   trace: string,
+  args: unknown[] = [],
 ) => {
   const testName =
     (that.global.expect as typeof expect).getState().currentTestName ||
@@ -41,7 +42,10 @@ const analyzeCallback = async (
 
     void Promise.resolve(
       that.asyncStorage.run(testName, () =>
-        (callback as () => Promise<unknown>).call(testContext),
+        (callback as (...args: unknown[]) => Promise<unknown>).call(
+          testContext,
+          ...args,
+        ),
       ),
     )
       .then(

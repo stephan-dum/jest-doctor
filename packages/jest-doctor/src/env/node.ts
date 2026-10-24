@@ -1,5 +1,5 @@
 import saveRequire from '../utils/saveRequire';
-import createEnvMixin from '../createEnvMixin';
+import createEnvironment from '../createEnvironment';
 
 const NodeEnvironment = saveRequire('jest-environment-node');
-export default createEnvMixin(NodeEnvironment);
+export default createEnvironment(NodeEnvironment);

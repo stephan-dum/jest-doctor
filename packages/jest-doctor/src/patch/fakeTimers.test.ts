@@ -1,5 +1,5 @@
 import fakeTimers from './fakeTimers';
-import { JestDoctorEnvironment } from '../types';
+import type { JestDoctorEnvironment } from '../types';
 
 it('should warn if environment does not support fake timers', () => {
   const stderrMock = jest.fn();

@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment, ReportOptions } from '../types';
+import type { JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
 
@@ -79,7 +79,7 @@ const patchDOMListeners = (
             if (options.once) {
               return originalWindowAddEventListener(
                 event,
-                function (this: Window, ...args) {
+                function (this: unknown, ...args) {
                   removeEventLeak(event, listener, options);
                   listener.call(this, ...args);
                 },
@@ -93,7 +93,7 @@ const patchDOMListeners = (
       return originalWindowAddEventListener(event, listener, options);
     };
 
-    const originalWindowRemoveEventListner =
+    const originalWindowRemoveEventListener =
       window.removeEventListener.bind(window);
 
     window.removeEventListener = (
@@ -102,7 +102,7 @@ const patchDOMListeners = (
       options?: false | AddEventListenerOptions,
     ) => {
       removeEventLeak(event, listener, options);
-      return originalWindowRemoveEventListner(event, listener, options);
+      return originalWindowRemoveEventListener(event, listener, options);
     };
   }
 };

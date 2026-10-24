@@ -1,7 +1,12 @@
 import type { Circus } from '@jest/types';
-import { JestDoctorEnvironment, RuntimeGlobals, RuntimeHooks } from '../types';
+import type {
+  JestDoctorEnvironment,
+  RuntimeGlobals,
+  RuntimeHooks,
+} from '../types';
 import analyzeCallback from '../utils/analyzeCallback';
 import getStack from '../utils/getStack';
+import getTimeout from '../utils/getTimeout';
 
 const patchHook = (
   that: JestDoctorEnvironment,
@@ -11,7 +16,9 @@ const patchHook = (
   const originalHook = that.global[hookName] as typeof beforeEach;
 
   that.global[hookName] = runtimeGlobals[hookName as keyof RuntimeHooks] =
-    function hookPatcher(callback, timeout = that.testTimeout) {
+    function hookPatcher(callback, customTimeout) {
+      const timeout = getTimeout(that, customTimeout);
+
       const trace = getStack(hookPatcher).split('\n')[1];
       const hookMock = function (this: Circus.TestContext) {
         if (hookName === 'afterEach') {

@@ -1,4 +1,4 @@
-import { AssertionResults, runTest } from '../../runJest';
+import { type AssertionResults, runTest } from '../../runJest';
 
 const expectPromise = (assertionResults: AssertionResults[]) => {
   const resolves = assertionResults[0];

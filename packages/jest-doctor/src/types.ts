@@ -1,6 +1,6 @@
-import { JestEnvironment } from '@jest/environment';
-import initOriginal from './utils/initOriginal';
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { JestEnvironment } from '@jest/environment';
+import type initOriginal from './utils/initOriginal';
+import type { AsyncLocalStorage } from 'node:async_hooks';
 import type {
   beforeEach,
   beforeAll,
@@ -9,7 +9,6 @@ import type {
   afterEach,
   afterAll,
 } from '@jest/globals';
-import jsdom from 'jsdom';
 
 export interface RuntimeHooks {
   beforeAll: typeof beforeAll;
@@ -69,19 +68,19 @@ export type IsIgnored = Array<string | RegExp>;
 
 type RawIgnore = string | RegExp | Array<string | RegExp>;
 
-type ConsoleAddition = {
+interface ConsoleAddition {
   methods: Array<keyof Console>;
   ignoreMessage: IsIgnored;
-};
+}
 
-type OutputAddition = {
+interface OutputAddition {
   methods: Array<'stderr' | 'stdout'>;
   ignoreMessage: IsIgnored;
-};
+}
 
-type PromiseAddition = {
+interface PromiseAddition {
   mode: 'async_hooks' | 'subclass';
-};
+}
 
 export type ReportOptions<Type = object> = {
   onError: ThrowOrWarn;
@@ -109,15 +108,15 @@ export interface NormalizedOptions {
   clearTimers: boolean;
 }
 
-type RawConsoleAddition = {
+interface RawConsoleAddition {
   methods?: Array<keyof Console>;
   ignoreMessage?: RawIgnore;
-};
+}
 
-type RawOutputAddition = {
+interface RawOutputAddition {
   methods?: Array<'stderr' | 'stdout'>;
   ignoreMessage?: RawIgnore;
-};
+}
 
 type RawReportOptions<Type = object> =
   | false
@@ -153,7 +152,21 @@ export interface AggregatedReport {
 }
 export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
-  dom?: jsdom.JSDOM;
+  // instead of using jsdom, use a structural type to avoid consumers having to install jsdom
+  dom?: {
+    window: {
+      addEventListener: (
+        event: string,
+        listener: (...args: unknown[]) => void,
+        options?: false | AddEventListenerOptions,
+      ) => void;
+      removeEventListener: (
+        event: string,
+        listener: (...args: unknown[]) => void,
+        options?: false | AddEventListenerOptions,
+      ) => void;
+    };
+  };
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

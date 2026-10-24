@@ -1,5 +1,5 @@
 import cleanupAfterTest from './cleanupAfterTest';
-import { JestDoctorEnvironment, LeakRecord } from '../types';
+import type { JestDoctorEnvironment, LeakRecord } from '../types';
 
 it('should clean all fake timers', () => {
   const clearTimeoutMock = jest.fn();

@@ -1,10 +1,13 @@
-import { JestDoctorEnvironment, ReportOptions } from '../types';
+import type { JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
-import chalk from 'chalk';
-import { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
+import type { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
+import { styleText } from 'node:util';
 
-const patchFakeTimers = (that: JestDoctorEnvironment) => {
+const patchFakeTimers = (
+  that: JestDoctorEnvironment,
+  options: ReportOptions,
+) => {
   const env = that.global;
   const patchTimersLifeCycles = (api: ModernFakeTimers | LegacyFakeTimers) => {
     const originalUseFakeTimers = api.useFakeTimers.bind(api);
@@ -29,12 +32,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
 
         const stack = getStack(that.global.setTimeout);
 
-        if (
-          !isIgnored(
-            stack,
-            (that.options.report.fakeTimers as ReportOptions).ignoreStack,
-          )
-        ) {
+        if (!isIgnored(stack, options.ignoreStack)) {
           fakeTimeout?.set(timerId, {
             type: 'fakeTimeout',
             delay: delay || 0,
@@ -54,12 +52,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
         const intervalId = originalFakeSetInterval(callback, delay);
         const stack = getStack(that.global.setInterval);
 
-        if (
-          !isIgnored(
-            stack,
-            (that.options.report.fakeTimers as ReportOptions).ignoreStack,
-          )
-        ) {
+        if (!isIgnored(stack, options.ignoreStack)) {
           that.leakRecords
             .get(that.currentTestName)
             ?.fakeTimers.set(intervalId, {
@@ -102,12 +95,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
 
           const stack = getStack(env.setImmediate);
 
-          if (
-            !isIgnored(
-              stack,
-              (that.options.report.fakeTimers as ReportOptions).ignoreStack,
-            )
-          ) {
+          if (!isIgnored(stack, options.ignoreStack)) {
             fakeTimeout?.set(timerId, {
               type: 'fakeSetImmediate',
               stack,
@@ -139,7 +127,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
     patchTimersLifeCycles(that.fakeTimersModern);
   } else {
     that.original.process.stderr(
-      chalk.yellow('\nModern fake timers could not be mocked!'),
+      styleText('yellow', '\nModern fake timers could not be mocked!'),
     );
   }
 
@@ -147,7 +135,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
     patchTimersLifeCycles(that.fakeTimers);
   } else {
     that.original.process.stderr(
-      chalk.yellow('\nLegacy fake timers could not be mocked!'),
+      styleText('yellow', '\nLegacy fake timers could not be mocked!'),
     );
   }
 };

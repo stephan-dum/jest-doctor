@@ -10,7 +10,7 @@ const aggregatedReport = {
   totalDelay: 0,
 };
 describe('console', () => {
-  it('warns ', () => {
+  it('warns', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
@@ -69,7 +69,7 @@ describe('console', () => {
     );
   });
 
-  it('throws ', () => {
+  it('throws', () => {
     const that = {
       aggregatedReport,
       options: {
@@ -96,18 +96,18 @@ describe('console', () => {
       ],
     } as LeakRecord;
 
-    try {
-      reportLeaks(that, leakReport);
-    } catch (error) {
-      expect((error as Error).stack).toContain('console output(s) found');
-    }
+    expect(() => reportLeaks(that, leakReport)).toThrow(
+      expect.objectContaining({
+        stack: expect.stringContaining('console output(s) found') as string,
+      }) as Error,
+    );
 
     expect(leakReport.console.length).toEqual(0);
   });
 });
 
 describe('processOutputs', () => {
-  it('warns ', () => {
+  it('warns', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
@@ -158,7 +158,7 @@ describe('processOutputs', () => {
 });
 
 describe('checkError', () => {
-  it('warns ', () => {
+  it('warns', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
@@ -207,7 +207,7 @@ describe('checkError', () => {
       expect.stringContaining('open promise(s) found'),
     );
   });
-  it('throws ', () => {
+  it('throws', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
@@ -251,11 +251,11 @@ describe('checkError', () => {
       totalDelay: 0,
     } as LeakRecord;
 
-    try {
-      reportLeaks(that, leakReport);
-    } catch (error) {
-      expect((error as Error).stack).toContain('open promise(s) found');
-    }
+    expect(() => reportLeaks(that, leakReport)).toThrow(
+      expect.objectContaining({
+        stack: expect.stringContaining('open promise(s) found') as string,
+      }) as Error,
+    );
 
     expect(leakReport.promises.size).toEqual(0);
 
@@ -264,7 +264,7 @@ describe('checkError', () => {
 });
 
 describe('totalDelay', () => {
-  it('warns ', () => {
+  it('warns', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,
@@ -301,7 +301,7 @@ describe('totalDelay', () => {
       expect.stringContaining('with total delay of'),
     );
   });
-  it('throws ', () => {
+  it('throws', () => {
     const that = {
       aggregatedReport,
       currentAfterEachCount: 0,
@@ -326,16 +326,16 @@ describe('totalDelay', () => {
       totalDelay: 10,
     } as LeakRecord;
 
-    try {
-      reportLeaks(that, leakReport);
-    } catch (error) {
-      expect((error as Error).stack).toContain('with total delay of');
-    }
+    expect(() => reportLeaks(that, leakReport)).toThrow(
+      expect.objectContaining({
+        stack: expect.stringContaining('with total delay of') as string,
+      }) as Error,
+    );
   });
 });
 
 describe('timers', () => {
-  it('warns ', () => {
+  it('warns', () => {
     const stderrWriteMock = jest.fn();
     const that = {
       aggregatedReport,

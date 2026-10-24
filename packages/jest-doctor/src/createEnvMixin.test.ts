@@ -41,16 +41,14 @@ it('tests edge cases', async () => {
 
   env.global.setTimeout(() => {}, 100);
 
-  try {
-    await env.teardown();
-  } catch (error) {
-    expect((error as Error).stack).toContain('open timer');
-  }
+  await expect(() => env.teardown()).rejects.toHaveProperty(
+    'stack',
+    expect.stringContaining('open timer'),
+  );
 
   // rethrow
-  try {
-    await env.teardown();
-  } catch (error) {
-    expect((error as Error).stack).toContain('open timer');
-  }
+  await expect(() => env.teardown()).rejects.toHaveProperty(
+    'stack',
+    expect.stringContaining('open timer'),
+  );
 });

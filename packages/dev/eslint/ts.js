@@ -6,7 +6,7 @@ export default [
     files: ['**/*.{ts,cts,tsx,mts}'],
   })),
   {
-    files: ['**/*.{ts,cts}'],
+    files: ['**/*.{ts,cts,tsx,mts}'],
     languageOptions: {
       parser: tsEslint.parser,
       ecmaVersion: 'latest',

@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "jest": "29.7.0",
-    "jest-doctor": "2.1.1",
+    "jest-doctor": "3.0.0",
     "jest-environment-jsdom": "29.7.0",
     "jest-environment-node": "29.7.0"
   }

@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment } from '../types';
+import type { JestDoctorEnvironment } from '../types';
 import getStack from '../utils/getStack';
 import { MAIN_THREAD } from '../consts';
 import isIgnored from '../utils/isIgnored';

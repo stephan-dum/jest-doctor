@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment, ReportOptions } from '../types';
+import type { JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
 
@@ -79,7 +79,7 @@ const patchDOMListeners = (
             if (options.once) {
               return originalWindowAddEventListener(
                 event,
-                function (this: Window, ...args) {
+                function (this: unknown, ...args) {
                   removeEventLeak(event, listener, options);
                   listener.call(this, ...args);
                 },

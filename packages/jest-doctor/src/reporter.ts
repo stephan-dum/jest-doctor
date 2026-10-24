@@ -15,15 +15,9 @@ interface ReporterOptions {
 interface FinalReport extends AggregatedReport {
   score: number;
 }
-interface TotalReport {
-  promises: number;
-  timers: number;
-  fakeTimers: number;
-  console: number;
-  processOutputs: number;
-  domListeners: number;
-  totalDelay: number;
-}
+
+type TotalReport = Omit<AggregatedReport, 'testPath'>;
+
 const writeTextReport = (results: FinalReport[], total: TotalReport) => {
   for (const report of results) {
     const message = [

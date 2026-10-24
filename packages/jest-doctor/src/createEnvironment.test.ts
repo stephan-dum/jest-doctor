@@ -1,7 +1,10 @@
 import createEnvironment from './createEnvironment';
 import NodeEnvironment from 'jest-environment-node';
-import { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
-import { Circus } from '@jest/types';
+import type {
+  EnvironmentContext,
+  JestEnvironmentConfig,
+} from '@jest/environment';
+import type { Circus } from '@jest/types';
 
 const handleEvent = jest.fn();
 class FakeEnvironment extends NodeEnvironment {

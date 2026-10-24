@@ -1,7 +1,7 @@
 import patchIt from './it';
 import analyzeCallback from '../utils/analyzeCallback';
-import { JestDoctorEnvironment, RuntimeGlobals } from '../types';
-import { Circus } from '@jest/types';
+import type { JestDoctorEnvironment, RuntimeGlobals } from '../types';
+import type { Circus } from '@jest/types';
 
 jest.mock('../utils/analyzeCallback', () => jest.fn());
 

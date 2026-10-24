@@ -16,13 +16,22 @@
       "types": "./dist/types.d.ts"
     },
     "./package.json": "./package.json",
-    "./createEnvMixin": {
-      "types": "./dist/createEnvMixin.d.ts",
-      "require": "./dist/createEnvMixin.js"
+    "./createEnvironment": {
+      "types": "./dist/createEnvironment.d.ts",
+      "require": "./dist/createEnvironment.js"
     },
-    "./env/node": "./dist/env/node.js",
-    "./env/jsdom": "./dist/env/jsdom.js",
-    "./reporter": "./dist/reporter.js"
+    "./env/node": {
+      "types": "./dist/env/node.d.ts",
+      "require": "./dist/env/node.js"
+    },
+    "./env/jsdom": {
+      "types": "./dist/env/jsdom.d.ts",
+      "require": "./dist/env/jsdom.js"
+    },
+    "./reporter": {
+      "types": "./dist/reporter.d.ts",
+      "require": "./dist/reporter.js"
+    }
   },
   "files": [
     "dist"

@@ -10,7 +10,6 @@ export default [
   ...jest,
   {
     rules: {
-      '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-this-alias': 'off',
       '@typescript-eslint/only-throw-error': 'off',
     },

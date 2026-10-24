@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment } from '../types';
+import type { JestDoctorEnvironment } from '../types';
 
 const TIMEOUT_SYMBOL = Symbol.for('TEST_TIMEOUT_SYMBOL');
 

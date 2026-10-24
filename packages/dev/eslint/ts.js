@@ -14,5 +14,14 @@ export default [
         projectService: true,
       },
     },
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'error',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+        },
+      ],
+    },
   },
 ];

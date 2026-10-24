@@ -52,10 +52,7 @@ Each option can be:
 
 All options **except promises** are enabled by default, because of its performance impact.
 Prefer Eslint with [recommendedTypeChecked](https://typescript-eslint.io/getting-started/typed-linting/) to find floating promises instead.
-However, if the target project is not TypeScript this option can be enabled with two different modes:
-
-- `async_hooks`: costly, but will detect every floating promise
-- `subclass`: minimal overhead, but only detects promises that use Promise constructor. (no async functions or resources)
+However, if the target project is not TypeScript this option can be enabled.
 
 ### Common options
 
@@ -71,7 +68,6 @@ These options are common to all `report` subtypes.
 - `timers`: track real timers
 - `fakeTimers`: track fake timers
 - `promises`: track not awaited promises.
-  - `mode`: `'async_hooks' | 'subclass'`: how to track promise creation
 - `domListeners`: track not removed window DOM listeners
 - `console`: track console output
   - `methods`: `Array<keyof Console>` (default: all) which console methods should be tracked

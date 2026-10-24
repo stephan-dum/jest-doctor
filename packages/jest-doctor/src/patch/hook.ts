@@ -1,5 +1,9 @@
 import type { Circus } from '@jest/types';
-import { JestDoctorEnvironment, RuntimeGlobals, RuntimeHooks } from '../types';
+import type {
+  JestDoctorEnvironment,
+  RuntimeGlobals,
+  RuntimeHooks,
+} from '../types';
 import analyzeCallback from '../utils/analyzeCallback';
 import getStack from '../utils/getStack';
 import getTimeout from '../utils/getTimeout';

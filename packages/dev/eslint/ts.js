@@ -3,7 +3,7 @@ import tsEslint from 'typescript-eslint';
 export default [
   ...tsEslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,
-    files: ['**/*.{ts,cts}'],
+    files: ['**/*.{ts,cts,tsx,mts}'],
   })),
   {
     files: ['**/*.{ts,cts}'],

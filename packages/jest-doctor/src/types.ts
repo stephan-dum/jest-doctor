@@ -9,7 +9,6 @@ import type {
   afterEach,
   afterAll,
 } from '@jest/globals';
-import jsdom from 'jsdom';
 
 export interface RuntimeHooks {
   beforeAll: typeof beforeAll;
@@ -153,7 +152,7 @@ export interface AggregatedReport {
 }
 export interface JestDoctorEnvironment extends JestEnvironment {
   global: JestEnvironment['global'];
-  dom?: jsdom.JSDOM;
+  dom?: { window: Window };
   original: ReturnType<typeof initOriginal>;
   currentTestName: string;
   leakRecords: Map<string, LeakRecord>;

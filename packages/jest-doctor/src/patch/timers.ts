@@ -13,7 +13,7 @@ const patchTimers = (that: JestDoctorEnvironment) => {
         const owner = that.currentTestName;
         const leakRecord = that.leakRecords.get(owner);
 
-        const stack = getStack(env.setTimeout);
+        const stack = getStack(env.setImmediate);
         const isAllowed =
           report.timers && !isIgnored(stack, report.timers.ignoreStack);
 

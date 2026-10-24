@@ -1,8 +1,8 @@
 import { JestDoctorEnvironment, ReportOptions } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
-import chalk from 'chalk';
 import { LegacyFakeTimers, ModernFakeTimers } from '@jest/fake-timers';
+import { styleText } from 'node:util';
 
 const patchFakeTimers = (that: JestDoctorEnvironment) => {
   const env = that.global;
@@ -139,7 +139,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
     patchTimersLifeCycles(that.fakeTimersModern);
   } else {
     that.original.process.stderr(
-      chalk.yellow('\nModern fake timers could not be mocked!'),
+      styleText('yellow', '\nModern fake timers could not be mocked!'),
     );
   }
 
@@ -147,7 +147,7 @@ const patchFakeTimers = (that: JestDoctorEnvironment) => {
     patchTimersLifeCycles(that.fakeTimers);
   } else {
     that.original.process.stderr(
-      chalk.yellow('\nLegacy fake timers could not be mocked!'),
+      styleText('yellow', '\nLegacy fake timers could not be mocked!'),
     );
   }
 };

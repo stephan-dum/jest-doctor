@@ -49,6 +49,7 @@ describe('console', () => {
           options: false,
           listener: () => {},
           stack: 'my stack',
+          abort() {},
         },
       ],
       console: [

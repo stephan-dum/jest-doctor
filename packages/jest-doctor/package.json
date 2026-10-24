@@ -54,10 +54,10 @@
     "@types/react-dom": "^19.2.5",
     "c8": "^12.0.0",
     "cross-spawn": "^7.0.6",
-    "eslint": "^10.9.1",
-    "jest": "30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
-    "jest-environment-node": "^30.4.1",
+    "eslint": "^10.13.0",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "jest-environment-node": "^30.5.2",
     "memfs": "^4.71.0",
     "nyc": "^18.0.0",
     "react": "^19.2.8",
@@ -80,8 +80,10 @@
     }
   },
   "dependencies": {
-    "chalk": "4.1.2",
-    "zod": "^4.4.3"
+    "@jest/environment": "^30.5.2",
+    "@jest/globals": "^30.5.1",
+    "@jest/types": "^30.2.0",
+    "zod": "^4.6.7"
   },
   "scripts": {
     "prepare:publish": "shx rm -fR dist && yarn build && npm login && npm publish",
@@ -91,7 +93,7 @@
     "lint": "eslint .",
     "test:unit": "jest --coverage",
     "test:matrix": "node ./e2e/runMatrix.mjs",
-    "test": "yarn matrix && yarn test:unit && yarn coverage:merge",
+    "test": "yarn test:matrix && yarn test:unit && yarn coverage:merge",
     "coverage:merge": "nyc report"
   }
 }

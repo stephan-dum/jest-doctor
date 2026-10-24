@@ -56,6 +56,7 @@ const patchDOMListeners = (
       const leak = that.leakRecords.get(that.currentTestName);
 
       if (leak) {
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         const stack = getStack(window.addEventListener);
 
         if (!isIgnored(stack, listenerOptions.ignoreStack)) {
@@ -93,7 +94,7 @@ const patchDOMListeners = (
       return originalWindowAddEventListener(event, listener, options);
     };
 
-    const originalWindowRemoveEventListner =
+    const originalWindowRemoveEventListener =
       window.removeEventListener.bind(window);
 
     window.removeEventListener = (
@@ -102,7 +103,7 @@ const patchDOMListeners = (
       options?: false | AddEventListenerOptions,
     ) => {
       removeEventLeak(event, listener, options);
-      return originalWindowRemoveEventListner(event, listener, options);
+      return originalWindowRemoveEventListener(event, listener, options);
     };
   }
 };

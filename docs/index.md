@@ -103,7 +103,7 @@ The reporter can be configured using standard Jest reporter configuration syntax
 Options:
 
 - **jsonFile**: `string`: (default: null) File path where a JSON version of the report should be saved.
-- **tmpDir**: `string` (default: `.tmp`) Directory used to exchange data between the environment and the reporter. (should be added to `.gitignore`)
+- **tmpDir**: `string` (default: `.jest-doctor`) Directory used to exchange data between the environment and the reporter. (should be added to `.gitignore`)
 
 ```js
 export default {

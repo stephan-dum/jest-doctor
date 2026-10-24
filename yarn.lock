@@ -571,14 +571,14 @@ __metadata:
   resolution: "@dev/eslint@workspace:packages/dev/eslint"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
-    eslint: "npm:^10.13.0"
+    eslint: "npm:10.13.0"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-jest: "npm:^29.16.0"
     globals: "npm:^17.11.0"
-    typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.70.1"
   peerDependencies:
     eslint: ^10.13.0
+    typescript: ^6.0.3
   languageName: unknown
   linkType: soft
 
@@ -992,7 +992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/environment@npm:30.5.2":
+"@jest/environment@npm:30.5.2, @jest/environment@npm:^30.5.2":
   version: 30.5.2
   resolution: "@jest/environment@npm:30.5.2"
   dependencies:
@@ -1150,7 +1150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/globals@npm:30.5.2":
+"@jest/globals@npm:30.5.2, @jest/globals@npm:^30.5.1":
   version: 30.5.2
   resolution: "@jest/globals@npm:30.5.2"
   dependencies:
@@ -3671,7 +3671,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.2":
+"chalk@npm:^4.0.0, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -4352,7 +4352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.13.0":
+"eslint@npm:10.13.0, eslint@npm:^10.13.0":
   version: 10.13.0
   resolution: "eslint@npm:10.13.0"
   dependencies:
@@ -5808,7 +5808,10 @@ __metadata:
   dependencies:
     "@dev/eslint": "npm:1.0.0"
     "@dev/tsconfig": "npm:1.0.0"
+    "@jest/environment": "npm:^30.5.2"
+    "@jest/globals": "npm:^30.5.1"
     "@jest/reporters": "npm:30.5.2"
+    "@jest/types": "npm:^30.2.0"
     "@swc/core": "npm:^1.16.2"
     "@swc/jest": "npm:^0.2.39"
     "@testing-library/dom": "npm:^10.4.2"
@@ -5820,7 +5823,6 @@ __metadata:
     "@types/react": "npm:^19.2.18"
     "@types/react-dom": "npm:^19.2.5"
     c8: "npm:^12.0.0"
-    chalk: "npm:4.1.2"
     cross-spawn: "npm:^7.0.6"
     eslint: "npm:^10.13.0"
     jest: "npm:30.5.2"
@@ -8920,7 +8922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:6.0.3, typescript@npm:^6.0.3":
+"typescript@npm:6.0.3":
   version: 6.0.3
   resolution: "typescript@npm:6.0.3"
   bin:
@@ -8930,7 +8932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^6.0.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>":
   version: 6.0.3
   resolution: "typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
   bin:

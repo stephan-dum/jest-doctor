@@ -18,6 +18,7 @@ const patchConsole = (
       consoleMethod
     ] = (...args: unknown[]) => {
       const message = format(...args);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const stack = getStack(env.console[consoleMethod]);
 
       if (

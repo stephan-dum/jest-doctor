@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
-    "jest": "30.4.2",
+    "jest": "30.5.2",
     "jest-doctor": "2.1.1",
-    "jest-environment-jsdom": "30.4.1",
-    "jest-environment-node": "30.4.1"
+    "jest-environment-jsdom": "30.5.2",
+    "jest-environment-node": "30.5.2"
   }
 }

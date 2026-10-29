@@ -51,7 +51,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react-dom": "^19.3.0",
     "c8": "^12.0.0",
     "cross-spawn": "^7.0.6",
     "eslint": "^10.13.0",
@@ -61,7 +61,7 @@
     "memfs": "^4.80.0",
     "nyc": "^18.0.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react-dom": "^19.3.1",
     "shx": "^0.4.0",
     "ts-jest": "^29.4.13",
     "typescript": "6.0.3"

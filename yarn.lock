@@ -1878,7 +1878,7 @@ __metadata:
     jest: "npm:28.1.3"
     jest-doctor: "npm:2.1.1"
     jest-environment-jsdom: "npm:28.1.3"
-    jest-environment-node: "npm:28.1.3"
+    jest-environment-node: "npm:30.5.2"
   languageName: unknown
   linkType: soft
 
@@ -1889,7 +1889,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-doctor: "npm:2.1.1"
     jest-environment-jsdom: "npm:29.7.0"
-    jest-environment-node: "npm:29.7.0"
+    jest-environment-node: "npm:30.5.2"
   languageName: unknown
   linkType: soft
 
@@ -5940,7 +5940,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:28.1.3, jest-environment-node@npm:^28.1.3":
+"jest-environment-node@npm:30.5.2, jest-environment-node@npm:^30.5.2":
+  version: 30.5.2
+  resolution: "jest-environment-node@npm:30.5.2"
+  dependencies:
+    "@jest/environment": "npm:30.5.2"
+    "@jest/fake-timers": "npm:30.5.2"
+    "@jest/types": "npm:30.5.1"
+    "@types/node": "npm:*"
+    jest-mock: "npm:30.5.2"
+    jest-util: "npm:30.5.1"
+    jest-validate: "npm:30.5.1"
+  checksum: 10c0/9dedafbc92232686277e232ed39c16e272fb8985b715761ea4963b1363317f0e1f52dbc55bd175cb88bf033a06e29a9154bfe192c231f5c2d483db2c693242e9
+  languageName: node
+  linkType: hard
+
+"jest-environment-node@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-environment-node@npm:28.1.3"
   dependencies:
@@ -5954,7 +5969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:29.7.0, jest-environment-node@npm:^29.7.0":
+"jest-environment-node@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-environment-node@npm:29.7.0"
   dependencies:
@@ -5965,21 +5980,6 @@ __metadata:
     jest-mock: "npm:^29.7.0"
     jest-util: "npm:^29.7.0"
   checksum: 10c0/61f04fec077f8b1b5c1a633e3612fc0c9aa79a0ab7b05600683428f1e01a4d35346c474bde6f439f9fcc1a4aa9a2861ff852d079a43ab64b02105d1004b2592b
-  languageName: node
-  linkType: hard
-
-"jest-environment-node@npm:30.5.2, jest-environment-node@npm:^30.5.2":
-  version: 30.5.2
-  resolution: "jest-environment-node@npm:30.5.2"
-  dependencies:
-    "@jest/environment": "npm:30.5.2"
-    "@jest/fake-timers": "npm:30.5.2"
-    "@jest/types": "npm:30.5.1"
-    "@types/node": "npm:*"
-    jest-mock: "npm:30.5.2"
-    jest-util: "npm:30.5.1"
-    jest-validate: "npm:30.5.1"
-  checksum: 10c0/9dedafbc92232686277e232ed39c16e272fb8985b715761ea4963b1363317f0e1f52dbc55bd175cb88bf033a06e29a9154bfe192c231f5c2d483db2c693242e9
   languageName: node
   linkType: hard
 

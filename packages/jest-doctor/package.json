@@ -63,7 +63,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "shx": "^0.4.0",
-    "ts-jest": "^29.4.13",
+    "ts-jest": "^29.4.15",
     "typescript": "6.0.3"
   },
   "peerDependencies": {

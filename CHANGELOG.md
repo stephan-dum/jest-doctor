@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 3.0.0
+
+**Features**
+- Improved type support
+- it.each support
+- setTimeout support
+
+**Fixes**
+- Node 20 issue with Iterator
+- version bump zod to 4.6.7
+- leaks reported from setImmediate have no internal stack trace frames any more
+
+**BREAKING**
+- renamed reporter option tmpDir defautl value from `.tmp` to `.jest-doctor` to avoid naming collision.
+- dropped chalk in favor of native `node:utils.styleText` (requires node 20.12.0)
+- createEnvMixin renamed to createEnvironment to reflect what it actually does
+- dropped `options.promises.mode.subclass` as the performance is equal, and it just increases complexity
+
 ## 2.1.1
 
 - input validation accepts now string Infinity for delayThreshold

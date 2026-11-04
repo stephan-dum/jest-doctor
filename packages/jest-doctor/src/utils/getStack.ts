@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const getStack = (stackFrom: Function) => {
   const error = {
     stack: '',

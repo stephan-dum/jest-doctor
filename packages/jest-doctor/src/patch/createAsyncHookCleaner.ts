@@ -13,7 +13,7 @@ const createAsyncHookCleaner = (that: JestDoctorEnvironment) => {
       that.leakRecords.get(owner)?.promises.delete(promise);
       that.promiseOwner.delete(promise);
     },
-  });
+  }) as () => void;
 };
 
 export default createAsyncHookCleaner;

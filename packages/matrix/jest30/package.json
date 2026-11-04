@@ -1,9 +1,10 @@
 {
   "name": "@matrix/jest30",
   "version": "1.0.0",
+  "private": true,
   "devDependencies": {
     "jest": "30.5.2",
-    "jest-doctor": "2.1.1",
+    "jest-doctor": "3.0.0",
     "jest-environment-jsdom": "30.5.2",
     "jest-environment-node": "30.5.2"
   }

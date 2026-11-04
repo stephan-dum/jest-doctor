@@ -67,19 +67,19 @@ const runJest = (
       },
     });
 
-    const stderrBuffer: string[] = [];
+    const stdOutBuffer: string[] = [];
 
     child.stdout?.on('data', (chunk: string | Buffer) => {
-      stderrBuffer.push(chunk.toString('utf8'));
+      stdOutBuffer.push(chunk.toString('utf8'));
     });
 
     child.on('error', reject);
 
     child.on('close', () => {
-      resolve(stderrBuffer.join(''));
+      resolve(stdOutBuffer.join(''));
     });
 
-    process.on('SIGINT', () => child.kill('SIGINT'));
+    process.once('SIGINT', () => child.kill('SIGINT'));
   });
 };
 

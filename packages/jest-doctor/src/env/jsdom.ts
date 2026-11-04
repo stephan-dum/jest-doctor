@@ -1,10 +1,10 @@
 import saveRequire from '../utils/saveRequire';
-import createEnvMixin from '../createEnvMixin';
+import createEnvironment from '../createEnvironment';
 import patchDOMListeners from '../patch/domListeners';
 
 const JSDOMEnvironment = saveRequire('jest-environment-jsdom');
 
-class JSDOMJestDoctorEnvironment extends createEnvMixin(JSDOMEnvironment) {
+class JSDOMJestDoctorEnvironment extends createEnvironment(JSDOMEnvironment) {
   async setup() {
     await super.setup();
 

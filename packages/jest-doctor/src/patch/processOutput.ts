@@ -1,4 +1,4 @@
-import { type OutputOptions, JestDoctorEnvironment } from '../types';
+import type { OutputOptions, JestDoctorEnvironment } from '../types';
 import getStack from '../utils/getStack';
 import isIgnored from '../utils/isIgnored';
 const patchProcessOutput = (

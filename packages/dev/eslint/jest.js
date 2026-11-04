@@ -1,5 +1,4 @@
 import jestPlugin from 'eslint-plugin-jest';
-import globals from 'globals';
 
 export default [
   {
@@ -8,10 +7,11 @@ export default [
       jest: jestPlugin,
     },
     languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
+      globals: jestPlugin.environments.globals.globals,
     },
-    rules: jestPlugin.configs.recommended.rules,
+    rules: {
+      ...jestPlugin.configs['flat/recommended'].rules,
+      'jest/expect-expect': 'off',
+    },
   },
 ];

@@ -1,5 +1,5 @@
 import normalizeOptions from './normalizeOptions';
-import { RawOptions } from '../types';
+import type { RawOptions } from '../types';
 
 describe('normalize console', () => {
   it('should normalize console if empty object', () => {

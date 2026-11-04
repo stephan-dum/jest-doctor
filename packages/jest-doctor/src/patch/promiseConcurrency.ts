@@ -1,4 +1,4 @@
-import { JestDoctorEnvironment, TrackedPromise } from '../types';
+import type { JestDoctorEnvironment, TrackedPromise } from '../types';
 
 const patchPromiseConcurrency = (that: JestDoctorEnvironment) => {
   const env = that.global;

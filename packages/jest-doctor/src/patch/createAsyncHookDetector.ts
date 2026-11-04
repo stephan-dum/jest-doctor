@@ -1,6 +1,10 @@
 import { promiseHooks, type Init } from 'node:v8';
 import getStack from '../utils/getStack';
-import { JestDoctorEnvironment, TrackedPromise, ReportOptions } from '../types';
+import type {
+  JestDoctorEnvironment,
+  TrackedPromise,
+  ReportOptions,
+} from '../types';
 import isIgnored from '../utils/isIgnored';
 
 const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
@@ -26,7 +30,7 @@ const createAsyncHookDetector = (that: JestDoctorEnvironment) => {
     }
   };
 
-  return promiseHooks.createHook({ init });
+  return promiseHooks.createHook({ init }) as () => void;
 };
 
 export default createAsyncHookDetector;

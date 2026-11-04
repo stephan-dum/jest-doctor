@@ -1,6 +1,6 @@
 {
   "name": "jest-doctor",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Custom Jest environment that detects async leaks between tests, enforces test isolation, and prevents flaky failures in CI.",
   "license": "MIT",
   "author": "Stephan Dum",
@@ -12,11 +12,26 @@
     "directory": "packages/jest-doctor"
   },
   "exports": {
+    ".": {
+      "types": "./dist/types.d.ts"
+    },
     "./package.json": "./package.json",
-    "./createEnvMixin": "./dist/createEnvMixin.js",
-    "./env/node": "./dist/env/node.js",
-    "./env/jsdom": "./dist/env/jsdom.js",
-    "./reporter": "./dist/reporter.js"
+    "./createEnvironment": {
+      "types": "./dist/createEnvironment.d.ts",
+      "require": "./dist/createEnvironment.js"
+    },
+    "./env/node": {
+      "types": "./dist/env/node.d.ts",
+      "require": "./dist/env/node.js"
+    },
+    "./env/jsdom": {
+      "types": "./dist/env/jsdom.d.ts",
+      "require": "./dist/env/jsdom.js"
+    },
+    "./reporter": {
+      "types": "./dist/reporter.d.ts",
+      "require": "./dist/reporter.js"
+    }
   },
   "files": [
     "dist"
@@ -80,7 +95,9 @@
     }
   },
   "dependencies": {
-    "chalk": "4.1.2",
+    "@jest/environment": "^30.5.2",
+    "@jest/globals": "^30.5.1",
+    "@jest/types": "^30.2.0",
     "zod": "^4.6.7"
   },
   "scripts": {
@@ -91,7 +108,7 @@
     "lint": "eslint .",
     "test:unit": "jest --coverage",
     "test:matrix": "node ./e2e/runMatrix.mjs",
-    "test": "yarn matrix && yarn test:unit && yarn coverage:merge",
+    "test": "yarn test:matrix && yarn test:unit && yarn coverage:merge",
     "coverage:merge": "nyc report"
   }
 }

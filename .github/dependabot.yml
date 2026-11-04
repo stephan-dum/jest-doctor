@@ -8,14 +8,14 @@ updates:
       - dependency-name: 'chalk'
 
   - package-ecosystem: 'npm'
-    directory: '/packages/matrix/yest29'
+    directory: '/packages/matrix/jest29'
     schedule:
       interval: 'yearly'
     ignore:
       - dependency-name: 'jest'
       - dependency-name: 'jest-*'
   - package-ecosystem: 'npm'
-    directory: '/packages/matrix/yest28'
+    directory: '/packages/matrix/jest28'
     schedule:
       interval: 'yearly'
     ignore:

@@ -7,7 +7,7 @@ import type {
   ReportOptions,
 } from '../types';
 
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 
 const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   const report = that.options.report;
@@ -18,7 +18,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
       error.stack = message;
       throw error;
     } else {
-      that.original.process.stderr(`\n` + chalk.yellow(message) + '\n');
+      that.original.process.stderr(`\n` + styleText('yellow', message) + '\n');
     }
   };
   const checkErrorArray = (
@@ -28,7 +28,7 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   ) => {
     if (result.length) {
       const message = [
-        chalk.red(`${result.length} ${label} found!`),
+        styleText('red', `${result.length} ${label} found!`),
         result[0].stack,
       ].join('\n');
 
@@ -42,7 +42,10 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
   ) => {
     if (leakRecord[property].size) {
       const message = [
-        chalk.red(`${leakRecord[property].size} open ${label}(s) found!`),
+        styleText(
+          'red',
+          `${leakRecord[property].size} open ${label}(s) found!`,
+        ),
         leakRecord[property].values().next().value?.stack,
       ].join('\n');
 
@@ -51,8 +54,8 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
     }
   };
 
-  const accountAbleTimers = Array.from(
-    leakRecord.timers.values().filter((timerRecord) => timerRecord.isAllowed),
+  const accountAbleTimers = Array.from(leakRecord.timers.values()).filter(
+    (timerRecord) => timerRecord.isAllowed,
   );
 
   that.aggregatedReport.processOutputs += leakRecord.processOutputs.length;
@@ -77,7 +80,11 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
     ) => {
       if (message && report[property] && report[property].onError !== 'warn') {
         that.original.process.stderr(
-          '\n' + chalk.red(label) + '\n' + chalk.red(message) + '\n',
+          '\n' +
+            styleText('red', label) +
+            '\n' +
+            styleText('red', message) +
+            '\n',
         );
       }
     };
@@ -123,7 +130,8 @@ const reportLeaks = (that: JestDoctorEnvironment, leakRecord: LeakRecord) => {
 
     if (that.currentAfterEachCount === 0) {
       if (leakRecord.totalDelay) {
-        const message = chalk.red(
+        const message = styleText(
+          'red',
           `setTimeout / setInterval with total delay of ${leakRecord.totalDelay}ms found, use fake timers instead!`,
         );
 

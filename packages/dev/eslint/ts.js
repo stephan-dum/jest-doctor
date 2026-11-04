@@ -3,16 +3,25 @@ import tsEslint from 'typescript-eslint';
 export default [
   ...tsEslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,
-    files: ['**/*.{ts,cts}'],
+    files: ['**/*.{ts,cts,tsx,mts}'],
   })),
   {
-    files: ['**/*.{ts,cts}'],
+    files: ['**/*.{ts,cts,tsx,mts}'],
     languageOptions: {
       parser: tsEslint.parser,
       ecmaVersion: 'latest',
       parserOptions: {
         projectService: true,
       },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'error',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+        },
+      ],
     },
   },
 ];

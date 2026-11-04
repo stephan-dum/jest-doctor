@@ -1,5 +1,5 @@
 import patchPromiseConcurrency from './promiseConcurrency';
-import { JestDoctorEnvironment } from '../types';
+import type { JestDoctorEnvironment } from '../types';
 
 const promises = new Map();
 const that = {

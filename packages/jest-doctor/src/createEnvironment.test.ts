@@ -1,7 +1,10 @@
-import createEnvMixin from './createEnvMixin';
+import createEnvironment from './createEnvironment';
 import NodeEnvironment from 'jest-environment-node';
-import { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
-import { Circus } from '@jest/types';
+import type {
+  EnvironmentContext,
+  JestEnvironmentConfig,
+} from '@jest/environment';
+import type { Circus } from '@jest/types';
 
 const handleEvent = jest.fn();
 class FakeEnvironment extends NodeEnvironment {
@@ -11,7 +14,7 @@ class FakeEnvironment extends NodeEnvironment {
   }
 }
 
-const Env = createEnvMixin(FakeEnvironment);
+const Env = createEnvironment(FakeEnvironment);
 
 // simulate a worker thread
 process.send = jest.fn();
@@ -41,16 +44,14 @@ it('tests edge cases', async () => {
 
   env.global.setTimeout(() => {}, 100);
 
-  try {
-    await env.teardown();
-  } catch (error) {
-    expect((error as Error).stack).toContain('open timer');
-  }
+  await expect(() => env.teardown()).rejects.toHaveProperty(
+    'stack',
+    expect.stringContaining('open timer'),
+  );
 
   // rethrow
-  try {
-    await env.teardown();
-  } catch (error) {
-    expect((error as Error).stack).toContain('open timer');
-  }
+  await expect(() => env.teardown()).rejects.toHaveProperty(
+    'stack',
+    expect.stringContaining('open timer'),
+  );
 });

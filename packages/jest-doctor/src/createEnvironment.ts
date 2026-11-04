@@ -17,7 +17,7 @@ import type {
 import patchConsole from './patch/console';
 import initOriginal from './utils/initOriginal';
 import patchFakeTimers from './patch/fakeTimers';
-import { MAIN_THREAD } from './consts';
+import { DEFAULT_TIMEOUT, MAIN_THREAD } from './consts';
 import patchTimers from './patch/timers';
 import patchIt from './patch/it';
 import createAsyncHookDetector from './patch/createAsyncHookDetector';
@@ -29,11 +29,10 @@ import patchHook from './patch/hook';
 import getAllAfterEach from './utils/getAllAfterEach';
 import normalizeOptions from './utils/normalizeOptions';
 import getReporterTmpDir from './utils/getReporterTmpDir';
-import { Circus } from '@jest/types';
+import type { Circus } from '@jest/types';
 import patchPromiseConcurrency from './patch/promiseConcurrency';
 import patchProcessOutput from './patch/processOutput';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import patchPromise from './patch/promise';
 
 export interface JestDoctor extends JestEnvironment {
   handleEvent?(
@@ -46,7 +45,9 @@ export interface JestDoctorConstructor<Environment = JestDoctor> {
   new (config: JestEnvironmentConfig, context: EnvironmentContext): Environment;
 }
 
-const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
+const createEnvironment = <
+  EnvironmentConstructor extends JestDoctorConstructor,
+>(
   Environment: EnvironmentConstructor,
 ): JestDoctorConstructor<JestDoctorEnvironment> => {
   // @ts-expect-error strange ts rule where constructor arguments should be any[] where again TypeScript complains
@@ -57,8 +58,8 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
     public readonly leakRecords = new Map<string, LeakRecord>();
     public readonly original = initOriginal();
     public readonly promiseOwner = new Map<Promise<unknown>, string>();
-    public asyncHookDetector?: Function;
-    public asyncHookCleaner?: Function;
+    public asyncHookDetector?: () => void;
+    public asyncHookCleaner?: () => void;
     public readonly options: NormalizedOptions;
     public seenTearDown = false;
     public currentAfterEachCount = 0;
@@ -75,7 +76,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       this.testTimeout =
         config.projectConfig.testTimeout ||
         config.globalConfig.testTimeout ||
-        5_000;
+        DEFAULT_TIMEOUT;
 
       this.testPath = context.testPath.replace(/\W/g, '_');
       this.aggregatedReport = {
@@ -113,7 +114,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       const report = this.options.report;
 
       if (report.fakeTimers) {
-        patchFakeTimers(this);
+        patchFakeTimers(this, report.fakeTimers);
       }
 
       // always patch to be able to clean them
@@ -127,15 +128,11 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
       }
 
       if (report.promises) {
-        if (report.promises.mode === 'async_hooks') {
-          patchPromiseConcurrency(this);
-        } else {
-          patchPromise(this);
-        }
+        patchPromiseConcurrency(this);
       }
     }
 
-    // unfortunately @jest/types doesn't export the necessary types,
+    // unfortunately, @jest/types don't export the necessary types,
     // so it breaks if public types are exposed and build with declaration enabled
     async handleEvent(event: unknown, state: unknown): Promise<void> {
       const circusEvent = event as Circus.AsyncEvent;
@@ -154,8 +151,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
         this.asyncHookDetector?.();
         this.seenTearDown = true;
       } else if (circusEvent.name === 'setup') {
-        const promiseOptions = this.options.report.promises;
-        if (promiseOptions && promiseOptions.mode === 'async_hooks') {
+        if (this.options.report.promises) {
           this.asyncHookCleaner = createAsyncHookCleaner(this);
           this.asyncHookDetector = createAsyncHookDetector(this);
         }
@@ -191,7 +187,7 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
           reportLeaks(this, leakRecord);
         }
       } catch (error) {
-        // it can happen that jest has a retry which leads, to even retrying teardown
+        // it can happen that jest has a retry which leads to even retrying teardown
         // to preserve the state and fast-forward, the error is saved and rethrow
         this.tearDownError = error as Error;
         throw error;
@@ -227,4 +223,4 @@ const createEnvMixin = <EnvironmentConstructor extends JestDoctorConstructor>(
   };
 };
 
-export default createEnvMixin;
+export default createEnvironment;

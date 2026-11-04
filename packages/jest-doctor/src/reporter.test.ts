@@ -38,7 +38,7 @@ describe('reporter', () => {
     expect(existsSync(tmpDir)).toEqual(true);
 
     vol.fromJSON({
-      [`./.tmp/${seed}/some_test.json`]: JSON.stringify({
+      [`./${REPORTER_TMP_DIR}/${seed}/some_test.json`]: JSON.stringify({
         ...report,
         promises: 1,
         timers: 1,
@@ -64,7 +64,7 @@ describe('reporter', () => {
     expect(existsSync(pidFile)).toEqual(false);
 
     vol.fromJSON({
-      [`./.tmp/${seed}/some_test.json`]: JSON.stringify(report),
+      [`./${REPORTER_TMP_DIR}/${seed}/some_test.json`]: JSON.stringify(report),
     });
 
     await reporter.onRunComplete();
@@ -77,7 +77,7 @@ describe('reporter', () => {
     const reporter = new JestDoctorReporter({ seed }, {});
 
     vol.fromJSON({
-      [`./.tmp/${seed}/some_test.json`]: 'CORRUPTED',
+      [`./${REPORTER_TMP_DIR}/${seed}/some_test.json`]: 'CORRUPTED',
     });
 
     await expect(reporter.onRunComplete()).rejects.toThrow('Could not parse');
@@ -90,8 +90,8 @@ describe('reporter', () => {
     ) => {
       const otherSeed = 555;
       const pid = 1;
-      const othersPidFile = `./.tmp/pid/${pid}`;
-      const othersTmpFile = `./.tmp/${otherSeed}/some_test.json`;
+      const othersPidFile = `./${REPORTER_TMP_DIR}/pid/${pid}`;
+      const othersTmpFile = `./${REPORTER_TMP_DIR}/${otherSeed}/some_test.json`;
 
       vol.fromJSON({
         [othersPidFile]: otherSeed.toString(),

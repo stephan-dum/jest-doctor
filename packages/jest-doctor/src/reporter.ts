@@ -2,7 +2,8 @@ import type { Reporter } from '@jest/reporters';
 import path from 'node:path';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { rm, readdir, readFile, writeFile } from 'node:fs/promises';
-import chalk from 'chalk';
+import { styleText } from 'node:util';
+
 import { REPORTER_TMP_DIR } from './consts';
 import type { AggregatedReport } from './types.js';
 interface ReporterOptions {
@@ -14,15 +15,9 @@ interface ReporterOptions {
 interface FinalReport extends AggregatedReport {
   score: number;
 }
-interface TotalReport {
-  promises: number;
-  timers: number;
-  fakeTimers: number;
-  console: number;
-  processOutputs: number;
-  domListeners: number;
-  totalDelay: number;
-}
+
+type TotalReport = Omit<AggregatedReport, 'testPath'>;
+
 const writeTextReport = (results: FinalReport[], total: TotalReport) => {
   for (const report of results) {
     const message = [
@@ -39,26 +34,28 @@ const writeTextReport = (results: FinalReport[], total: TotalReport) => {
       .join('\n');
 
     if (message) {
-      console.log(['', chalk.red.bold(report.testPath), message].join('\n'));
+      console.log(
+        ['', styleText(['red', 'bold'], report.testPath), message].join('\n'),
+      );
     }
   }
 
   if (results.length) {
     const message = [
       total.promises &&
-        `${chalk.bold('Total open promises:')} ${chalk.red(total.promises)}`,
+        `${styleText('bold', 'Total open promises:')} ${styleText('red', total.promises.toString())}`,
       total.timers &&
-        `${chalk.bold('Total open timers:')} ${chalk.red(total.timers)}`,
+        `${styleText('bold', 'Total open timers:')} ${styleText('red', total.timers.toString())}`,
       total.fakeTimers &&
-        `${chalk.bold('Total open fake timers:')} ${chalk.red(total.fakeTimers)}`,
+        `${styleText('bold', 'Total open fake timers:')} ${styleText('red', total.fakeTimers.toString())}`,
       total.console &&
-        `${chalk.bold('Total console outputs:')} ${chalk.red(total.console)}`,
+        `${styleText('bold', 'Total console outputs:')} ${styleText('red', total.console.toString())}`,
       total.processOutputs &&
-        `${chalk.bold('Total process outputs:')} ${chalk.red(total.processOutputs)}`,
+        `${styleText('bold', 'Total process outputs:')} ${styleText('red', total.processOutputs.toString())}`,
       total.domListeners &&
-        `${chalk.bold('Total DOM listeners:')} ${chalk.red(total.domListeners)}`,
+        `${styleText('bold', 'Total DOM listeners:')} ${styleText('red', total.domListeners.toString())}`,
       total.totalDelay &&
-        `${chalk.bold('Total delay:')} ${chalk.red(total.totalDelay + 'ms')}`,
+        `${styleText('bold', 'Total delay:')} ${styleText('red', total.totalDelay + 'ms')}`,
     ]
       .filter(Boolean)
       .join('\n');

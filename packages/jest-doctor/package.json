@@ -57,7 +57,7 @@
     "@dev/eslint": "1.0.0",
     "@dev/tsconfig": "1.0.0",
     "@jest/reporters": "30.5.2",
-    "@swc/core": "^1.16.2",
+    "@swc/core": "^1.16.20",
     "@swc/jest": "^0.2.39",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
@@ -78,7 +78,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "shx": "^0.4.0",
-    "ts-jest": "^29.4.13",
+    "ts-jest": "^29.4.15",
     "typescript": "6.0.3"
   },
   "peerDependencies": {
